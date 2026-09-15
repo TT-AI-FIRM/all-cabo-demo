@@ -3,16 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>All Cabo Services · Cada traslado, a cargo de la app</title>
-<meta name="description" content="Demo del sistema integral para All Cabo Services: el huésped reserva y paga desde su teléfono, el viaje llega solo al chofer más cercano y el dueño ve todo en vivo.">
+<title>All Cabo Services · Propuesta de sistema · T.T AI Firm</title>
+<meta name="description" content="Propuesta para All Cabo Services: un sistema interno donde el cliente reserva y paga solo, el viaje llega al chofer más cercano y el dueño ve toda la operación en vivo. Con demos funcionales.">
 <link rel="icon" href="shared/img/fav.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="importmap">{ "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm" } }</script>
 <style>
   :root {
-    --background: #0B0B0C; --foreground: #F4F1EC; --page: #0B0B0C;
-    --deep: #0B0B0C; --deep2: #131315; --gold: #E4B15C; --gold-light: #F0C77A; --gold-ink: #1A1206;
+    --page: #0B0B0C; --deep: #0B0B0C; --deep2: #131315; --gold: #E4B15C; --gold-light: #F0C77A; --gold-ink: #1A1206;
     --surface: #F4F1EC; --surface2: #ECE6DB; --card: #FFFDF9;
     --ink: #0B0B0C; --ink-soft: #6F6A63; --ghost: #D9D3C8; --hairline: #E3DDD3; --on-dark: #F4F1EC;
     --radius-card: 1.5rem; --radius-card-lg: 2rem; --radius-pill: 62.5rem; --radius-xl: .75rem;
@@ -27,13 +26,12 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; }
   [hidden] { display: none !important; }
   img { display: block; max-width: 100%; }
-  button { cursor: pointer; font: inherit; color: inherit; background: none; border: 0; padding: 0; }
+  button { cursor: pointer; font: inherit; color: inherit; background: none; border: 0; padding: 0; text-align: left; }
   a { color: inherit; text-decoration: none; }
   :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
-  body { min-height: 100vh; background: var(--page); color: var(--foreground); font-family: "Onest", system-ui, -apple-system, sans-serif; font-weight: 400; line-height: 1.4; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; background: var(--page); color: var(--on-dark); font-family: "Onest", system-ui, -apple-system, sans-serif; font-weight: 400; line-height: 1.4; -webkit-font-smoothing: antialiased; }
   main { width: 100%; overflow-x: clip; padding: .5rem; }
   @media (min-width: 640px) { main { padding: .75rem; } }
-  .medium { font-weight: 500; } .upper { text-transform: uppercase; } .tight { letter-spacing: -.02em; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   /* reveals */
   .rv .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .12em; margin-bottom: -.12em; }
@@ -49,39 +47,31 @@
   /* loader */
   #loader { position: fixed; inset: 0; z-index: 200; background: var(--deep); color: var(--on-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transition: transform 850ms var(--ease-in-out-cubic); }
   #loader.out { transform: translateY(-105%); }
-  #loader .mark { display: flex; align-items: center; gap: .75rem; opacity: 0; transform: translateY(16px); transition: transform 700ms cubic-bezier(.2, .9, .25, 1.03), opacity 600ms ease; }
-  #loader.ready .mark { opacity: 1; transform: none; }
-  #loader .mark img { height: 2.4rem; }
+  #loader .mark { opacity: 0; transform: translateY(16px); transition: transform 700ms cubic-bezier(.2, .9, .25, 1.03), opacity 600ms ease; } #loader.ready .mark { opacity: 1; transform: none; } #loader .mark img { height: 2.4rem; }
   #loader .track { width: 10rem; height: 1px; border-radius: var(--radius-pill); background: rgba(255,255,255,.2); overflow: hidden; }
-  #loader .fill { height: 100%; width: 100%; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 1280ms var(--ease-in-out-cubic) 120ms; }
-  #loader.ready .fill { transform: scaleX(1); }
+  #loader .fill { height: 100%; width: 100%; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 1280ms var(--ease-in-out-cubic) 120ms; } #loader.ready .fill { transform: scaleX(1); }
   /* header */
   header.site { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 1.5rem 0; font-size: .75rem; color: var(--on-dark); position: relative; z-index: 5; }
   @media (min-width: 640px) { header.site { padding: 2rem 2.5rem 0; } }
-  header.site nav.left { display: none; flex: 1; gap: 2rem; } header.site nav.left a { opacity: .9; } header.site nav.left a:hover { opacity: 1; }
-  @media (min-width: 1024px) { header.site nav.left { display: flex; } }
-  header.site .brand { flex: 1; display: flex; justify-content: flex-start; } @media (min-width: 1024px) { header.site .brand { justify-content: center; } }
-  header.site .brand img { height: 1.7rem; }
-  header.site .right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; } @media (min-width: 640px) { header.site .right { gap: 1.25rem; } }
+  header.site nav.left { display: none; flex: 1; gap: 2rem; } header.site nav.left a { opacity: .9; } header.site nav.left a:hover { opacity: 1; } @media (min-width: 1024px) { header.site nav.left { display: flex; } }
+  header.site .brand { flex: 1; display: flex; justify-content: flex-start; } @media (min-width: 1024px) { header.site .brand { justify-content: center; } } header.site .brand img { height: 1.7rem; }
+  header.site .right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
   header.site .textbtn { display: none; text-transform: uppercase; letter-spacing: .12em; } header.site .textbtn:hover { text-decoration: underline; } @media (min-width: 640px) { header.site .textbtn { display: inline; } }
   .burger { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: var(--radius-pill); background: rgba(255,255,255,.15); backdrop-filter: blur(8px); transition: background-color 200ms ease; } .burger:hover { background: rgba(255,255,255,.25); }
   .burger i { display: block; width: 1rem; height: 1px; background: #fff; } .burger i + i { margin-top: 5px; }
   /* hero */
   .hero { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-card-lg); background: var(--deep); color: var(--on-dark); height: calc(100svh - 1rem); min-height: 36rem; display: flex; flex-direction: column; }
   @media (min-width: 640px) { .hero { height: calc(100svh - 1.5rem); } }
-  .hero .plate { position: absolute; inset: 0; z-index: -10; overflow: hidden; } .hero .plate .inner { position: absolute; left: 0; right: 0; top: -16%; height: 132%; width: 100%; will-change: transform; } .hero .plate img { width: 100%; height: 100%; object-fit: cover; }
-  .hero .plate::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11,11,12,.62), rgba(11,11,12,.28), rgba(11,11,12,.82)); }
+  .hero .plate { position: absolute; inset: 0; z-index: -10; overflow: hidden; } .hero .plate .inner { position: absolute; left: 0; right: 0; top: -16%; height: 132%; width: 100%; will-change: transform; } .hero .plate img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+  .hero .plate::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11,11,12,.66), rgba(11,11,12,.22) 45%, rgba(11,11,12,.86)); }
   .hero .title { padding: 1rem 1.5rem 0; } @media (min-width: 640px) { .hero .title { padding-left: 2.5rem; padding-right: 2.5rem; } }
   .hero h1 { font-size: 10.6vw; font-weight: 500; text-transform: uppercase; line-height: .85; letter-spacing: -.03em; white-space: nowrap; }
   .hero .bottom { margin-top: auto; padding: 0 1.5rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; } @media (min-width: 640px) { .hero .bottom { padding: 0 2.5rem 2.5rem; flex-direction: row; justify-content: space-between; align-items: flex-end; } }
-  .hero .tag { font-size: 2.4rem; font-weight: 500; text-transform: uppercase; line-height: .95; letter-spacing: -.02em; color: rgba(244,241,236,.88); }
-  .hero .tag .l > span { white-space: nowrap; }
-  @media (max-width: 640px) { .hero h1 { font-size: 9.4vw; } .hero .tag { font-size: 1.55rem; } .hero .bottom { padding-bottom: 1.5rem; } }
+  .hero .tag { font-size: 2.4rem; font-weight: 500; text-transform: uppercase; line-height: .95; letter-spacing: -.02em; color: rgba(244,241,236,.9); } .hero .tag .l > span { white-space: nowrap; }
   .hero .cluster { display: flex; align-items: flex-end; gap: 1rem; }
   .glass { border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,.35); border-radius: var(--radius-card); padding: .75rem; }
   .slider { display: none; width: 16rem; flex-direction: column; gap: .75rem; } @media (min-width: 768px) { .slider { display: flex; } }
-  .slider .sc { display: flex; gap: .75rem; align-items: center; transition: transform 240ms var(--ease-out-quart), opacity 240ms ease; }
-  .slider .sc.swap { opacity: 0; transform: translateY(16px) scale(.96); }
+  .slider .sc { display: flex; gap: .75rem; align-items: center; transition: transform 240ms var(--ease-out-quart), opacity 240ms ease; } .slider .sc.swap { opacity: 0; transform: translateY(16px) scale(.96); }
   .slider .sc img { width: 3.5rem; height: 3.5rem; border-radius: var(--radius-xl); object-fit: cover; flex: 0 0 3.5rem; }
   .slider .sc b { display: block; font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; } .slider .sc span { display: block; font-size: .7rem; text-transform: uppercase; opacity: .8; margin-top: .15rem; } .slider .sc a { display: inline-block; font-size: .65rem; text-decoration: underline; margin-top: .35rem; }
   .dots { display: flex; gap: .5rem; } .dots button { padding: .375rem; } .dots i { display: block; height: .375rem; width: .375rem; border-radius: var(--radius-pill); background: rgba(255,255,255,.4); transition: width 240ms var(--ease-out-quart), background-color 240ms ease; } .dots button[aria-current="true"] i { width: 1.25rem; background: #fff; }
@@ -89,85 +79,93 @@
   .member { width: 100%; max-width: 20rem; display: flex; gap: .75rem; align-items: stretch; } @media (min-width: 640px) { .member { max-width: 15rem; } }
   .member .col { display: flex; flex-direction: column; justify-content: space-between; flex: 1; } .member .big { font-size: 1.875rem; font-weight: 500; line-height: 1; }
   .member .avs { display: flex; margin-top: .5rem; } .member .avs i { width: 1.25rem; height: 1.25rem; border-radius: var(--radius-pill); border: 1px solid rgba(11,11,12,.4); margin-left: -.5rem; } .member .avs i:first-child { margin-left: 0; }
-  .member .cap { font-size: .65rem; opacity: .8; margin-top: .5rem; } .member img { width: 4rem; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--radius-xl); }
-  /* trust */
+  .member .cap { font-size: .65rem; opacity: .85; margin-top: .5rem; line-height: 1.4; } .member img { width: 4rem; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--radius-xl); }
+  /* propuesta */
   .trust { position: relative; isolation: isolate; overflow: hidden; background: var(--surface); color: var(--ink); padding: 4rem 1.5rem; border-radius: var(--radius-card-lg); margin-top: .75rem; } @media (min-width: 640px) { .trust { padding: 5rem 2.5rem; } }
   .trust .badges { position: relative; z-index: 20; display: flex; flex-direction: column; gap: 1.5rem; } @media (min-width: 640px) { .trust .badges { flex-direction: row; justify-content: space-between; align-items: flex-start; } }
-  .pct { width: 7rem; height: 7rem; border-radius: var(--radius-pill); background: var(--surface2); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; } @media (min-width: 640px) { .pct { width: 8rem; height: 8rem; } }
+  .pct { width: 7rem; height: 7rem; border-radius: var(--radius-pill); background: var(--surface2); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex: 0 0 auto; } @media (min-width: 640px) { .pct { width: 8rem; height: 8rem; } }
   .pct b { font-size: 1.5rem; font-weight: 500; } .pct span { font-size: .6rem; color: var(--ink-soft); max-width: 8em; line-height: 1.3; margin-top: .2rem; }
-  .bcard { max-width: 28rem; display: flex; gap: 1rem; border-radius: var(--radius-card); background: var(--surface2); padding: 1.25rem; align-items: flex-start; } @media (min-width: 640px) { .bcard { gap: 1.25rem; padding: 1.5rem; } }
-  .bcard .idx { border-radius: var(--radius-xl); background: var(--card); padding: .5rem 1rem; font-size: 1.25rem; font-weight: 500; } .bcard h3 { font-size: 1.125rem; font-weight: 500; } .bcard p { font-size: .75rem; color: var(--ink-soft); line-height: 1.6; margin-top: .35rem; }
+  .bcard { max-width: 30rem; border-radius: var(--radius-card); background: var(--surface2); padding: 1.25rem; } @media (min-width: 640px) { .bcard { padding: 1.5rem; } }
+  .bcard h3 { font-size: 1.125rem; font-weight: 500; line-height: 1.25; } .bcard p { font-size: .8rem; color: var(--ink-soft); line-height: 1.6; margin-top: .5rem; } .bcard p b { color: var(--ink); font-weight: 500; }
   .ghost { position: relative; z-index: 0; pointer-events: none; user-select: none; max-width: 88rem; margin: 3rem auto 0; font-size: 8.2vw; font-weight: 500; text-transform: uppercase; line-height: 1.02; letter-spacing: -.02em; color: var(--ghost); }
   .ghost .row { display: flex; justify-content: space-between; gap: 1rem; } .ghost .row .w { display: inline-block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; } .ghost .w > span { display: inline-block; transform: translateY(115%); opacity: 0; transition: transform 700ms var(--ease-out-expo), opacity 700ms var(--ease-out-expo); will-change: transform; } .ghost.in .w > span { transform: none; opacity: 1; } .ghost .ink { color: var(--ink); }
   .coach { position: relative; z-index: 10; margin: 2rem auto 0; width: 13rem; } @media (min-width: 640px) { .coach { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin: 0; width: 16rem; } }
   .coach figure { transform: rotate(6deg); aspect-ratio: 3/4; border-radius: var(--radius-card); background: var(--gold); overflow: hidden; position: relative; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.18); }
   .coach img { width: 100%; height: 100%; object-fit: cover; transition: opacity 260ms ease; } .coach img.swap { opacity: 0; }
-  .coach figcaption { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; border-radius: var(--radius-xl); background: rgba(11,11,12,.45); color: #fff; backdrop-filter: blur(8px); padding: .5rem .75rem; } .coach figcaption b { display: block; font-size: .875rem; font-weight: 500; } .coach figcaption span { font-size: .65rem; opacity: .8; }
+  .coach figcaption { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; border-radius: var(--radius-xl); background: rgba(11,11,12,.5); color: #fff; backdrop-filter: blur(8px); padding: .5rem .75rem; } .coach figcaption b { display: block; font-size: .875rem; font-weight: 500; } .coach figcaption span { font-size: .65rem; opacity: .85; }
   .controls { position: relative; z-index: 20; margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; } @media (min-width: 640px) { .controls { margin-top: 6rem; } }
-  .arrow { width: 3rem; height: 3rem; border-radius: var(--radius-pill); display: grid; place-items: center; border: 1px solid var(--hairline); color: var(--ink); transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease; } @media (min-width: 640px) { .arrow { width: 3.5rem; height: 3.5rem; } }
-  .arrow:hover { border-color: var(--ink); } .arrow.solid { background: var(--ink); border-color: var(--ink); color: #fff; } .arrow.solid:hover { background: #2A2A2E; }
-  .arrow svg { width: 1.25rem; height: 1.25rem; will-change: transform; } .arrow.prev svg { transform: scaleX(-1); }
-  /* programs */
+  .arrow { width: 3rem; height: 3rem; border-radius: var(--radius-pill); display: grid; place-items: center; border: 1px solid var(--hairline); color: var(--ink); transition: border-color 200ms ease, background-color 200ms ease; } @media (min-width: 640px) { .arrow { width: 3.5rem; height: 3.5rem; } }
+  .arrow:hover { border-color: var(--ink); } .arrow.solid { background: var(--ink); border-color: var(--ink); color: #fff; } .arrow.solid:hover { background: #2A2A2E; } .arrow svg { width: 1.25rem; height: 1.25rem; will-change: transform; } .arrow.prev svg { transform: scaleX(-1); }
+  /* el sistema */
   .programs { background: var(--surface2); color: var(--ink); padding: 6rem 1.5rem; border-radius: var(--radius-card-lg) var(--radius-card-lg) 0 0; margin-top: .75rem; } @media (min-width: 640px) { .programs { padding-left: 2.5rem; padding-right: 2.5rem; } }
   .eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .22em; color: var(--ink-soft); } .eyebrow::before { content: ''; width: .375rem; height: .375rem; border-radius: var(--radius-pill); background: var(--gold); }
   .eyebrow.light { color: rgba(244,241,236,.7); } .eyebrow.light::before { background: var(--gold-light); }
   h2.big { font-size: 3rem; font-weight: 500; line-height: .95; letter-spacing: -.02em; margin-top: 1rem; }
-  .plist { list-style: none; padding: 0; margin-top: 3.5rem; } .plist li { border-top: 1px solid var(--hairline); } .plist li:last-child { border-bottom: 1px solid var(--hairline); }
-  .plist a { display: block; } .plist a:focus-visible { background: var(--surface); }
-  .plist .row { display: flex; gap: 1.5rem; padding: 1.75rem 0; align-items: center; }
-  .plist .n { width: 2.5rem; font-size: .875rem; font-weight: 500; color: var(--ink-soft); flex: 0 0 2.5rem; } .plist .tx { flex: 1; } .plist .tx b { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.02em; line-height: 1.1; } @media (min-width: 640px) { .plist .tx b { font-size: 1.875rem; } } .plist .tx span { display: block; font-size: .875rem; color: var(--ink-soft); margin-top: .35rem; max-width: 40rem; }
+  .intro-p { font-size: 1rem; color: var(--ink-soft); max-width: 36rem; margin-top: 1.25rem; line-height: 1.6; } .intro-p b { color: var(--ink); font-weight: 500; }
+  .plist { list-style: none; padding: 0; margin-top: 3rem; } .plist li { border-top: 1px solid var(--hairline); } .plist li:last-child { border-bottom: 1px solid var(--hairline); } .plist a { display: block; } .plist a:focus-visible { background: var(--surface); }
+  .plist .row { display: flex; gap: 1.25rem; padding: 1.75rem 0; align-items: center; }
+  .plist .n { width: 2.5rem; font-size: .875rem; font-weight: 500; color: var(--ink-soft); flex: 0 0 2.5rem; } .plist .tx { flex: 1; min-width: 0; } .plist .tx b { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.02em; line-height: 1.1; } @media (min-width: 640px) { .plist .tx b { font-size: 1.875rem; } } .plist .tx span { display: block; font-size: .875rem; color: var(--ink-soft); margin-top: .4rem; max-width: 42rem; line-height: 1.55; } .plist .tx small { display: inline-block; font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--gold-ink); background: var(--gold); border-radius: var(--radius-pill); padding: .2rem .6rem; margin-top: .6rem; }
   .plist .ar { width: 2.75rem; height: 2.75rem; border-radius: var(--radius-pill); border: 1px solid var(--hairline); display: grid; place-items: center; flex: 0 0 2.75rem; opacity: .55; will-change: transform, opacity; } .plist .ar svg { width: 1.1rem; height: 1.1rem; }
-  /* facilities */
+  /* pantallas */
   .facil { background: var(--surface); color: var(--ink); border-radius: var(--radius-card-lg); margin-top: -2.5rem; position: relative; padding: 4rem 1.5rem 5rem; } @media (min-width: 640px) { .facil { padding-left: 2.5rem; padding-right: 2.5rem; } }
   .facil .grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: end; } @media (min-width: 768px) { .facil .grid { grid-template-columns: 1fr 1fr; } }
   .facil .intro { max-width: 24rem; } .facil .icon { width: 4rem; height: 4rem; border-radius: var(--radius-card); object-fit: cover; }
-  .facil .body { font-size: .875rem; color: var(--ink-soft); max-width: 20rem; margin-top: 1.5rem; line-height: 1.6; }
+  .facil .body { font-size: .95rem; color: var(--ink-soft); max-width: 22rem; margin-top: 1.5rem; line-height: 1.6; }
   .courts { display: flex; align-items: flex-end; gap: 1.25rem; } .courts figure { flex: 1; position: relative; aspect-ratio: 3/4; border-radius: var(--radius-card); overflow: hidden; background: var(--surface2); } .courts figure.up { margin-bottom: 2rem; }
   .courts img { width: 100%; height: 100%; object-fit: cover; object-position: top; will-change: transform; }
-  .courts figcaption { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; border-radius: var(--radius-xl); backdrop-filter: blur(8px); color: #fff; padding: .75rem 1rem; } .courts .gold figcaption { background: rgba(122,84,20,.6); } .courts .dark figcaption { background: rgba(11,11,12,.55); }
-  .courts figcaption b { display: block; font-size: .875rem; font-weight: 500; } .courts figcaption span { display: block; font-size: .65rem; opacity: .85; margin-top: .15rem; }
-  /* stats */
-  .stats { background: var(--deep2); color: var(--on-dark); border-radius: var(--radius-card-lg); margin-top: .75rem; padding: 5rem 1.5rem; } @media (min-width: 640px) { .stats { padding-left: 2.5rem; padding-right: 2.5rem; } }
-  .stats dl { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2rem; row-gap: 3rem; margin-top: 4rem; } @media (min-width: 1024px) { .stats dl { grid-template-columns: repeat(4, 1fr); } }
-  .stats .cell { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1.25rem; } .stats dd { margin: 0; } .stats .v { font-size: 3.75rem; font-weight: 500; letter-spacing: -.03em; line-height: 1; } @media (min-width: 640px) { .stats .v { font-size: 4.5rem; } } .stats .lb { font-size: .875rem; color: rgba(244,241,236,.65); margin-top: .75rem; }
-  /* testimonials */
+  .courts figcaption { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; border-radius: var(--radius-xl); backdrop-filter: blur(8px); color: #fff; padding: .75rem 1rem; } .courts .gold figcaption { background: rgba(122,84,20,.62); } .courts .dark figcaption { background: rgba(11,11,12,.58); }
+  .courts figcaption b { display: block; font-size: .875rem; font-weight: 500; } .courts figcaption span { display: block; font-size: .65rem; opacity: .9; margin-top: .15rem; line-height: 1.4; }
+  /* todo conectado */
+  .conectado { background: var(--deep2); color: var(--on-dark); border-radius: var(--radius-card-lg); margin-top: .75rem; padding: 5rem 1.5rem; } @media (min-width: 640px) { .conectado { padding-left: 2.5rem; padding-right: 2.5rem; } }
+  .conectado .lead { font-size: 1.05rem; color: rgba(244,241,236,.75); max-width: 40rem; margin-top: 1.5rem; line-height: 1.6; } .conectado .lead b { color: var(--on-dark); font-weight: 500; }
+  .conectado dl { display: grid; grid-template-columns: 1fr; column-gap: 2rem; row-gap: 2rem; margin-top: 3.5rem; } @media (min-width: 640px) { .conectado dl { grid-template-columns: 1fr 1fr; } } @media (min-width: 1024px) { .conectado dl { grid-template-columns: repeat(4, 1fr); } }
+  .conectado .cell { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1.25rem; } .conectado dt { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: var(--gold-light); } .conectado dd { margin: .75rem 0 0; font-size: 1.05rem; line-height: 1.5; }
+  /* lo que cambia */
   .testi { background: var(--surface); color: var(--ink); border-radius: var(--radius-card-lg); margin-top: .75rem; padding: 5rem 1.5rem; } @media (min-width: 640px) { .testi { padding: 6rem 2.5rem; } }
-  .testi ul { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 3.5rem; } @media (min-width: 768px) { .testi ul { grid-template-columns: repeat(3, 1fr); } }
+  .testi ul { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 3rem; } @media (min-width: 768px) { .testi ul { grid-template-columns: repeat(3, 1fr); } }
   .tcard { display: flex; flex-direction: column; justify-content: space-between; height: 100%; border-radius: var(--radius-card); background: var(--surface2); padding: 1.75rem; will-change: transform; }
-  .tcard .q { font-size: .75rem; color: var(--gold); line-height: 1; font-weight: 500; text-transform: uppercase; letter-spacing: .22em; } .tcard blockquote { font-size: 1.125rem; line-height: 1.6; margin-top: 1rem; color: var(--ink); }
+  .tcard .q { font-size: .75rem; color: var(--gold-ink); background: var(--gold); display: inline-block; border-radius: var(--radius-pill); padding: .3rem .7rem; line-height: 1; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; } .tcard blockquote { font-size: 1.05rem; line-height: 1.55; margin-top: 1rem; color: var(--ink); }
   .tcard figcaption { border-top: 1px solid var(--hairline); padding-top: 1rem; margin-top: 1.5rem; } .tcard figcaption b { display: block; font-weight: 500; } .tcard figcaption span { font-size: .875rem; color: var(--ink-soft); }
   /* footer */
   footer.site { background: var(--deep2); color: var(--on-dark); border-radius: var(--radius-card-lg); margin-top: .75rem; padding: 3.5rem 1.5rem; } @media (min-width: 640px) { footer.site { padding: 4rem 2.5rem; } }
   .cta { border-bottom: 1px solid rgba(255,255,255,.15); padding-bottom: 3.5rem; display: flex; flex-direction: column; gap: 2rem; } @media (min-width: 640px) { .cta { flex-direction: row; justify-content: space-between; align-items: flex-end; } }
   .cta .h { font-size: 3.75rem; font-weight: 500; line-height: .92; letter-spacing: -.03em; margin-top: 1rem; }
-  .pill { display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--radius-pill); padding: .875rem 1.75rem; font-size: .875rem; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; transition: background-color 200ms ease, color 200ms ease; }
-  .pill svg { width: 1rem; height: 1rem; will-change: transform; }
-  .pill.light { background: #fff; color: var(--ink); } .pill.light:hover { background: var(--gold); color: var(--gold-ink); }
-  .pill.solid { background: var(--ink); color: #fff; } .pill.solid:hover { background: #2A2A2E; }
-  .pill.gold { background: var(--gold); color: var(--gold-ink); } .pill.gold:hover { background: var(--gold-light); }
-  .cols { display: grid; gap: 2.5rem; padding: 3.5rem 0; grid-template-columns: 1fr; } @media (min-width: 768px) { .cols { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
-  .cols .brandcol { max-width: 20rem; } .cols .brandcol img { height: 2rem; } .cols .brandcol p { font-size: .875rem; color: rgba(244,241,236,.65); margin-top: 1rem; line-height: 1.6; }
+  .cta .apps { display: flex; flex-direction: column; gap: .75rem; width: 100%; } @media (min-width: 640px) { .cta .apps { width: 20rem; } }
+  .applink { display: flex; align-items: center; gap: .9rem; border-radius: var(--radius-card); border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); padding: .85rem 1rem; transition: background-color 200ms ease, border-color 200ms ease; } .applink:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); }
+  .applink img { width: 3rem; height: 3rem; border-radius: var(--radius-xl); object-fit: cover; flex: 0 0 3rem; } .applink b { display: block; font-size: .95rem; font-weight: 500; } .applink span { display: block; font-size: .75rem; color: rgba(244,241,236,.65); margin-top: .15rem; } .applink svg { width: 1rem; height: 1rem; margin-left: auto; flex: 0 0 1rem; will-change: transform; }
+  .pill { display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--radius-pill); padding: .875rem 1.75rem; font-size: .875rem; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; transition: background-color 200ms ease, color 200ms ease; } .pill svg { width: 1rem; height: 1rem; will-change: transform; }
+  .pill.light { background: #fff; color: var(--ink); } .pill.light:hover { background: var(--gold); color: var(--gold-ink); } .pill.solid { background: var(--ink); color: #fff; } .pill.solid:hover { background: #2A2A2E; }
+  .cols { display: grid; gap: 2.5rem; padding: 3.5rem 0; grid-template-columns: 1fr; } @media (min-width: 768px) { .cols { grid-template-columns: 1.4fr 1fr 1fr; } }
+  .cols .brandcol { max-width: 22rem; } .cols .brandcol img { height: 2rem; } .cols .brandcol p { font-size: .875rem; color: rgba(244,241,236,.65); margin-top: 1rem; line-height: 1.6; }
   .cols address { font-style: normal; margin-top: 1.5rem; font-size: .875rem; color: rgba(244,241,236,.8); line-height: 1.8; } .cols address .mut { color: rgba(244,241,236,.55); }
-  .cols h4 { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: rgba(244,241,236,.5); } .cols ul { list-style: none; padding: 0; margin-top: 1rem; font-size: .875rem; color: rgba(244,241,236,.8); } .cols li + li { margin-top: .75rem; } .cols li a:hover { color: var(--gold-light); }
+  .cols h4 { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: rgba(244,241,236,.5); } .cols ul, .cols ol { padding: 0; margin-top: 1rem; font-size: .875rem; color: rgba(244,241,236,.8); list-style: none; } .cols li + li { margin-top: .75rem; } .cols li a:hover { color: var(--gold-light); } .cols ol li { display: flex; gap: .6rem; } .cols ol li i { font-style: normal; color: var(--gold-light); }
   .bottombar { border-top: 1px solid rgba(255,255,255,.15); padding-top: 2rem; font-size: .875rem; color: rgba(244,241,236,.6); display: flex; flex-direction: column; gap: 1.25rem; } @media (min-width: 640px) { .bottombar { flex-direction: row; justify-content: space-between; align-items: center; } } .bottombar nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
-  /* menu overlay */
+  /* menú */
   #menu { position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column; pointer-events: none; } #menu.open { pointer-events: auto; }
   #menu .bg { position: absolute; inset: 0; background: var(--deep); opacity: 0; transition: opacity 320ms ease; } #menu.open .bg { opacity: 1; }
   #menu .panel { position: relative; height: 100%; display: flex; flex-direction: column; padding: .5rem; color: var(--on-dark); opacity: 0; transform: translateY(-24px); transition: transform 420ms cubic-bezier(.2, .9, .25, 1.03), opacity 300ms ease; } @media (min-width: 640px) { #menu .panel { padding: .75rem; } } #menu.open .panel { opacity: 1; transform: none; }
   #menu .inner { flex: 1; display: flex; flex-direction: column; padding: 1.5rem; } @media (min-width: 640px) { #menu .inner { padding: 2rem 2.5rem; } }
   #menu .toprow { display: flex; justify-content: space-between; align-items: center; } #menu .toprow img { height: 1.7rem; }
   .xbtn { width: 2.5rem; height: 2.5rem; border-radius: var(--radius-pill); display: grid; place-items: center; background: rgba(255,255,255,.15); transition: background-color 200ms ease; } .xbtn:hover { background: rgba(255,255,255,.25); } .xbtn svg { width: 1.1rem; height: 1.1rem; will-change: transform; }
-  #menu nav.main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: .5rem; } #menu nav.main a { display: block; font-size: 3rem; font-weight: 500; letter-spacing: -.03em; line-height: 1; opacity: 0; transform: translateY(28px); transition: transform 600ms cubic-bezier(.2, .9, .25, 1.03) var(--dl), opacity 500ms ease var(--dl), color 200ms ease; } @media (min-width: 640px) { #menu nav.main a { font-size: 4.5rem; } } #menu.open nav.main a { opacity: 1; transform: none; } #menu nav.main a:hover { color: var(--gold-light); }
-  #menu .bottomrow { border-top: 1px solid rgba(255,255,255,.15); padding-top: 2rem; display: flex; flex-direction: column; gap: 1.25rem; } @media (min-width: 640px) { #menu .bottomrow { flex-direction: row; justify-content: space-between; align-items: center; } } #menu .bottomrow nav { display: flex; gap: 1.25rem; font-size: .875rem; color: rgba(244,241,236,.7); } #menu .bottomrow nav a:hover { color: #fff; }
-  /* modal */
+  #menu nav.main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: .5rem; } #menu nav.main a { display: block; font-size: 2.6rem; font-weight: 500; letter-spacing: -.03em; line-height: 1; opacity: 0; transform: translateY(28px); transition: transform 600ms cubic-bezier(.2, .9, .25, 1.03) var(--dl), opacity 500ms ease var(--dl), color 200ms ease; } @media (min-width: 640px) { #menu nav.main a { font-size: 4.5rem; } } #menu.open nav.main a { opacity: 1; transform: none; } #menu nav.main a:hover { color: var(--gold-light); }
+  #menu .bottomrow { border-top: 1px solid rgba(255,255,255,.15); padding-top: 2rem; display: flex; flex-direction: column; gap: 1.25rem; } @media (min-width: 640px) { #menu .bottomrow { flex-direction: row; justify-content: space-between; align-items: center; } } #menu .bottomrow nav { display: flex; gap: 1.25rem; font-size: .875rem; color: rgba(244,241,236,.7); flex-wrap: wrap; } #menu .bottomrow nav a:hover { color: #fff; }
+  /* modal: elegir demo */
   #modal { position: fixed; inset: 0; z-index: 90; display: flex; align-items: flex-end; justify-content: center; padding: .75rem; pointer-events: none; } @media (min-width: 640px) { #modal { align-items: center; padding: 1.5rem; } } #modal.open { pointer-events: auto; }
   #modal .bg { position: absolute; inset: 0; background: rgba(11,11,12,.55); backdrop-filter: blur(6px); opacity: 0; transition: opacity 320ms ease; } #modal.open .bg { opacity: 1; }
   #modal .panel { position: relative; width: 100%; max-height: 92svh; overflow-y: auto; border-radius: var(--radius-card-lg); background: var(--card); color: var(--ink); padding: 1.5rem; box-shadow: 0 2rem 4rem rgba(0,0,0,.5); opacity: 0; transform: translateY(28px) scale(.96); transition: transform 460ms cubic-bezier(.2, .9, .25, 1.03), opacity 320ms ease; } @media (min-width: 640px) { #modal .panel { max-width: 32rem; padding: 2rem; } } #modal.open .panel { opacity: 1; transform: none; }
-  #modal .panel .xbtn { background: var(--surface); color: var(--ink); } #modal .panel .xbtn:hover { background: var(--hairline); }
+  #modal .panel .xbtn { background: var(--surface); color: var(--ink); flex: 0 0 auto; } #modal .panel .xbtn:hover { background: var(--hairline); }
   #modal h2 { font-size: 2.25rem; font-weight: 500; line-height: .95; letter-spacing: -.03em; margin-top: .75rem; } @media (min-width: 640px) { #modal h2 { font-size: 3rem; } }
-  #modal form { margin-top: 1.75rem; display: flex; flex-direction: column; gap: 1rem; } #modal label { display: block; font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .18em; color: var(--ink-soft); margin-bottom: .4rem; }
-  #modal input, #modal textarea { width: 100%; border-radius: var(--radius-xl); border: 1px solid var(--hairline); background: var(--surface); padding: .75rem 1rem; font-size: .875rem; font-family: inherit; color: var(--ink); } #modal input:focus, #modal textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(228,177,92,.35); }
-  #modal .ok { margin-top: 2rem; border-radius: var(--radius-card); background: var(--surface); padding: 1.5rem; text-align: center; } #modal .ok .chk { width: 3rem; height: 3rem; border-radius: var(--radius-pill); background: var(--gold); display: grid; place-items: center; margin: 0 auto 1rem; } #modal .ok .chk svg { width: 1.4rem; height: 1.4rem; } #modal .ok b { display: block; font-size: 1.125rem; font-weight: 500; } #modal .ok p { font-size: .875rem; color: var(--ink-soft); margin-top: .5rem; }
+  #modal .opts { display: flex; flex-direction: column; gap: .75rem; margin-top: 1.5rem; }
+  #modal .applink { border-color: var(--hairline); background: var(--surface); color: var(--ink); } #modal .applink:hover { background: var(--surface2); border-color: var(--ink); } #modal .applink span { color: var(--ink-soft); }
+  #modal ol { margin: 1.5rem 0 0; padding: 0 0 0 1.2rem; font-size: .8rem; color: var(--ink-soft); line-height: 1.6; } #modal ol li + li { margin-top: .3rem; } #modal h3 { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: var(--ink-soft); margin-top: 1.5rem; }
+  /* móvil: tamaños de texto */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 9.4vw; } .hero .tag { font-size: 1.55rem; } .hero .bottom { padding-bottom: 1.5rem; }
+    h2.big { font-size: 2.35rem; } .ghost { font-size: 6.8vw; margin-top: 2rem; } .ghost .row { gap: .75rem; }
+    .cta .h { font-size: 2.8rem; } .conectado dd { font-size: 1rem; } .tcard blockquote { font-size: 1rem; }
+    .plist .row { flex-wrap: wrap; gap: .5rem 1rem; padding: 1.5rem 0; } .plist .n { flex: 0 0 100%; width: auto; } .plist .tx { flex: 1 1 100%; } .plist .ar { display: none; }
+    .trust { padding: 3rem 1.25rem; } .programs { padding: 4rem 1.25rem; } .facil { padding: 3rem 1.25rem 4rem; } .conectado, .testi { padding: 4rem 1.25rem; } footer.site { padding: 3rem 1.25rem; }
+  }
 </style>
 </head>
 <body>
@@ -176,199 +174,181 @@
 <main>
   <!-- HERO -->
   <section class="hero" id="top">
-    <div class="plate"><div class="inner" id="plate"><img src="shared/img/site/hero.jpg" alt="Camioneta negra de All Cabo Services en la pista del aeropuerto de Los Cabos" fetchpriority="high"></div></div>
+    <div class="plate"><div class="inner" id="plate"><picture><source media="(max-width: 767px)" srcset="shared/img/site/suburban_drive.jpg"><img src="shared/img/site/hero.jpg" alt="Camioneta de All Cabo Services lista para un traslado en Los Cabos" fetchpriority="high"></picture></div></div>
     <header class="site">
-      <nav class="left"><a href="#sistema" data-scroll>El sistema</a><a href="#pantallas" data-scroll>Pantallas</a></nav>
+      <nav class="left"><a href="#sistema" data-scroll>El sistema</a><a href="#pantallas" data-scroll>Pantallas</a><a href="#conectado" data-scroll>Todo conectado</a></nav>
       <div class="brand"><a href="#top" data-scroll><img src="shared/img/logo.png" alt="All Cabo Services"></a></div>
-      <div class="right"><button class="textbtn" data-scroll-to="#sistema">Ver el demo</button><button class="burger" id="btnMenu" aria-label="Abrir menú"><i></i><i></i></button></div>
+      <div class="right"><button class="textbtn" data-open-modal>Probar el demo</button><button class="burger" id="btnMenu" aria-label="Abrir menú"><i></i><i></i></button></div>
     </header>
     <div class="title"><h1 id="heroTitle" class="rv" data-words="Cada Traslado" data-stagger="140" data-d="1100"></h1></div>
     <div class="bottom">
       <p class="tag lines" id="heroTag" data-lines="A cargo de la app,|no del teléfono." data-stagger="110" data-base="350"></p>
       <div class="cluster">
-        <div class="slider iv" data-dl="650">
-          <div class="glass"><div class="sc" id="sc"></div></div>
-          <div class="dots" id="scDots" role="tablist"></div>
-        </div>
+        <div class="slider iv" data-dl="650"><div class="glass"><div class="sc" id="sc"></div></div><div class="dots" id="scDots" role="tablist"></div></div>
         <article class="member glass iv" data-dl="780">
-          <div class="col"><div><div class="big">2011</div><div class="avs"><i style="background:#E4B15C"></i><i style="background:#F4F1EC"></i><i style="background:#6F6A63"></i><i style="background:#0B0B0C"></i></div></div><div class="cap">Operando en Los Cabos desde entonces · proveedor VIP de los resorts</div></div>
-          <img src="shared/img/site/suburban_drive.jpg" alt="Suburban plateada en la entrada de un resort" loading="lazy">
+          <div class="col"><div><div class="big">3 apps</div><div class="avs"><i style="background:#E4B15C"></i><i style="background:#F4F1EC"></i><i style="background:#6F6A63"></i></div></div><div class="cap">Un solo sistema para el cliente, el chofer y el dueño, conectados entre sí</div></div>
+          <img src="shared/img/site/escalade_jet.jpg" alt="Cadillac Escalade de All Cabo Services junto a un jet" loading="lazy">
         </article>
       </div>
     </div>
   </section>
 
-  <!-- TRUST -->
-  <section class="trust" id="confianza">
+  <!-- PROPUESTA -->
+  <section class="trust" id="propuesta">
     <div class="badges">
-      <div class="pct iv" data-s=".9" data-y="0"><b>4.7</b><span>en TripAdvisor, según su propio sitio</span></div>
-      <article class="bcard iv" data-dl="120" data-y="24"><div class="idx">#01</div><div><h3>Los resorts ya confían en ellos</h3><p>Juan Carlos trabajó dentro de One&amp;Only Palmilla, Las Ventanas y Waldorf Astoria Pedregal y hoy es su proveedor VIP. Lo que falta no es reputación: es que el sistema trabaje por él, no su celular.</p></div></article>
+      <div class="pct iv" data-s=".9" data-y="0"><b>Demo</b><span>funcional, para probarlo en su teléfono</span></div>
+      <article class="bcard iv" data-dl="120" data-y="24"><h3>Juan Carlos: esto es lo que podemos construir para All Cabo Services.</h3><p>Hoy cada reserva llega por WhatsApp o por teléfono y pasa por usted. Con el sistema, <b>el cliente reserva y paga solo</b>, el viaje <b>le llega al chofer más cercano</b> y usted <b>ve toda la operación en vivo</b>. Nada de esto es una lámina: todo lo que ve aquí ya funciona en el demo.</p></article>
     </div>
     <h2 class="ghost" id="ghost" aria-label="Palabras del carrusel"><div class="row"><span class="w"><span data-px="-3,3"></span></span><span class="w"><span data-px="3,-3"></span></span></div><div class="row"><span class="w ink"><span data-px="-2,4"></span></span><span class="w"><span data-px="4,-3"></span></span></div></h2>
-    <div class="coach iv" data-y="60" data-s=".92"><figure><img id="coachImg" src="shared/img/site/escalade_jet.jpg" alt="Cadillac Escalade junto a un jet privado" loading="lazy"><figcaption><b id="coachName">Cadillac Escalade</b><span id="coachRole">Traslado ejecutivo · SJD</span></figcaption></figure></div>
+    <div class="coach iv" data-y="60" data-s=".92"><figure><img id="coachImg" src="shared/img/site/escalade_jet.jpg" alt="Cadillac Escalade junto a un jet privado" loading="lazy"><figcaption><b id="coachName">Cadillac Escalade</b><span id="coachRole">Traslado ejecutivo desde SJD</span></figcaption></figure></div>
     <div class="controls"><button class="arrow prev" id="tPrev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><div class="dots dark" id="tDots" role="tablist"></div><button class="arrow solid next" id="tNext" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
   </section>
 
-  <!-- PROGRAMS → EL SISTEMA -->
+  <!-- EL SISTEMA -->
   <section class="programs" id="sistema">
     <span class="eyebrow">El sistema</span>
-    <h2 class="big lines" data-lines="Un solo lugar|para todo el negocio" data-stagger="120"></h2>
+    <h2 class="big lines" data-lines="Un solo sistema|para todo el negocio" data-stagger="120"></h2>
+    <p class="intro-p iv" data-y="20">Tres aplicaciones y una sola base de datos. <b>Cada dato se captura una vez</b> y aparece donde hace falta: en el teléfono del cliente, en el del chofer y en su central. Toque cualquiera para abrir su demo.</p>
     <ul class="plist" id="plist"></ul>
   </section>
 
-  <!-- FACILITIES → PANTALLAS -->
+  <!-- PANTALLAS -->
   <section class="facil" id="pantallas">
     <div class="grid">
       <div class="intro">
         <img class="icon iv" data-s=".85" data-y="0" src="shared/img/site/escalade_villa.jpg" alt="Escalade blanca frente a una villa" loading="lazy">
-        <h2 class="big lines" data-lines="Así se ve|en la mano|del huésped" data-stagger="120" style="margin-top:1.5rem;"></h2>
-        <p class="body rv fade" data-words="Pide como en Uber: ve dónde va su camioneta y cuántos minutos faltan para que llegue. El chofer solo toca botones. Y el dueño ve todo el negocio sin llamar a nadie." data-stagger="28" data-d="700" data-base="250"></p>
+        <h2 class="big lines" data-lines="Así se ve|en el teléfono|del cliente" data-stagger="120" style="margin-top:1.5rem;"></h2>
+        <p class="body rv fade" data-words="Un mapa GPS le muestra al cliente dónde va su camioneta y cuántos minutos faltan para que llegue por él, con el nombre del chofer y la placa. El chofer solo toca botones. Y usted ve toda la operación sin llamar a nadie." data-stagger="24" data-d="700" data-base="250"></p>
       </div>
       <div class="courts">
-        <figure class="gold iv" data-y="48" data-hover-scale="1.03"><img src="shared/img/shots/app_cliente.jpg" alt="App del huésped mostrando la camioneta acercándose en el mapa" loading="lazy"><figcaption><b>App del huésped</b><span>«Luis arrives in 5 min»: la camioneta avanza por la carretera real, con nombre y placa.</span></figcaption></figure>
+        <figure class="gold iv" data-y="48" data-hover-scale="1.03"><img src="shared/img/shots/app_cliente.jpg" alt="App del cliente con la camioneta acercándose en el mapa" loading="lazy"><figcaption><b>App del cliente</b><span>La camioneta avanza sobre la carretera real y el tiempo de llegada baja en vivo.</span></figcaption></figure>
         <figure class="dark up iv" data-y="48" data-dl="140" data-hover-scale="1.03"><img src="shared/img/shots/app_chofer.jpg" alt="App del chofer con la ruta y el botón de estado" loading="lazy"><figcaption><b>App del chofer</b><span>Ruta, pasajero, vuelo y un botón para cada paso del viaje.</span></figcaption></figure>
       </div>
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="stats" id="numeros">
-    <span class="eyebrow light">En números</span>
-    <h2 class="big lines" data-lines="Lo que ya tienen|y lo que se pierde" data-stagger="120"></h2>
+  <!-- TODO CONECTADO -->
+  <section class="conectado" id="conectado">
+    <span class="eyebrow light">Todo conectado</span>
+    <h2 class="big lines" data-lines="Un sistema interno,|no WhatsApp." data-stagger="120"></h2>
+    <p class="lead iv" data-y="20">WhatsApp sirve para hablar, no para operar una flota. En el sistema <b>cada reserva, cada chofer, cada cobro y cada camioneta viven en el mismo lugar</b>, y lo que hoy se hace a mano se hace solo.</p>
     <dl>
-      <div class="cell iv" data-y="30"><dt class="sr-only">Operando desde</dt><dd><div class="v">2011</div><div class="lb">Operando en Los Cabos desde</div></dd></div>
-      <div class="cell iv" data-y="30" data-dl="110"><dt class="sr-only">TripAdvisor</dt><dd><div class="v">4.7</div><div class="lb">Calificación en TripAdvisor, según su sitio</div></dd></div>
-      <div class="cell iv" data-y="30" data-dl="220"><dt class="sr-only">Tarifa</dt><dd><div class="v">100–125</div><div class="lb">Dólares por traslado sencillo, tarifa publicada</div></dd></div>
-      <div class="cell iv" data-y="30" data-dl="330"><dt class="sr-only">Reservas en línea</dt><dd><div class="v">0</div><div class="lb">Reservas confirmadas al instante hoy: todo pasa por un teléfono</div></dd></div>
+      <div class="cell iv" data-y="30"><dt>Reservas</dt><dd>El cliente reserva y paga desde su teléfono, a cualquier hora, y la confirmación sale sola con chofer, camioneta y placa.</dd></div>
+      <div class="cell iv" data-y="30" data-dl="110"><dt>Despacho</dt><dd>El viaje se asigna automáticamente al chofer disponible más cercano; usted solo interviene si quiere cambiarlo.</dd></div>
+      <div class="cell iv" data-y="30" data-dl="220"><dt>Vuelos y cobros</dt><dd>Un vuelo retrasado mueve la recogida sin llamadas. Zelle, tarjeta y efectivo quedan registrados y conciliados.</dd></div>
+      <div class="cell iv" data-y="30" data-dl="330"><dt>Flota y números</dt><dd>Seguros, permisos y servicios avisan antes de vencer. El tablero le dice qué zona, qué mes y qué canal rinden más.</dd></div>
     </dl>
   </section>
 
-  <!-- TESTIMONIALS → LO QUE CAMBIA -->
+  <!-- LO QUE CAMBIA -->
   <section class="testi" id="beneficios">
     <span class="eyebrow">Lo que cambia</span>
     <h2 class="big lines" data-lines="Para cada quien,|algo distinto" data-stagger="120"></h2>
     <ul>
-      <li class="iv" data-y="40"><figure class="tcard" data-hover-y="-8"><div><div class="q">Huésped</div><blockquote>Reserva en un minuto desde Houston a las once de la noche, paga con Apple Pay y ve llegar su camioneta con el nombre del chofer y la placa.</blockquote></div><figcaption><b>Confirmación al instante</b><span>Sin escribirle a nadie, a cualquier hora</span></figcaption></figure></li>
-      <li class="iv" data-y="40" data-dl="120"><figure class="tcard" data-hover-y="-8"><div><div class="q">Chofer</div><blockquote>Recibe el viaje en su teléfono con la ruta, el vuelo y las preferencias del huésped. Marca cada paso con un botón. Sin llamadas, sin libreta.</blockquote></div><figcaption><b>Los viajes le llegan solos</b><span>Al chofer disponible más cercano</span></figcaption></figure></li>
-      <li class="iv" data-y="40" data-dl="240"><figure class="tcard" data-hover-y="-8"><div><div class="q">Dueño</div><blockquote>Ve la flota, los cobros y el margen en vivo, y pregunta al tablero qué zona rinde más. El negocio deja de depender de su celular y puede crecer.</blockquote></div><figcaption><b>Todo el negocio en una pantalla</b><span>Flota, cobros, margen y alertas</span></figcaption></figure></li>
+      <li class="iv" data-y="40"><figure class="tcard" data-hover-y="-8"><div><div class="q">Cliente</div><blockquote>Reserva en un minuto a cualquier hora, paga desde su teléfono y ve llegar su camioneta con el nombre del chofer y la placa. Sin escribirle a nadie.</blockquote></div><figcaption><b>Confirmación al instante</b><span>Cualquier día, cualquier hora</span></figcaption></figure></li>
+      <li class="iv" data-y="40" data-dl="120"><figure class="tcard" data-hover-y="-8"><div><div class="q">Chofer</div><blockquote>Recibe el viaje en su teléfono con la ruta, el vuelo y las preferencias del cliente. Marca cada paso con un botón. Sin llamadas, sin libreta.</blockquote></div><figcaption><b>Los viajes le llegan solos</b><span>Al chofer disponible más cercano</span></figcaption></figure></li>
+      <li class="iv" data-y="40" data-dl="240"><figure class="tcard" data-hover-y="-8"><div><div class="q">Usted</div><blockquote>Ve la flota, los cobros y el margen en vivo. Cada reserva queda registrada sola y el negocio deja de depender de su celular.</blockquote></div><figcaption><b>Todo el negocio en una pantalla</b><span>Flota, cobros, margen y alertas</span></figcaption></figure></li>
     </ul>
   </section>
 
   <!-- FOOTER -->
-  <footer class="site" id="contacto">
+  <footer class="site" id="demos">
     <div class="cta">
-      <div><span class="eyebrow light">Siguiente paso</span><p class="h lines" data-lines="¿Lo vemos|con sus números?" data-stagger="120"></p></div>
-      <button class="pill light iv" data-y="20" data-dl="150" data-open-modal>Agendar una demo<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <div><span class="eyebrow light">Pruebe el demo</span><p class="h lines" data-lines="Ábralo en|su teléfono." data-stagger="120"></p></div>
+      <div class="apps">
+        <a class="applink iv" data-y="20" href="cliente/?user=c1&demo=now"><img src="shared/img/shots/thumb_cliente.jpg" alt=""><div><b>App del cliente</b><span>En inglés · abre con un viaje en camino</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="applink iv" data-y="20" data-dl="90" href="chofer/?id=d1"><img src="shared/img/shots/thumb_chofer.jpg" alt=""><div><b>App del chofer</b><span>Luis · Cadillac Escalade</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="applink iv" data-y="20" data-dl="180" href="central/?rol=dueno"><img src="shared/img/shots/thumb_central.jpg" alt=""><div><b>Central del dueño</b><span>Mapa, despacho, flota y tablero</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
     </div>
     <div class="cols">
-      <div class="brandcol"><img src="shared/img/logo.png" alt="All Cabo Services"><p>Demo del sistema integral para All Cabo Services, preparado por T.T AI Firm. Datos ilustrativos; pagos, vuelos, WhatsApp y GPS de la flota simulados.</p><address><a href="https://allcaboservices.com" target="_blank" rel="noopener">allcaboservices.com</a><br><span class="mut">Los Cabos, Baja California Sur</span></address></div>
-      <nav aria-label="Apps"><h4>Apps del demo</h4><ul><li><a href="cliente/?user=c1">App del huésped</a></li><li><a href="cliente/?user=c1&demo=now">Huésped · viaje en vivo</a></li><li><a href="chofer/?id=d1">App del chofer</a></li><li><a href="central/?rol=dueno">Central del dueño</a></li></ul></nav>
-      <nav aria-label="Recorrido"><h4>Recorrido</h4><ul><li>1. El huésped reserva y paga</li><li>2. La central asigna al más cercano</li><li>3. La camioneta avanza en el mapa</li><li>4. El chofer completa y registra gasolina</li><li>5. El tablero ya trae el margen</li></ul></nav>
-      <nav aria-label="Secciones"><h4>Secciones</h4><ul><li><a href="#sistema" data-scroll>El sistema</a></li><li><a href="#pantallas" data-scroll>Pantallas</a></li><li><a href="#numeros" data-scroll>Números</a></li><li><a href="#beneficios" data-scroll>Lo que cambia</a></li></ul></nav>
+      <div class="brandcol"><img src="shared/img/logo.png" alt="All Cabo Services"><p>Propuesta de sistema integral para All Cabo Services, preparada por T.T AI Firm. El demo usa datos ilustrativos; los pagos, los vuelos, los mensajes y el GPS de la flota están simulados. En la versión real todo corre en la nube y se sincroniza entre teléfonos.</p><address><a href="https://allcaboservices.com" target="_blank" rel="noopener">allcaboservices.com</a><br><span class="mut">Los Cabos, Baja California Sur</span></address></div>
+      <nav aria-label="Recorrido"><h4>Recorrido sugerido</h4><ol><li><i>1</i><span>El cliente reserva y paga en su app.</span></li><li><i>2</i><span>La central asigna al chofer más cercano.</span></li><li><i>3</i><span>La camioneta avanza en el mapa del cliente.</span></li><li><i>4</i><span>El chofer completa y registra la gasolina.</span></li><li><i>5</i><span>El tablero ya trae ingreso, costo y margen.</span></li></ol></nav>
+      <nav aria-label="Secciones"><h4>Secciones</h4><ul><li><a href="#propuesta" data-scroll>La propuesta</a></li><li><a href="#sistema" data-scroll>El sistema</a></li><li><a href="#pantallas" data-scroll>Pantallas</a></li><li><a href="#conectado" data-scroll>Todo conectado</a></li><li><a href="#beneficios" data-scroll>Lo que cambia</a></li></ul></nav>
     </div>
-    <div class="bottombar"><span>© 2026 T.T AI Firm · Demo con datos ilustrativos</span><nav aria-label="Otros"><a href="central/?rol=operador#viajes">Operador</a><a href="central/?rol=dueno#tablero">Tablero</a><a href="README.md">Cómo está hecho</a></nav><span>Pagos, vuelos y GPS simulados</span></div>
+    <div class="bottombar"><span>© 2026 T.T AI Firm · Propuesta para All Cabo Services</span><nav aria-label="Otros"><a href="central/?rol=operador#viajes">Central · operador</a><a href="central/?rol=dueno#tablero">Tablero del dueño</a></nav><span>Demo con datos ilustrativos</span></div>
   </footer>
 </main>
 
 <div id="menu" aria-hidden="true"><div class="bg" data-close-menu></div><div class="panel"><div class="inner"><div class="toprow"><img src="shared/img/logo.png" alt="All Cabo Services"><button class="xbtn" data-close-menu aria-label="Cerrar menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <nav class="main"><a href="#sistema" data-scroll style="--dl:120ms">El sistema</a><a href="#pantallas" data-scroll style="--dl:190ms">Pantallas</a><a href="#numeros" data-scroll style="--dl:260ms">Números</a><a href="#contacto" data-scroll style="--dl:330ms">Contacto</a></nav>
-  <div class="bottomrow"><a class="pill light" href="cliente/?user=c1&demo=now">Abrir la app del huésped<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><nav><a href="chofer/?id=d1">Chofer</a><a href="central/?rol=dueno">Central</a><a href="https://allcaboservices.com" target="_blank" rel="noopener">Sitio actual</a></nav></div></div></div></div>
+  <nav class="main"><a href="#propuesta" data-scroll style="--dl:120ms">La propuesta</a><a href="#sistema" data-scroll style="--dl:190ms">El sistema</a><a href="#pantallas" data-scroll style="--dl:260ms">Pantallas</a><a href="#conectado" data-scroll style="--dl:330ms">Todo conectado</a><a href="#demos" data-scroll style="--dl:400ms">Los demos</a></nav>
+  <div class="bottomrow"><button class="pill light" data-open-modal>Probar el demo<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><nav><a href="cliente/?user=c1&demo=now">Cliente</a><a href="chofer/?id=d1">Chofer</a><a href="central/?rol=dueno">Central</a><a href="https://allcaboservices.com" target="_blank" rel="noopener">Sitio actual</a></nav></div></div></div></div>
 
-<div id="modal" aria-hidden="true"><div class="bg" data-close-modal></div><div class="panel" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;"><div><span class="eyebrow">Agendar una demo</span><h2 id="mTitle" class="lines" data-lines="Véalo con|sus números" data-stagger="90"></h2></div><button class="xbtn" data-close-modal aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <form id="mForm" novalidate><div><label for="fNombre">Nombre</label><input id="fNombre" type="text" placeholder="Juan Carlos Macías" autocomplete="name"></div><div><label for="fMail">Correo</label><input id="fMail" type="email" placeholder="usted@allcaboservices.com" autocomplete="email"></div><div><label for="fMsg">¿Qué le gustaría ver con sus datos?</label><textarea id="fMsg" rows="3" placeholder="Nuestra flota real, las tarifas por hotel y el mes pasado en el tablero…"></textarea></div><button class="pill solid" id="mGo" type="submit">Solicitar la demo</button></form>
-  <div class="ok" id="mOk" hidden><div class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="#1A1206" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><b>Solicitud recibida</b><p id="mOkTxt">Gracias. T.T AI Firm le escribe para agendar.</p><button class="pill solid" data-close-modal style="margin-top:1.25rem;">Listo</button></div></div></div>
+<div id="modal" aria-hidden="true"><div class="bg" data-close-modal></div><div class="panel" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;"><div><span class="eyebrow">Probar el demo</span><h2 id="mTitle" class="lines" data-lines="Elija|una app" data-stagger="90"></h2></div><button class="xbtn" data-close-modal aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="opts">
+    <a class="applink" href="cliente/?user=c1&demo=now"><img src="shared/img/shots/thumb_cliente.jpg" alt=""><div><b>App del cliente</b><span>En inglés · abre con una camioneta en camino</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a class="applink" href="chofer/?id=d1"><img src="shared/img/shots/thumb_chofer.jpg" alt=""><div><b>App del chofer</b><span>Luis Ramírez · Cadillac Escalade</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a class="applink" href="central/?rol=dueno"><img src="shared/img/shots/thumb_central.jpg" alt=""><div><b>Central del dueño</b><span>Mapa en vivo, despacho, flota y tablero</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <h3>Recorrido sugerido</h3><ol><li>En la app del cliente, reserve un viaje del aeropuerto a un hotel y pague. Se abre el mapa con la camioneta en camino.</li><li>En la central, la reserva ya está asignada al chofer más cercano.</li><li>En la app del chofer, marque «Llegué», «A bordo» y «Completar».</li><li>En el tablero del dueño ya aparece el ingreso, el costo y el margen del viaje.</li></ol></div></div>
 
 <script type="module">
-  // ── rem adaptativo (escala hacia arriba sobre 1920)
   const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666; const html = document.documentElement;
   function fitRem() { const reduction = ((BASE_W - innerWidth) / BASE_W) * 100 * COEF; const size = FONT_BASE - (FONT_BASE * reduction) / 100; if (size > FONT_BASE) html.style.fontSize = size + 'px'; else html.style.removeProperty('font-size'); }
   fitRem(); addEventListener('resize', fitRem); scrollTo(0, 0);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; const isMobile = () => innerWidth <= 768;
-
-  // ── Lenis (scroll suave) con respaldo nativo
-  let lenis = null; try { const { default: Lenis } = await import('lenis'); lenis = new Lenis({ smoothWheel: true }); const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); } catch (e) { lenis = null; }
+  let lenis = null; const sinLenis = new URLSearchParams(location.search).has('nolenis') || matchMedia('(pointer: coarse)').matches; try { if (!sinLenis) { const { default: Lenis } = await import('lenis'); lenis = new Lenis({ smoothWheel: true }); const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); } } catch (e) { lenis = null; } window.__lenis = lenis;
   const lock = (on) => { if (lenis) on ? lenis.stop() : lenis.start(); html.classList.toggle('locked', on); };
   const goTo = (sel) => { const el = document.querySelector(sel); if (!el) return; if (lenis) lenis.scrollTo(el, { offset: -8 }); else el.scrollIntoView({ behavior: 'smooth' }); };
-  document.querySelectorAll('[data-scroll]').forEach(a => a.addEventListener('click', (e) => { const h = a.getAttribute('href'); if (h && h.startsWith('#')) { e.preventDefault(); goTo(h); closeMenu(); } }));
-  document.querySelectorAll('[data-scroll-to]').forEach(b => b.addEventListener('click', () => goTo(b.dataset.scrollTo)));
-
-  // ── resortes (tensión / fricción, como react-spring)
+  document.querySelectorAll('[data-scroll]').forEach(a => a.addEventListener('click', (e) => { const h = a.getAttribute('href'); if (h && h.startsWith('#')) { e.preventDefault(); closeMenu(); setTimeout(() => goTo(h), 60); } }));
   class Spring { constructor(v, k, c) { this.x = v; this.v = 0; this.t = v; this.k = k; this.c = c; this.done = true; } set(t) { this.t = t; this.done = false; } step(dt) { if (this.done) return false; const a = -this.k * (this.x - this.t) - this.c * this.v; this.v += a * dt; this.x += this.v * dt; if (Math.abs(this.v) < 0.002 && Math.abs(this.x - this.t) < 0.002) { this.x = this.t; this.v = 0; this.done = true; } return true; } }
   const springs = []; let last = performance.now();
   function loop(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; springs.forEach(s => { let moved = false; Object.values(s.vals).forEach(v => { if (v.step(dt)) moved = true; }); if (moved || !s.applied) { s.apply(); s.applied = true; } }); requestAnimationFrame(loop); }
   requestAnimationFrame(loop);
-  function hover(el, target, from, to, k, c) { const vals = {}; Object.keys(from).forEach(p => vals[p] = new Spring(from[p], k, c)); const rec = { vals, applied: false, apply() { const x = vals.x ? vals.x.x : 0, y = vals.y ? vals.y.x : 0, s = vals.scale ? vals.scale.x : 1, r = vals.rotate ? vals.rotate.x : 0; target.style.transform = `translate(${x}px, ${y}px) scale(${s}) rotate(${r}deg)`; if (vals.opacity) target.style.opacity = vals.opacity.x; } }; springs.push(rec); el.addEventListener('pointerenter', () => { if (isMobile()) return; Object.keys(to).forEach(p => vals[p].set(to[p])); }); el.addEventListener('pointerleave', () => { Object.keys(from).forEach(p => vals[p].set(from[p])); }); }
-
-  // ── texto: palabras y líneas con máscara
+  function hover(el, target, from, to, k, c) { if (!el || !target) return; const vals = {}; Object.keys(from).forEach(p => vals[p] = new Spring(from[p], k, c)); const rec = { vals, applied: false, apply() { const x = vals.x ? vals.x.x : 0, y = vals.y ? vals.y.x : 0, s = vals.scale ? vals.scale.x : 1, r = vals.rotate ? vals.rotate.x : 0; target.style.transform = `translate(${x}px, ${y}px) scale(${s}) rotate(${r}deg)`; if (vals.opacity) target.style.opacity = vals.opacity.x; } }; springs.push(rec); el.addEventListener('pointerenter', () => { if (isMobile()) return; Object.keys(to).forEach(p => vals[p].set(to[p])); }); el.addEventListener('pointerleave', () => { Object.keys(from).forEach(p => vals[p].set(from[p])); }); }
   function words(el) { if (el.dataset.ready) return; el.dataset.ready = '1'; const st = Number(el.dataset.stagger || 140), d = Number(el.dataset.d || 1100), base = Number(el.dataset.base || 0); el.innerHTML = el.dataset.words.split(' ').map((w, i) => `<span class="w"><span style="--d:${d}ms;--dl:${base + i * st}ms">${w}</span></span>`).join(' '); }
   function lines(el) { if (el.dataset.ready) return; el.dataset.ready = '1'; const st = Number(el.dataset.stagger || 120), base = Number(el.dataset.base || 0); el.innerHTML = el.dataset.lines.split('|').map((l, i) => `<span class="l"><span style="--dl:${base + i * st}ms">${l}</span></span>`).join(''); }
   document.querySelectorAll('.rv[data-words]').forEach(words); document.querySelectorAll('.lines[data-lines]').forEach(lines);
-  const io = new IntersectionObserver((entries) => { entries.forEach(en => { if (!en.isIntersecting) return; const el = en.target; if (el.dataset.gate === 'loader' && !ready) return; el.classList.add('in'); io.unobserve(el); }); }, { threshold: 0.15 });
+  const io = new IntersectionObserver((entries) => { entries.forEach(en => { if (!en.isIntersecting) return; const el = en.target; if (el.dataset.gate === 'loader' && !ready) return; el.classList.add('in'); io.unobserve(el); }); }, { threshold: 0.12 });
   document.querySelectorAll('.iv, .rv, .lines').forEach(el => { if (el.closest('#modal')) return; if (el.closest('.hero')) el.dataset.gate = 'loader'; io.observe(el); });
-
-  // ── loader
   let ready = false; const MIN = reduced ? 200 : 1400, MAX = 2600, EXIT = reduced ? 1 : 850; const loader = document.getElementById('loader'); lock(true);
   requestAnimationFrame(() => loader.classList.add('ready'));
-  function reveal() { if (ready) return; ready = true; lock(false); loader.classList.add('out'); setTimeout(() => loader.remove(), EXIT + 50); document.querySelectorAll('.hero .iv, .hero .rv, .hero .lines').forEach(el => el.classList.add('in')); startSlider(); }
+  function reveal() { if (ready) return; ready = true; lock(false); loader.classList.add('out'); setTimeout(() => loader.remove(), EXIT + 50); document.querySelectorAll('.hero .iv, .hero .rv, .hero .lines').forEach(el => el.classList.add('in')); startSlider(); if (location.hash && document.querySelector(location.hash)) setTimeout(() => goTo(location.hash), 120); }
   const arm = () => setTimeout(reveal, MIN); if (document.readyState === 'complete') arm(); else addEventListener('load', arm, { once: true }); setTimeout(reveal, MAX);
-
-  // ── parallax por progreso de scroll
   const px = []; function reg(el, fn) { px.push({ el, fn }); }
   function progressOf(el) { const r = el.getBoundingClientRect(); const h = innerHeight; return Math.min(1, Math.max(0, (h - r.top) / (h + r.height))); }
   function onScroll() { px.forEach(({ el, fn }) => fn(progressOf(el))); }
   if (lenis) lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll);
   const plate = document.getElementById('plate'); reg(document.querySelector('.hero'), (p) => { plate.style.transform = `translateY(${(p * 12).toFixed(2)}%)`; });
-  const ghost = document.getElementById('ghost'); const gw = Array.from(ghost.querySelectorAll('.w > span')); reg(document.querySelector('.trust'), (p) => { gw.forEach(w => { const [a, b] = w.dataset.px.split(',').map(Number); w.style.setProperty('--tx', (a + (b - a) * p).toFixed(2) + '%'); w.style.transform = ghost.classList.contains('in') ? `translate(${(a + (b - a) * p).toFixed(2)}%, 0)` : ''; }); });
-
-  // ── carrusel del hero (las tres apps)
+  const ghost = document.getElementById('ghost'); const gw = Array.from(ghost.querySelectorAll('.w > span')); reg(document.querySelector('.trust'), (p) => { gw.forEach(w => { const [a, b] = w.dataset.px.split(',').map(Number); w.style.transform = ghost.classList.contains('in') ? `translate(${(a + (b - a) * p).toFixed(2)}%, 0)` : ''; }); });
   const SLIDES = [
-    { img: 'shared/img/shots/thumb_cliente.jpg', brand: 'App del huésped', title: 'Reserva, paga y sigue su camioneta', cta: 'Abrir', href: 'cliente/?user=c1', alt: 'Pantalla de la app del huésped' },
-    { img: 'shared/img/shots/thumb_chofer.jpg', brand: 'App del chofer', title: 'Los viajes le llegan solos', cta: 'Abrir', href: 'chofer/?id=d1', alt: 'Pantalla de la app del chofer' },
-    { img: 'shared/img/shots/thumb_central.jpg', brand: 'Central del dueño', title: 'Todo el negocio en vivo', cta: 'Abrir', href: 'central/?rol=dueno', alt: 'Mapa en vivo de la central' },
+    { img: 'shared/img/shots/thumb_cliente.jpg', brand: 'Demo · app del cliente', title: 'Reservar, pagar y ver su camioneta', href: 'cliente/?user=c1&demo=now', alt: 'Pantalla de la app del cliente' },
+    { img: 'shared/img/shots/thumb_chofer.jpg', brand: 'Demo · app del chofer', title: 'Los viajes le llegan solos', href: 'chofer/?id=d1', alt: 'Pantalla de la app del chofer' },
+    { img: 'shared/img/shots/thumb_central.jpg', brand: 'Demo · central del dueño', title: 'Toda la operación en vivo', href: 'central/?rol=dueno', alt: 'Mapa en vivo de la central' },
   ];
   const sc = document.getElementById('sc'), scDots = document.getElementById('scDots'); let si = 0, sTimer = null;
-  function drawSlide(i, first) { const s = SLIDES[i]; const paint = () => { sc.innerHTML = `<img src="${s.img}" alt="${s.alt}" loading="lazy"><div><b>${s.brand}</b><span>${s.title}</span><a href="${s.href}">${s.cta} →</a></div>`; sc.classList.remove('swap'); }; if (first) paint(); else { sc.classList.add('swap'); setTimeout(paint, 240); } scDots.innerHTML = SLIDES.map((_, k) => `<button role="tab" aria-label="Slide ${k + 1}" aria-current="${k === i}"><i></i></button>`).join(''); scDots.querySelectorAll('button').forEach((b, k) => b.onclick = () => { si = k; drawSlide(si); restartSlider(); }); }
+  function drawSlide(i, first) { const s = SLIDES[i]; const paint = () => { sc.innerHTML = `<img src="${s.img}" alt="${s.alt}" loading="lazy"><div><b>${s.brand}</b><span>${s.title}</span><a href="${s.href}">Abrir →</a></div>`; sc.classList.remove('swap'); }; if (first) paint(); else { sc.classList.add('swap'); setTimeout(paint, 240); } scDots.innerHTML = SLIDES.map((_, k) => `<button role="tab" aria-label="Demo ${k + 1}" aria-current="${k === i}"><i></i></button>`).join(''); scDots.querySelectorAll('button').forEach((b, k) => b.onclick = () => { si = k; drawSlide(si); restartSlider(); }); }
   function restartSlider() { clearInterval(sTimer); sTimer = setInterval(() => { si = (si + 1) % SLIDES.length; drawSlide(si); }, 3800); }
   function startSlider() { drawSlide(si, true); restartSlider(); }
-
-  // ── carrusel de confianza (palabras fantasma + tarjeta)
   const TS = [
-    { words: ['Puntual', 'Bilingüe', 'Privado', 'Impecable'], img: 'shared/img/site/escalade_jet.jpg', name: 'Cadillac Escalade', role: 'Traslado ejecutivo · SJD', alt: 'Cadillac Escalade junto a un jet privado' },
-    { words: ['Aeropuerto', 'Corredor', 'Cabo', 'Pacífico'], img: 'shared/img/site/suburban_playa.jpg', name: 'Chevrolet Suburban', role: 'Hasta 7 pasajeros · dos zonas', alt: 'Suburban plateada en la playa' },
-    { words: ['Suburban', 'Escalade', 'Hiace', 'Sprinter'], img: 'shared/img/site/sprinter_casa.jpg', name: 'Mercedes-Benz Sprinter', role: 'Grupos, bodas y corporativos', alt: 'Sprinter frente a una casa moderna' },
+    { words: ['Reserva', 'Pago', 'Chofer', 'Mapa'], img: 'shared/img/site/escalade_jet.jpg', name: 'Cadillac Escalade', role: 'Traslado ejecutivo desde SJD', alt: 'Cadillac Escalade junto a un jet privado' },
+    { words: ['Vuelo', 'Recogida', 'Ruta', 'Llegada'], img: 'shared/img/site/suburban_playa.jpg', name: 'Chevrolet Suburban', role: 'Hasta 7 pasajeros · Corredor y Cabo', alt: 'Suburban plateada en la playa' },
+    { words: ['Cliente', 'Chofer', 'Central', 'Dueño'], img: 'shared/img/site/sprinter_casa.jpg', name: 'Mercedes-Benz Sprinter', role: 'Grupos, bodas y corporativos', alt: 'Sprinter frente a una casa moderna' },
   ];
   let ti = 0; const tDots = document.getElementById('tDots'); const coachImg = document.getElementById('coachImg');
-  function drawTrust(i, first) { const t = TS[i]; ghost.classList.remove('in'); gw.forEach((w, k) => { w.textContent = t.words[k]; w.style.transform = ''; }); requestAnimationFrame(() => requestAnimationFrame(() => { ghost.classList.add('in'); onScroll(); })); if (!first) { coachImg.classList.add('swap'); setTimeout(() => { coachImg.src = t.img; coachImg.alt = t.alt; coachImg.classList.remove('swap'); }, 260); } document.getElementById('coachName').textContent = t.name; document.getElementById('coachRole').textContent = t.role; tDots.innerHTML = TS.map((_, k) => `<button role="tab" aria-label="Slide ${k + 1}" aria-current="${k === i}"><i></i></button>`).join(''); tDots.querySelectorAll('button').forEach((b, k) => b.onclick = () => { ti = k; drawTrust(ti); }); }
+  function drawTrust(i, first) { const t = TS[i]; ghost.classList.remove('in'); gw.forEach((w, k) => { w.textContent = t.words[k]; w.style.transform = ''; }); requestAnimationFrame(() => requestAnimationFrame(() => { ghost.classList.add('in'); onScroll(); })); if (!first) { coachImg.classList.add('swap'); setTimeout(() => { coachImg.src = t.img; coachImg.alt = t.alt; coachImg.classList.remove('swap'); }, 260); } document.getElementById('coachName').textContent = t.name; document.getElementById('coachRole').textContent = t.role; tDots.innerHTML = TS.map((_, k) => `<button role="tab" aria-label="Grupo ${k + 1}" aria-current="${k === i}"><i></i></button>`).join(''); tDots.querySelectorAll('button').forEach((b, k) => b.onclick = () => { ti = k; drawTrust(ti); }); }
   gw.forEach((w, k) => w.textContent = TS[0].words[k]); document.getElementById('tPrev').onclick = () => { ti = (ti + TS.length - 1) % TS.length; drawTrust(ti); }; document.getElementById('tNext').onclick = () => { ti = (ti + 1) % TS.length; drawTrust(ti); };
   const tio = new IntersectionObserver((en) => { if (en[0].isIntersecting) { drawTrust(0, true); tio.disconnect(); } }, { threshold: .2 }); tio.observe(ghost);
   document.querySelectorAll('.arrow').forEach(b => hover(b, b.querySelector('svg'), { scale: 1 }, { scale: 1.15 }, 320, 18));
-
-  // ── lista del sistema
   const PROGS = [
-    ['01', 'App del huésped', 'Cotización al instante, pago con Apple Pay o Zelle, vuelo que mueve la recogida y el carro en el mapa como en Uber.', 'cliente/?user=c1'],
-    ['02', 'App del chofer', 'El viaje le llega solo al chofer más cercano; ruta, estados, checklist, gastos con foto y chat con el pasajero.', 'chofer/?id=d1'],
-    ['03', 'Central de despacho', 'Mapa en vivo, vuelos, clientes, aliados con comisión y una flota con seguros y servicios al día.', 'central/?rol=operador#mapa'],
-    ['04', 'Tablero del dueño', 'Ingresos, margen, temporada y cobros pendientes; preguntas al tablero en lenguaje normal.', 'central/?rol=dueno#tablero'],
+    ['01', 'App del cliente', 'Reserva con el precio al instante, paga con Apple Pay, tarjeta, Zelle o transferencia, y ve llegar su camioneta en un mapa GPS con el nombre del chofer y la placa. Si su vuelo se retrasa, la recogida se mueve sola.', 'cliente/?user=c1&demo=now', 'Demo en inglés'],
+    ['02', 'App del chofer', 'Cada viaje le llega al chofer disponible más cercano con la ruta, el vuelo y las preferencias del cliente. Marca cada paso con un botón, registra gastos con foto y chatea con el pasajero sin dar su número.', 'chofer/?id=d1', 'Demo'],
+    ['03', 'Central de operaciones', 'Mapa GPS de toda la flota, tablero de despacho, vuelos del día, clientes y aliados con su comisión, y una flota con seguros, permisos y servicios al día.', 'central/?rol=operador#mapa', 'Demo'],
+    ['04', 'Tablero del dueño', 'Ingresos, margen, temporada, canales y cobros pendientes, con conciliación de Zelle y efectivo. Preguntas en lenguaje normal y respuestas con los números del sistema.', 'central/?rol=dueno#tablero', 'Demo'],
   ];
-  document.getElementById('plist').innerHTML = PROGS.map(([n, t, d, h], i) => `<li><a href="${h}"><div class="row iv" data-y="26" data-dl="${i * 90}"><span class="n">${n}</span><span class="tx"><b>${t}</b><span>${d}</span></span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a></li>`).join('');
+  document.getElementById('plist').innerHTML = PROGS.map(([n, t, d, h, tag], i) => `<li><a href="${h}"><div class="row iv" data-y="26" data-dl="${i * 90}"><span class="n">${n}</span><span class="tx"><b>${t}</b><span>${d}</span><small>${tag} →</small></span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a></li>`).join('');
   document.querySelectorAll('#plist .row').forEach(r => { io.observe(r); hover(r.closest('a'), r.querySelector('.ar'), { x: 0, opacity: .55 }, { x: 8, opacity: 1 }, 300, 20); });
   document.querySelectorAll('[data-hover-scale]').forEach(f => hover(f, f.querySelector('img'), { scale: 1 }, { scale: Number(f.dataset.hoverScale) }, 300, 22));
   document.querySelectorAll('[data-hover-y]').forEach(c => hover(c, c, { y: 0 }, { y: Number(c.dataset.hoverY) }, 300, 22));
-  document.querySelectorAll('.pill').forEach(p => { const svg = p.querySelector('svg'); if (svg) hover(p, svg, { x: 0 }, { x: 5 }, 320, 20); });
+  document.querySelectorAll('.pill, .applink').forEach(p => { const svg = p.querySelector('svg'); if (svg) hover(p, svg, { x: 0 }, { x: 5 }, 320, 20); });
   document.querySelectorAll('.xbtn').forEach(b => hover(b, b.querySelector('svg'), { rotate: 0 }, { rotate: 90 }, 300, 18));
-
-  // ── menú
-  const menu = document.getElementById('menu');
+  const menu = document.getElementById('menu'); const modal = document.getElementById('modal'); const mTitle = document.getElementById('mTitle');
   function openMenu() { menu.classList.add('open'); menu.setAttribute('aria-hidden', 'false'); lock(true); }
   function closeMenu() { if (!menu.classList.contains('open')) return; menu.classList.remove('open'); menu.setAttribute('aria-hidden', 'true'); if (!modal.classList.contains('open')) lock(false); }
   document.getElementById('btnMenu').onclick = openMenu; document.querySelectorAll('[data-close-menu]').forEach(b => b.addEventListener('click', closeMenu));
-
-  // ── modal
-  const modal = document.getElementById('modal'); const mForm = document.getElementById('mForm'), mOk = document.getElementById('mOk'), mTitle = document.getElementById('mTitle');
-  function openModal() { closeMenu(); modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); lock(true); requestAnimationFrame(() => mTitle.classList.add('in')); setTimeout(() => document.getElementById('fNombre').focus(), 120); }
-  function closeModal() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); lock(false); setTimeout(() => { mForm.reset(); mForm.hidden = false; mOk.hidden = true; mTitle.classList.remove('in'); document.getElementById('mGo').disabled = false; document.getElementById('mGo').textContent = 'Solicitar la demo'; }, 350); }
+  function openModal() { closeMenu(); modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); lock(true); requestAnimationFrame(() => mTitle.classList.add('in')); }
+  function closeModal() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); lock(false); setTimeout(() => mTitle.classList.remove('in'), 350); }
   document.querySelectorAll('[data-open-modal]').forEach(b => b.addEventListener('click', openModal)); document.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', closeModal));
-  mForm.addEventListener('submit', (e) => { e.preventDefault(); const go = document.getElementById('mGo'); go.disabled = true; go.textContent = 'Enviando…'; setTimeout(() => { const n = (document.getElementById('fNombre').value || '').trim().split(' ')[0]; document.getElementById('mOkTxt').textContent = `Gracias${n ? ', ' + n : ''}: T.T AI Firm le escribe para agendar una sesión con sus datos reales. (Demo: no se envió nada.)`; mForm.hidden = true; mOk.hidden = false; }, 700); });
   addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMenu(); if (modal.classList.contains('open')) closeModal(); } });
   onScroll();
 </script>

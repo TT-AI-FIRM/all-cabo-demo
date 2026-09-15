@@ -7,4 +7,4 @@ Demo funcional (sin servidor) preparado por T.T AI Firm. Página de inicio edito
 - `central/` — Central del dueño (español): mapa en vivo, despacho, vuelos, clientes, aliados y comisiones, cuentas de boda y corporativas, flota y cumplimiento, choferes, gastos, tablero financiero, configuración.
 - `shared/core.js` — datos semilla deterministas (12 meses), tarifas por zona, despacho por distancia, simulación de GPS sobre rutas OSRM, métricas y asistente por reglas. `shared/rutas.js` — 19 rutas reales de carretera entre SJD, San José, Corredor, Cabo San Lucas y Pacífico.
 
-Enlaces directos: `cliente/?user=c1`, `chofer/?id=d1`, `central/?rol=dueno#tablero`. Datos en `localStorage` (`acs_demo_v3`), sincronizados entre pestañas con `BroadcastChannel`. Todo lo simulado se indica en pantalla.
+Enlaces directos: `cliente/?user=c1`, `chofer/?id=d1`, `central/?rol=dueno#tablero`. Datos en `localStorage` (`acs_demo_v4`), sincronizados entre pestañas con `BroadcastChannel`. Todo lo simulado se indica en pantalla.

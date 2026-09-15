@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B0B0C">
+<title>All Cabo Services · Book your ride</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../shared/img/fav.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/vendor/leaflet.min.css">
+<link rel="stylesheet" href="../shared/brand.css">
+<style>
+  body { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 8px 18px; }
+  .top img { height: 26px; display: block; }
+  .top .who { display: flex; align-items: center; gap: 8px; }
+  main { padding: 6px 18px calc(92px + env(safe-area-inset-bottom)) 18px; }
+  .hero { margin: 6px 0 16px 0; }
+  .hero h1 { font-weight: 500; font-size: 30px; line-height: 1.02; letter-spacing: -.03em; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p { color: var(--muted); margin: 8px 0 0 0; font-size: 14px; }
+  nav.bottom { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; background: rgba(11,11,12,.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--line); display: flex; padding: 8px 6px calc(8px + env(safe-area-inset-bottom)) 6px; z-index: 40; }
+  nav.bottom .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; padding: 6px 0; border-radius: 12px; transition: transform 160ms var(--ease), color 160ms ease; }
+  nav.bottom .tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  nav.bottom .tab.on { color: var(--gold); }
+  .steps { display: flex; gap: 6px; margin: 0 0 14px 0; } .steps i { flex: 1; height: 3px; border-radius: 3px; background: var(--line); } .steps i.on { background: var(--gold); }
+  .opt { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); margin-bottom: 8px; transition: transform 160ms var(--ease), border-color 160ms ease, background-color 160ms ease; text-align: left; width: 100%; }
+  .opt.on { border-color: var(--gold); background: #1E1A12; }
+  .opt b { display: block; font-size: 14.5px; } .opt span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .opt .pr { margin-left: auto; font-weight: 800; font-size: 14px; white-space: nowrap; }
+  .opt .ic { font-size: 22px; width: 32px; text-align: center; }
+  .step { display: flex; align-items: center; gap: 12px; }
+  .step button { width: 40px; height: 40px; border-radius: 50%; background: var(--panel3); border: 1px solid var(--line2); font-size: 20px; color: var(--text); display: grid; place-items: center; }
+  .step b { font-size: 20px; min-width: 24px; text-align: center; }
+  .sum { display: flex; justify-content: space-between; padding: 7px 0; font-size: 13.5px; border-bottom: 1px solid var(--line); }
+  .sum:last-child { border-bottom: 0; } .sum span:first-child { color: var(--muted); }
+  .sum.total { font-size: 17px; font-weight: 800; padding-top: 10px; }
+  .pay { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); margin-bottom: 8px; width: 100%; text-align: left; transition: transform 160ms var(--ease), border-color 160ms ease; }
+  .pay.on { border-color: var(--gold); background: #1E1A12; }
+  .pay .lg { width: 44px; height: 30px; border-radius: 7px; display: grid; place-items: center; font-weight: 800; font-size: 11px; background: #fff; color: #111; }
+  .applebtn { width: 100%; background: #fff; color: #111; border-radius: 14px; padding: 15px; font-weight: 800; font-size: 17px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: transform 160ms var(--ease); }
+  .trip { display: flex; gap: 12px; padding: 14px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); margin-bottom: 10px; width: 100%; text-align: left; transition: transform 160ms var(--ease); }
+  .trip .dt { text-align: center; min-width: 46px; } .trip .dt b { display: block; font-size: 20px; line-height: 1; } .trip .dt span { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .trip .rt { flex: 1; min-width: 0; } .trip .rt b { display: block; font-size: 14px; } .trip .rt span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mapwrap { position: relative; height: 46vh; min-height: 300px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 12px; }
+  .mapwrap .eta { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 500; background: rgba(11,11,12,.9); border: 1px solid var(--line2); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .mapwrap .eta b { display: block; font-size: 19px; line-height: 1.1; letter-spacing: -.02em; } .mapwrap .eta span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .mapwrap .demo { position: absolute; right: 12px; top: 12px; z-index: 500; }
+  .timeline { display: flex; gap: 4px; margin: 10px 0; } .timeline i { flex: 1; height: 4px; border-radius: 4px; background: var(--line); } .timeline i.on { background: var(--ok); }
+  .drv { display: flex; align-items: center; gap: 12px; }
+  .drv .avatar { width: 48px; height: 48px; flex: 0 0 48px; font-size: 16px; }
+  .plate { display: inline-block; font-family: var(--sans); font-weight: 800; letter-spacing: .12em; background: #F4F1EC; color: #111; border-radius: 6px; padding: 3px 8px; font-size: 12px; border: 2px solid #999; }
+  .faceid { width: 88px; height: 88px; border-radius: 22px; border: 3px solid var(--gold); margin: 14px auto; display: grid; place-items: center; font-size: 40px; animation: pulse 1.1s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.94); opacity: .7; } }
+  .ok-big { width: 78px; height: 78px; border-radius: 50%; background: var(--ok); color: #06140C; display: grid; place-items: center; font-size: 40px; margin: 6px auto 14px auto; animation: pop 260ms var(--ease) both; }
+  .conf h2 { font-weight: 500; font-size: 28px; text-align: center; letter-spacing: -.03em; }
+  .conf p.lead { text-align: center; color: var(--muted); margin: 6px 0 16px 0; }
+  .lang { font-size: 11px; color: var(--muted); }
+  .star { font-size: 30px; color: var(--line2); transition: transform 160ms var(--ease), color 120ms ease; } .star.on { color: var(--gold); }
+  @media (hover: hover) { .opt:hover, .pay:hover, .trip:hover { border-color: var(--line2); } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="overlay"></div>
+<div id="toast"></div>
+<nav class="bottom" id="nav"></nav>
+<script src="../shared/vendor/leaflet.min.js"></script>
+<script src="../shared/rutas.js"></script>
+<script src="../shared/core.js"></script>
+<script>
+(function () {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s); const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const A = window.ACS; const usd = A.usd;
+  const qs = new URLSearchParams(location.search); if (qs.get('user')) sessionStorage.setItem('acs_user', qs.get('user'));
+  let userId = sessionStorage.getItem('acs_user') || 'c1';
+  const user = () => A.cliente(userId) || A.db.clientes[0];
+  let view = location.hash.replace('#', '') || 'book'; let sel = { tripId: null, stars: 0 };
+  let map = null, layers = {}; let toastT = null;
+  function toast(m) { const t = $('#toast'); t.innerHTML = `<div class="toast">${esc(m)}</div>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', 2800); }
+  function sheet(html) { $('#overlay').innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet">${html}</div></div>`; $('#sheetBg').addEventListener('click', e => { if (e.target.id === 'sheetBg') closeSheet(); }); }
+  function closeSheet() { $('#overlay').innerHTML = ''; }
+  const ini = (n) => n.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+  const lugarN = (id) => { const l = A.lugar(id); return l ? (l.corto || l.nombre) : '—'; };
+  const hoy = A.hoy();
+  // ?demo=now crea un viaje inmediato para enseñar el mapa en vivo sin pasar por el formulario
+  if (qs.get('demo') === 'now' && !A.db.viajes.some(v => v.clienteId === userId && A.EN_RUTA.includes(v.estado))) { const v0 = A.solicitarViaje({ clienteId: userId, fecha: hoy, hora: A.ahoraHM(), asap: true, origenId: 'sjd', destinoId: 'oo', vehiculo: 'escalade', pasajeros: 4, maletas: 4, extras: ['super', 'cervezas'], canal: 'app', pago: { metodo: 'applepay', estado: 'aprobado' } }); sel.tripId = v0.id; view = 'trips'; }
+  const NAV = [['book', 'Book', '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>'], ['trips', 'Trips', '<svg viewBox="0 0 24 24"><path d="M3 17l3-8h12l3 8M5 17h14v3H5zM7 13h10"/></svg>'], ['account', 'Account', '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg>']];
+  function renderNav() { $('#nav').innerHTML = NAV.map(([id, l, ic]) => `<button class="tab ${view === id ? 'on' : ''}" data-v="${id}">${ic}<span>${l}</span></button>`).join(''); $$('#nav [data-v]').forEach(b => b.onclick = () => go(b.dataset.v)); }
+  function go(v) { if (v === 'trips' && view !== 'trips') sel.list = false; view = v; location.hash = v; render(); window.scrollTo(0, 0); }
+  function header() { const u = user(); return `<div class="top"><img src="../shared/img/logo.png" alt="All Cabo Services"><div class="who"><span class="pill gold">Los Cabos</span><button class="avatar press" id="btnUser" title="Switch guest">${ini(u.nombre)}</button></div></div>`; }
+  function bindHeader() { $('#btnUser').onclick = () => { sheet(`<div class="row"><h3>Demo · switch guest</h3><button class="btn sec sm" id="cls">Close</button></div><p class="small muted">Each tab can be a different guest. Open two tabs to see a group split the ride.</p><div class="stack" style="margin-top:8px;">${A.db.clientes.slice(0, 8).map(c => `<button class="opt ${c.id === userId ? 'on' : ''}" data-u="${c.id}"><span class="avatar">${ini(c.nombre)}</span><div><b>${esc(c.nombre)}</b><span>${esc(c.ciudad)} · ${c.visitas} trips${c.cuentaId ? ' · ' + esc((A.db.cuentas.find(x => x.id === c.cuentaId) || {}).nombre || '') : ''}</span></div></button>`).join('')}</div><button class="btn ghost full" id="btnReset" style="margin-top:12px;">Reset demo data</button>`); $('#cls').onclick = closeSheet; $$('[data-u]').forEach(b => b.onclick = () => { userId = b.dataset.u; sessionStorage.setItem('acs_user', userId); closeSheet(); render(); }); $('#btnReset').onclick = () => { if (confirm('Reset all demo data in this browser?')) { A.reset(); closeSheet(); render(); } }; }; }
+
+  // ═════════════ BOOK ═════════════
+  const B = { paso: 1, modo: 'from_airport', origenId: 'sjd', destinoId: 'oo', redondo: false, fecha: hoy, hora: '15:40', vuelo: 'UA 1234', pax: 4, maletas: 4, vehiculo: 'escalade', extras: ['super', 'cervezas'], notas: '', pago: 'applepay', last: null, cuando: 'schedule' };
+  const hoteles = A.LUGARES.filter(l => l.tipo !== 'aeropuerto');
+  const selectLugar = (id, val, incAero) => `<select class="txt" id="${id}">${incAero ? `<option value="sjd" ${val === 'sjd' ? 'selected' : ''}>Los Cabos International Airport (SJD)</option>` : ''}${['Corridor', 'San José', 'Cabo San Lucas', 'Pacific'].map(area => `<optgroup label="${area}">${hoteles.filter(l => l.area === area).map(l => `<option value="${l.id}" ${val === l.id ? 'selected' : ''}>${esc(l.nombre)}</option>`).join('')}</optgroup>`).join('')}</select>`;
+  const paso1Programado = () => `<div class="grid2"><div><label class="lbl">Date</label><input class="txt" id="bFecha" type="date" value="${B.fecha}" min="${hoy}"></div><div><label class="lbl">${B.modo === 'from_airport' ? 'Landing time' : 'Pickup time'}</label><input class="txt" id="bHora" type="time" value="${B.hora}"></div></div>
+        ${B.modo !== 'between' ? `<label class="lbl">Flight number</label><input class="txt" id="bVuelo" value="${esc(B.vuelo)}" placeholder="UA 1234"><div class="tiny muted" style="margin-top:5px;">We track your flight. If it's early or late, your pickup moves with it.</div>` : ''}`;
+  const paso1Ahora = () => `<div class="card p2" style="margin-top:12px;"><b>Right away</b><div class="small muted" style="margin-top:3px;">The nearest available driver heads to you the moment you pay, like a ride-hailing app. You will see the car and the minutes left on the map.</div></div>`;
+  function vBook() {
+    const q = A.cotizar(B); const dist = A.distanciaViaje(B.origenId, B.destinoId); const veh = A.TIPOS_VEHICULO[B.vehiculo];
+    let body = `<div class="steps">${[1, 2, 3].map(i => `<i class="${B.paso >= i ? 'on' : ''}"></i>`).join('')}</div>`;
+    if (B.paso === 1) {
+      body += `<div class="hero"><h1>Your ride in Los Cabos, <em>confirmed in seconds.</em></h1><p>Private luxury transfers since 2011. Choose your route, see the price, pay, and get your driver's name and plate right away.</p></div>
+        <div class="seg" style="display:flex;">${[['from_airport', 'From airport'], ['to_airport', 'To airport'], ['between', 'Between places']].map(([id, l]) => `<button data-modo="${id}" class="${B.modo === id ? 'on' : ''}" style="flex:1;">${l}</button>`).join('')}</div>
+        <label class="lbl">When</label><div class="seg" style="display:flex;">${[['now', 'Now · driver comes right away'], ['schedule', 'Schedule']].map(([id, l]) => `<button data-cuando="${id}" class="${B.cuando === id ? 'on' : ''}" style="flex:1;">${l}</button>`).join('')}</div>
+        ${B.modo === 'between' ? `<label class="lbl">Pickup</label>${selectLugar('bOrigen', B.origenId, false)}` : ''}
+        <label class="lbl">${B.modo === 'to_airport' ? 'Pickup at' : (B.modo === 'between' ? 'Drop-off' : 'Drop-off · hotel or villa')}</label>${selectLugar('bDestino', B.modo === 'to_airport' ? B.origenId : B.destinoId, false)}
+        <div class="row" style="margin-top:12px;"><div><b>Round trip</b><div class="small muted">Return to the airport on your departure day</div></div><button class="seg" id="bRedondo" style="padding:3px;"><span class="${!B.redondo ? 'on' : ''}" style="display:inline-block;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;color:${!B.redondo ? 'var(--gold-ink)' : 'var(--muted)'};background:${!B.redondo ? 'var(--gold)' : 'transparent'}">One way</span><span class="${B.redondo ? 'on' : ''}" style="display:inline-block;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;color:${B.redondo ? 'var(--gold-ink)' : 'var(--muted)'};background:${B.redondo ? 'var(--gold)' : 'transparent'}">Round trip</span></button></div>
+        ${B.cuando === 'schedule' ? paso1Programado() : paso1Ahora()}
+        <div class="grid2" style="margin-top:6px;"><div><label class="lbl">Passengers</label><div class="step"><button data-st="pax,-1">−</button><b>${B.pax}</b><button data-st="pax,1">+</button></div></div><div><label class="lbl">Bags</label><div class="step"><button data-st="maletas,-1">−</button><b>${B.maletas}</b><button data-st="maletas,1">+</button></div></div></div>
+        <button class="btn xl full" id="bNext" style="margin-top:18px;">Get instant quote · ${usd(q.total)}</button>
+        <p class="legal" style="margin-top:10px;">Published rates: ${A.ZONAS.sj.en} ${usd(A.ZONAS.sj.sencillo)} one way · ${usd(A.ZONAS.sj.redondo)} round trip. ${A.ZONAS.csl.en} ${usd(A.ZONAS.csl.sencillo)} · ${usd(A.ZONAS.csl.redondo)}. Up to 7 passengers, taxes included.</p>`;
+    } else if (B.paso === 2) {
+      body += `<div class="hero"><h1>Pick your <em>vehicle.</em></h1><p>${esc(lugarN(B.origenId))} → ${esc(lugarN(B.destinoId))} · ${dist.km} km · about ${dist.min} min${B.redondo ? ' · round trip' : ''}</p></div>
+        ${Object.values(A.TIPOS_VEHICULO).map(v => `<button class="opt ${B.vehiculo === v.id ? 'on' : ''} ${v.pax < B.pax ? 'dim' : ''}" data-veh="${v.id}" ${v.pax < B.pax ? 'disabled' : ''}><span class="ic">${v.icono}</span><div><b>${esc(v.nombre)}</b><span>Up to ${v.pax} passengers · ${v.maletas} bags${v.pax < B.pax ? ' · too small for your party' : ''}</span></div><span class="pr">${v.id === 'escalade' ? 'Premium' : 'Included'}</span></button>`).join('')}
+        <label class="lbl">Extras</label>${A.db.config.extras.map(e => `<button class="opt ${B.extras.includes(e.id) ? 'on' : ''}" data-ex="${e.id}"><span class="ic">${{ host: '🤵', super: '🛒', cervezas: '🍺', silla: '👶' }[e.id] || '✨'}</span><div><b>${esc(e.en)}</b><span>${e.precio ? 'Added to your ride' : 'Free, on request'}</span></div><span class="pr">${e.precio ? '+' + usd(e.precio) : 'Free'}</span></button>`).join('')}
+        <label class="lbl">Special requests</label><textarea class="txt" id="bNotas" rows="2" placeholder="Celebrating something? Dietary needs for the grocery stop?">${esc(B.notas)}</textarea>
+        <div class="grid2" style="margin-top:16px;"><button class="btn sec xl" id="bBack">Back</button><button class="btn xl" id="bNext">Continue · ${usd(q.total)}</button></div>`;
+    } else {
+      const f = B.cuando === 'schedule' && B.modo !== 'between' && B.vuelo ? A.vueloDe(B.vuelo) : null; const recogida = f && B.fecha === hoy ? A.hmDe(A.minutosDe(f.programada) + f.minutos + A.db.config.esperaAeropuerto) : B.hora;
+      body += `<div class="hero"><h1>Review <em>and pay.</em></h1></div>
+        <div class="card"><div class="sum"><span>Route</span><span style="text-align:right;">${esc(lugarN(B.origenId))} → ${esc(lugarN(B.destinoId))}${B.redondo ? ' · round trip' : ''}</span></div><div class="sum"><span>When</span><span>${B.cuando === 'now' ? 'Right now · driver heads to you when you pay' : A.fechaLarga(B.fecha, true) + ' · ' + A.hora12(B.hora)}</span></div>${f ? `<div class="sum"><span>Flight ${esc(f.num)}</span><span style="text-align:right;">${esc(f.aerolinea)} from ${esc(f.origen)}<br><span class="pill ${f.estado === 'a tiempo' ? 'ok' : 'warn'}">${f.estado === 'a tiempo' ? 'On time' : (f.estado === 'retrasado' ? 'Delayed ' + f.minutos + ' min' : 'Early ' + (-f.minutos) + ' min')} · lands ${A.hora12(A.hmDe(A.minutosDe(f.programada) + f.minutos))}</span></span></div><div class="sum"><span>Your pickup</span><span><b>${A.hora12(recogida)}</b> <span class="muted small">(${A.db.config.esperaAeropuerto} min after landing)</span></span></div>` : ''}<div class="sum"><span>Party</span><span>${B.pax} passengers · ${B.maletas} bags</span></div><div class="sum"><span>Vehicle</span><span>${esc(veh.nombre)}</span></div>
+          <div class="sum" style="margin-top:6px;"><span>${esc(A.ZONAS[q.zona].en)} · ${B.redondo ? 'round trip' : 'one way'}</span><span>${usd(q.base)}</span></div>${q.detalle.map(e => `<div class="sum"><span>${esc(e.en)}</span><span>${e.precio ? usd(e.precio) : 'Free'}</span></div>`).join('')}<div class="sum total"><span>Total</span><span>${usd(q.total)} USD</span></div></div>
+        <label class="lbl">Pay with</label>
+        ${[['applepay', 'Apple Pay', 'Face ID · instant confirmation', '<span class="lg" style="background:#000;color:#fff;"> Pay</span>'], ['tarjeta', 'Credit or debit card', 'Visa, Mastercard, Amex', '<span class="lg" style="background:#1A1F71;color:#fff;">VISA</span>'], ['zelle', 'Zelle', 'Send to our US account · confirmed by our office', '<span class="lg" style="background:#6D1ED4;color:#fff;">Zelle</span>'], ['transferencia', 'Bank transfer (SPEI)', 'Mexican bank transfer with reference', '<span class="lg" style="background:#F4F1EC;color:#111;">SPEI</span>'], ['efectivo', 'Cash on arrival', 'USD or MXN · driver carries change', '<span class="lg" style="background:#1F7A4D;color:#fff;">$</span>']].map(([id, l, d, lg]) => `<button class="pay ${B.pago === id ? 'on' : ''}" data-pago="${id}">${lg}<div><b>${l}</b><div class="small muted">${d}</div></div></button>`).join('')}
+        <div class="grid2" style="margin-top:14px;"><button class="btn sec xl" id="bBack">Back</button>${B.pago === 'applepay' ? `<button class="applebtn press" id="bPay"> Pay</button>` : `<button class="btn xl" id="bPay">Pay ${usd(q.total)}</button>`}</div>
+        <p class="legal" style="margin-top:10px;">Demo: payments are simulated, nothing is charged. Free cancellation up to 24 h before pickup.</p>`;
+    }
+    $('#root').innerHTML = header() + `<main>${body}</main>`; bindHeader();
+    $$('[data-cuando]').forEach(b => b.onclick = () => { B.cuando = b.dataset.cuando; render(); });
+    $$('[data-modo]').forEach(b => b.onclick = () => { B.modo = b.dataset.modo; B.cuando = b.dataset.modo === 'from_airport' ? 'schedule' : 'now'; if (B.modo === 'from_airport') { B.origenId = 'sjd'; if (B.destinoId === 'sjd') B.destinoId = 'oo'; } if (B.modo === 'to_airport') { if (B.origenId === 'sjd') B.origenId = B.destinoId !== 'sjd' ? B.destinoId : 'oo'; B.destinoId = 'sjd'; } if (B.modo === 'between') { if (B.origenId === 'sjd') B.origenId = 'oo'; if (B.destinoId === 'sjd') B.destinoId = 'vi'; } render(); });
+    const bo = $('#bOrigen'); if (bo) bo.onchange = () => { B.origenId = bo.value; render(); };
+    const bd = $('#bDestino'); if (bd) bd.onchange = () => { if (B.modo === 'to_airport') B.origenId = bd.value; else B.destinoId = bd.value; render(); };
+    const br = $('#bRedondo'); if (br) br.onclick = () => { B.redondo = !B.redondo; render(); };
+    const bf = $('#bFecha'); if (bf) bf.onchange = () => { B.fecha = bf.value || hoy; }; const bh = $('#bHora'); if (bh) bh.onchange = () => { B.hora = bh.value || B.hora; };
+    const bv = $('#bVuelo'); if (bv) bv.oninput = () => { B.vuelo = bv.value; };
+    $$('[data-st]').forEach(b => b.onclick = () => { const [k, d] = b.dataset.st.split(','); B[k] = Math.max(k === 'pax' ? 1 : 0, Math.min(14, B[k] + Number(d))); if (B.pax > A.TIPOS_VEHICULO[B.vehiculo].pax) B.vehiculo = B.pax > 12 ? 'sprinter' : (B.pax > 7 ? 'hiace' : 'suburban'); render(); });
+    $$('[data-veh]').forEach(b => b.onclick = () => { B.vehiculo = b.dataset.veh; render(); });
+    $$('[data-ex]').forEach(b => b.onclick = () => { const id = b.dataset.ex; B.extras = B.extras.includes(id) ? B.extras.filter(x => x !== id) : B.extras.concat([id]); render(); });
+    const bn = $('#bNotas'); if (bn) bn.oninput = () => { B.notas = bn.value; };
+    $$('[data-pago]').forEach(b => b.onclick = () => { B.pago = b.dataset.pago; render(); });
+    const next = $('#bNext'); if (next) next.onclick = () => { if (B.paso === 1) { B.fecha = ($('#bFecha') || {}).value || B.fecha; B.hora = ($('#bHora') || {}).value || B.hora; } B.paso = Math.min(3, B.paso + 1); render(); };
+    const back = $('#bBack'); if (back) back.onclick = () => { B.paso = Math.max(1, B.paso - 1); render(); };
+    const pay = $('#bPay'); if (pay) pay.onclick = () => pagar(q);
+  }
+  function pagar(q) {
+    const total = usd(q.total); const done = (ref, extra) => { const v = A.solicitarViaje({ clienteId: userId, fecha: B.fecha, hora: B.hora, asap: B.cuando === 'now', origenId: B.origenId, destinoId: B.destinoId, redondo: B.redondo, vehiculo: B.vehiculo, pasajeros: B.pax, maletas: B.maletas, vuelo: B.cuando === 'schedule' && B.modo !== 'between' ? B.vuelo : '', extras: B.extras, notas: B.notas, canal: 'app', pago: { metodo: B.pago, estado: 'aprobado' } }); A.registrarPago(v.id, B.pago, extra || {}); B.last = v.id; B.paso = 1; closeSheet(); sel.tripId = v.id; sel.list = false; const ch = v.choferId ? A.chofer(v.choferId) : null; toast(ch ? `You're all set · ${ch.nombre.split(' ')[0]} is your driver` : "You're all set · finding your driver"); go('trips'); };
+    if (B.pago === 'applepay') { sheet(`<div style="text-align:center;"><div class="lg" style="display:inline-grid;place-items:center;background:#000;color:#fff;border-radius:8px;padding:4px 12px;font-weight:800;"> Pay</div><div class="faceid">👤</div><div class="muted small" id="apMsg">Confirm with Face ID…</div><div style="margin-top:14px;" class="row"><span class="muted">All Cabo Services</span><b>${total}</b></div></div>`); setTimeout(() => { const m = $('#apMsg'); if (m) m.innerHTML = '<span class="ok">✓ Done</span>'; }, 1100); setTimeout(() => done('AP-' + Math.floor(Math.random() * 1e6), { ultimos4: '4242' }), 1700); return; }
+    if (B.pago === 'tarjeta') { sheet(`<div class="row"><h3>Card payment</h3><button class="btn sec sm" id="cls">Close</button></div><label class="lbl">Card number</label><input class="txt" id="cNum" value="4242 4242 4242 4242" inputmode="numeric"><div class="grid2"><div><label class="lbl">Expiry</label><input class="txt" value="09/28"></div><div><label class="lbl">CVC</label><input class="txt" value="123" inputmode="numeric"></div></div><label class="lbl">Name on card</label><input class="txt" value="${esc(user().nombre)}"><button class="btn xl full" id="cGo" style="margin-top:14px;">Pay ${total}</button><p class="legal" style="margin-top:8px;">Simulated · in production this runs on Stripe or Conekta and nothing is stored on our side.</p>`); $('#cls').onclick = closeSheet; $('#cGo').onclick = () => { $('#cGo').textContent = 'Authorizing…'; setTimeout(() => done('', { ultimos4: ($('#cNum').value || '').slice(-4) }), 900); }; return; }
+    if (B.pago === 'zelle') { sheet(`<div class="row"><h3>Pay with Zelle</h3><button class="btn sec sm" id="cls">Close</button></div><p class="small muted">Send <b style="color:var(--text)">${total}</b> to <b style="color:var(--text)">pay@allcaboservices.com</b> (All Cabo Services LLC). Your ride is held for 2 hours; our office confirms the payment and your QR-free confirmation stays active.</p><div class="card p2" style="margin:10px 0;"><div class="kv"><span>Reference</span><b>ACS-${String(Math.floor(Math.random() * 90000) + 10000)}</b></div><div class="kv"><span>Amount</span><b>${total}</b></div></div><button class="btn xl full" id="zGo">I sent the Zelle</button>`); $('#cls').onclick = closeSheet; $('#zGo').onclick = () => done(); return; }
+    if (B.pago === 'transferencia') { sheet(`<div class="row"><h3>Bank transfer (SPEI)</h3><button class="btn sec sm" id="cls">Close</button></div><div class="card p2" style="margin:10px 0;"><div class="kv"><span>Beneficiary</span><b>All Cabo Services S.A. de C.V.</b></div><div class="kv"><span>CLABE</span><b>012 180 0012345678 9</b></div><div class="kv"><span>Amount</span><b>${total} · ${A.mxn(q.total * A.db.config.tipoCambio)}</b></div><div class="kv"><span>Reference</span><b>ACS${String(Math.floor(Math.random() * 900000) + 100000)}</b></div></div><p class="legal">Simulated account. Confirmed automatically when the transfer lands.</p><button class="btn xl full" id="tGo" style="margin-top:10px;">I made the transfer</button>`); $('#cls').onclick = closeSheet; $('#tGo').onclick = () => done(); return; }
+    sheet(`<div class="row"><h3>Cash on arrival</h3><button class="btn sec sm" id="cls">Close</button></div><p class="small muted">Pay <b style="color:var(--text)">${total}</b> in USD or MXN to your driver. Your reservation is confirmed now with a card hold of $0; we only ask you to cancel 24 h ahead.</p><button class="btn xl full" id="eGo" style="margin-top:10px;">Confirm reservation</button>`); $('#cls').onclick = closeSheet; $('#eGo').onclick = () => done();
+  }
+  function vConfirm() {
+    const v = A.viaje(B.last); if (!v) { B.paso = 1; B.last = null; return vBook(); } const c = v.choferId ? A.chofer(v.choferId) : null; const veh = c ? A.vehiculo(c.vehiculoId) : null;
+    $('#root').innerHTML = header() + `<main class="conf"><div class="ok-big">✓</div><h2>You're all set, ${esc(user().nombre.split(' ')[0])}.</h2><p class="lead">${c ? `${esc(c.nombre)} will be waiting for you.` : 'We are assigning your driver.'} Confirmation sent by WhatsApp and email (simulated).</p>
+      ${c ? `<div class="card gold"><div class="drv"><div class="avatar">${ini(c.nombre)}</div><div style="flex:1;"><b style="font-size:16px;">${esc(c.nombre)}</b><div class="small muted">Your driver · <span class="stars">★</span> ${c.calificacion.toFixed(1)} · since ${c.ingreso} · ${esc(c.idiomas)}</div></div><span class="plate">${esc(veh.placa)}</span></div><div class="kv" style="margin-top:10px;"><span>Vehicle</span><span>${esc(A.TIPOS_VEHICULO[veh.tipo].nombre)} · ${esc(veh.color)}</span></div></div>` : ''}
+      <div class="card" style="margin-top:10px;"><div class="kv"><span>Pickup</span><span style="text-align:right;">${A.fechaLarga(v.fecha, true)} · <b>${A.hora12(v.hora)}</b>${v.horaOriginal ? `<br><span class="pill warn">moved from ${A.hora12(v.horaOriginal)} · flight ${esc(v.vuelo.estado === 'retrasado' ? 'delayed' : 'early')}</span>` : ''}</span></div><div class="kv"><span>Where</span><span style="text-align:right;">${esc(lugarN(v.origenId))} → ${esc(lugarN(v.destinoId))}</span></div>${v.origenId === 'sjd' ? `<div class="kv"><span>Meeting point</span><span style="text-align:right;">Exit through Door 3 · look for the <b>All Cabo Services</b> sign</span></div>` : ''}<div class="kv"><span>Paid</span><span>${usd(v.precio.total)} · ${esc(A.METODOS[v.pago.metodo].en)} · <span class="pill ${v.pago.estado === 'aprobado' ? 'ok' : 'warn'}">${v.pago.estado === 'aprobado' ? 'Approved' : (v.pago.estado === 'pendiente' ? 'Pay driver' : 'Pending confirmation')}</span></span></div></div>
+      <div class="grid2" style="margin-top:14px;"><button class="btn sec xl" id="cShare">Share with friends</button><button class="btn xl" id="cTrips">Track my ride</button></div>
+      <button class="btn ghost full" id="cNew" style="margin-top:10px;">Book another ride</button></main>`; bindHeader();
+    $('#cTrips').onclick = () => { sel.tripId = v.id; go('trips'); }; $('#cNew').onclick = () => { B.paso = 1; B.last = null; render(); };
+    $('#cShare').onclick = () => { const txt = `All Cabo Services · ${lugarN(v.origenId)} → ${lugarN(v.destinoId)} · ${A.fechaLarga(v.fecha, true)} ${A.hora12(v.hora)} · driver ${c ? c.nombre : 'TBD'}`; if (navigator.share) navigator.share({ title: 'My ride', text: txt }).catch(() => { }); else { toast('Link copied (simulated) · ' + txt.slice(0, 40) + '…'); } };
+  }
+
+  // ═════════════ TRIPS ═════════════
+  function misViajes() { const u = user(); return A.db.viajes.filter(v => v.clienteId === u.id || (v.cuentaId && v.cuentaId === u.cuentaId && v.cuentaId)); }
+  function vTrips() {
+    const vs = misViajes(); const up = vs.filter(v => !['completado', 'cancelado', 'no_show'].includes(v.estado) && v.fecha >= hoy).sort((a, b) => (a.fecha + a.hora) < (b.fecha + b.hora) ? -1 : 1); const past = vs.filter(v => ['completado', 'cancelado', 'no_show'].includes(v.estado) || v.fecha < hoy).sort((a, b) => (a.fecha + a.hora) < (b.fecha + b.hora) ? 1 : -1);
+    if (!sel.tripId && !sel.list) { const act = up.find(v => A.EN_RUTA.includes(v.estado)) || up.find(v => v.fecha === hoy); if (act) sel.tripId = act.id; }
+    if (sel.tripId && A.viaje(sel.tripId)) return vTrip(A.viaje(sel.tripId));
+    const card = (v) => { const [y, m, d] = v.fecha.split('-'); return `<button class="trip" data-t="${v.id}"><div class="dt"><b>${Number(d)}</b><span>${A.MESES_EN[Number(m) - 1]}</span></div><div class="rt"><b>${esc(lugarN(v.origenId))} → ${esc(lugarN(v.destinoId))}</b><span>${A.hora12(v.hora)} · ${esc(A.TIPOS_VEHICULO[v.vehiculo].corto)} · ${v.pasajeros} pax${v.choferId ? ' · ' + esc(A.chofer(v.choferId).nombre.split(' ')[0]) : ''}</span><span style="margin-top:6px;"><span class="pill" style="color:${A.ESTADOS[v.estado].color}">${esc(A.ESTADOS[v.estado].en)}</span> ${v.estado === 'completado' && v.calificacion ? '<span class="stars">' + '★'.repeat(v.calificacion) + '</span>' : ''}</span></div><div class="num" style="font-weight:800;">${usd(v.precio.total)}</div></button>`; };
+    $('#root').innerHTML = header() + `<main><div class="hero"><h1>Your <em>trips.</em></h1></div><h3 class="eyebrow" style="margin-bottom:8px;">Upcoming</h3>${up.map(card).join('') || '<div class="card muted small">No upcoming rides. Book one in seconds.</div>'}<h3 class="eyebrow" style="margin:16px 0 8px 0;">Past</h3>${past.slice(0, 12).map(card).join('') || '<div class="card muted small">No past trips yet.</div>'}</main>`; bindHeader();
+    $$('[data-t]').forEach(b => b.onclick = () => { sel.tripId = b.dataset.t; render(); });
+  }
+  const PASOS = ['asignado', 'en_camino', 'llegue', 'a_bordo', 'completado'];
+  function vTrip(v) {
+    const c = v.choferId ? A.chofer(v.choferId) : null; const veh = c ? A.vehiculo(c.vehiculoId) : null; const live = A.EN_RUTA.includes(v.estado); const idx = PASOS.indexOf(v.estado === 'aceptado' ? 'asignado' : v.estado); const e = c ? A.eta(v) : null; const done = ['completado', 'cancelado', 'no_show'].includes(v.estado);
+    const [etaTxt, etaSub] = etaLineas(v);
+    const msgs = A.mensajesDe(v.id);
+    $('#root').innerHTML = header() + `<main><button class="btn ghost sm" id="tBack" style="margin-bottom:10px;">‹ All trips</button>
+      <div class="mapwrap"><div id="map" class="map"></div><div class="eta"><div><b>${esc(etaTxt)}</b><span>${esc(etaSub)}</span></div>${c && !done ? `<span class="avatar">${ini(c.nombre)}</span>` : ''}</div>${live && !(c && c.gpsReal) ? '<span class="pill gold demo">demo · GPS ×' + A.db.config.factorDemo + '</span>' : (c && c.gpsReal ? '<span class="pill ok demo">live GPS</span>' : '')}</div>
+      <div class="card"><div class="row"><b style="font-size:15px;">${esc(lugarN(v.origenId))} → ${esc(lugarN(v.destinoId))}</b><span class="pill" style="color:${A.ESTADOS[v.estado].color}">${esc(A.ESTADOS[v.estado].en)}</span></div><div class="small muted" style="margin-top:4px;">${A.fechaLarga(v.fecha, true)} · pickup ${A.hora12(v.hora)}${v.horaOriginal ? ` (moved from ${A.hora12(v.horaOriginal)})` : ''} · ${v.pasajeros} pax · ${esc(A.TIPOS_VEHICULO[v.vehiculo].nombre)}</div>
+        ${!done ? `<div class="timeline">${PASOS.slice(0, 4).map((p, i) => `<i class="${idx >= i ? 'on' : ''}"></i>`).join('')}</div><div class="row tiny muted"><span>Assigned</span><span>En route</span><span>Arrived</span><span>On board</span></div>` : ''}
+        ${v.vuelo ? `<div class="kv" style="margin-top:8px;"><span>Flight ${esc(v.vuelo.num)}</span><span class="pill ${v.vuelo.estado === 'a tiempo' ? 'ok' : 'warn'}">${v.vuelo.estado === 'a tiempo' ? 'On time' : (v.vuelo.estado === 'retrasado' ? 'Delayed ' + v.vuelo.minutos + ' min · pickup adjusted' : 'Early · pickup adjusted')}</span></div>` : ''}
+        ${v.origenId === 'sjd' && !done ? `<div class="kv"><span>Meeting point</span><span style="text-align:right;">Door 3 · <b>All Cabo Services</b> sign</span></div>` : ''}
+        <div class="kv"><span>Paid</span><span>${usd(v.precio.total)} · ${esc(A.METODOS[v.pago.metodo].en)}${v.extras.length ? ' · ' + v.extras.map(x => esc((A.db.config.extras.find(e => e.id === x) || {}).en || x)).join(', ') : ''}</span></div></div>
+      ${c ? `<div class="card" style="margin-top:10px;"><div class="drv"><div class="avatar">${ini(c.nombre)}</div><div style="flex:1;"><b style="font-size:15px;">${esc(c.nombre)}</b><div class="small muted"><span class="stars">★</span> ${c.calificacion.toFixed(1)} · ${esc(A.TIPOS_VEHICULO[veh.tipo].nombre)} · ${esc(veh.color)}</div></div><span class="plate">${esc(veh.placa)}</span></div>${!done ? `<div class="grid2" style="margin-top:12px;"><a class="btn sec" href="tel:+52${c.tel}">Call</a><button class="btn" id="tChat">Message${msgs.length ? ' (' + msgs.length + ')' : ''}</button></div>` : ''}</div>` : '<div class="card" style="margin-top:10px;"><b>Assigning your driver…</b><div class="small muted">Our dispatch is matching the nearest available vehicle. You will get the name and plate by WhatsApp.</div></div>'}
+      ${v.estado === 'completado' ? `<div class="card" style="margin-top:10px;"><h3>How was your ride${c ? ' with ' + esc(c.nombre.split(' ')[0]) : ''}?</h3><div class="row" style="justify-content:center;gap:6px;">${[1, 2, 3, 4, 5].map(n => `<button class="star ${(v.calificacion || sel.stars) >= n ? 'on' : ''}" data-star="${n}">★</button>`).join('')}</div>${v.calificacion ? '<div class="small muted" style="text-align:center;margin-top:6px;">Thank you. Your receipt was sent by email.</div>' : ''}</div>` : ''}
+      ${!done && (v.estado === 'asignado' || v.estado === 'aceptado' || v.estado === 'solicitado') ? `<button class="btn ghost full" id="tCancel" style="margin-top:12px;">Cancel ride · free until 24 h before</button>` : ''}
+      <p class="legal" style="margin-top:12px;">Demo: the vehicle position is simulated over the real highway route unless the driver enables live GPS on their phone.</p></main>`; bindHeader();
+    $('#tBack').onclick = () => { sel.tripId = null; sel.list = true; render(); };
+    const bc = $('#tChat'); if (bc) bc.onclick = () => chat(v);
+    const bx = $('#tCancel'); if (bx) bx.onclick = () => { if (confirm('Cancel this ride?')) { A.cambiarEstado(v.id, 'cancelado', user().nombre); toast('Ride cancelled. Refund issued (simulated).'); render(); } };
+    $$('[data-star]').forEach(b => b.onclick = () => { A.calificar(v.id, Number(b.dataset.star)); toast('Thanks for rating your ride!'); render(); });
+    dibujarMapa(v);
+  }
+  function etaLineas(v) {
+    const c = v.choferId ? A.chofer(v.choferId) : null; if (!c) return ['Finding your driver…', 'Matching the nearest available vehicle'];
+    const veh = A.vehiculo(c.vehiculoId); const nom = c.nombre.split(' ')[0]; const car = `${A.TIPOS_VEHICULO[veh.tipo].corto} · ${veh.placa}`; const e = A.eta(v);
+    if (v.estado === 'asignado' || v.estado === 'aceptado') return [`${nom} picks you up at ${A.hora12(v.hora)}`, `${car} · ${A.haversine(c.pos, A.lugar(v.origenId).pos).toFixed(1)} km away right now`];
+    if (v.estado === 'en_camino') return e && e.llegado ? [`${nom} is at the pickup point`, car] : [`${nom} arrives in ${e ? e.min : '—'} min`, `${e ? e.km.toFixed(1) : '—'} km away · ${car}`];
+    if (v.estado === 'llegue') return [`${nom} is here`, `${v.origenId === 'sjd' ? 'Door 3 · ' : ''}${car}`];
+    if (v.estado === 'a_bordo') return e && e.llegado ? ['You have arrived', lugarN(v.destinoId)] : [`${e ? e.min : '—'} min to ${lugarN(v.destinoId)}`, `${e ? e.km.toFixed(1) : '—'} km left · enjoy the ride`];
+    if (v.estado === 'completado') return ['Trip completed', A.fechaLarga(v.fecha, true) + ' · ' + usd(v.precio.total)];
+    return [A.ESTADOS[v.estado].en, ''];
+  }
+  function chat(v) {
+    const c = A.chofer(v.choferId); const draw = () => { const ms = A.mensajesDe(v.id); $('#chatBox').innerHTML = ms.map(m => `<div class="cb ${m.de === 'cliente' ? 'me' : 'them'}">${esc(m.texto)}<time>${new Date(m.t).toTimeString().slice(0, 5)}</time></div>`).join('') || '<div class="muted small" style="text-align:center;">Say hi to your driver. Messages are translated for them if needed.</div>'; $('#chatBox').scrollTop = 1e6; };
+    sheet(`<div class="row"><div class="drv"><div class="avatar">${ini(c.nombre)}</div><div><b>${esc(c.nombre)}</b><div class="small muted">Your driver</div></div></div><button class="btn sec sm" id="cls">Close</button></div><div class="chat" id="chatBox" style="margin-top:10px;"></div><div class="chips" style="margin-top:8px;">${['We are at Door 3', 'Running 10 min late', 'We have 2 extra bags', 'Can we stop for groceries?'].map(t => `<button class="chip" data-q="${esc(t)}">${esc(t)}</button>`).join('')}</div><div class="row" style="margin-top:10px;"><input class="txt" id="chatIn" placeholder="Message…"><button class="btn" id="chatGo">Send</button></div>`);
+    $('#cls').onclick = closeSheet; draw(); const send = (t) => { if (!t.trim()) return; A.enviarMensaje(v.id, 'cliente', t.trim()); $('#chatIn').value = ''; draw(); }; $('#chatGo').onclick = () => send($('#chatIn').value); $('#chatIn').onkeydown = (e) => { if (e.key === 'Enter') send($('#chatIn').value); }; $$('[data-q]').forEach(b => b.onclick = () => send(b.dataset.q));
+    window.__chatViaje = v.id;
+  }
+  function icono(cls, txt) { return L.divIcon({ className: 'mk', html: `<div class="${cls}">${txt || ''}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] }); }
+  const pinIcon = (dest, label) => L.divIcon({ className: 'mk', html: `<div style="position:relative;"><div class="mk-pin ${dest ? 'dest' : ''}"></div><div class="mk-lbl">${esc(label)}</div></div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+  function dibujarMapa(v) {
+    const el = $('#map'); if (!el) return; const o = A.lugar(v.origenId), d = A.lugar(v.destinoId);
+    map = L.map(el, { zoomControl: false, attributionControl: true }); L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles © Esri · © OpenStreetMap contributors', maxZoom: 16 }).addTo(map); L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, opacity: .9 }).addTo(map);
+    const r = A.rutaViaje(v); layers = {};
+    layers.dest = L.polyline(r.destino, { color: '#B8862B', weight: 5, opacity: .9 }).addTo(map);
+    if (r.recoger) layers.rec = L.polyline(r.recoger, { color: '#5A5A60', weight: 4, dashArray: '6 8', opacity: .9 }).addTo(map);
+    L.marker(o.pos, { icon: pinIcon(false, o.corto || o.nombre) }).addTo(map); L.marker(d.pos, { icon: pinIcon(true, d.corto || d.nombre) }).addTo(map);
+    const c = v.choferId ? A.chofer(v.choferId) : null; if (c && !['completado', 'cancelado', 'no_show'].includes(v.estado)) layers.car = L.marker(c.pos, { icon: icono('mk-car' + (A.EN_RUTA.includes(v.estado) ? ' busy' : ''), '🚘'), zIndexOffset: 1000 }).addTo(map);
+    const pts = [o.pos, d.pos].concat(c ? [c.pos] : []); map.fitBounds(L.latLngBounds(pts), { padding: [40, 40] }); layers.viajeId = v.id;
+  }
+  function actualizarMapa() { if (!map || !layers.viajeId) return; const v = A.viaje(layers.viajeId); if (!v) return; const c = v.choferId ? A.chofer(v.choferId) : null; if (c && layers.car) layers.car.setLatLng(c.pos); const [t1, t2] = etaLineas(v); const etaEl = $('.mapwrap .eta b'); const subEl = $('.mapwrap .eta span'); if (etaEl) etaEl.textContent = t1; if (subEl) subEl.textContent = t2; if (v.sim && v.sim.fase === 'a_recoger' && layers.rec && c) { /* recorta la ruta recorrida */ const idx = v.sim.cum.findIndex(x => x >= v.sim.avance); layers.rec.setLatLngs([c.pos].concat(v.sim.pts.slice(Math.max(1, idx)))); } if (v.sim && v.sim.fase === 'a_destino' && layers.dest && c) { const idx = v.sim.cum.findIndex(x => x >= v.sim.avance); layers.dest.setLatLngs([c.pos].concat(v.sim.pts.slice(Math.max(1, idx)))); } }
+
+  // ═════════════ ACCOUNT ═════════════
+  function vAccount() {
+    const u = user(); const cta = u.cuentaId ? A.db.cuentas.find(x => x.id === u.cuentaId) : null; const vs = misViajes().filter(v => v.estado === 'completado'); const amigos = (u.amigos || []).map(id => A.cliente(id)).filter(Boolean);
+    $('#root').innerHTML = header() + `<main><div class="hero"><h1>${esc(u.nombre.split(' ')[0])}'s <em>account.</em></h1><p>${esc(u.ciudad)} · guest since ${2026 - Math.min(5, u.visitas)} · ${u.visitas} trips with us${u.vip ? ' · <span class="pill gold">VIP guest</span>' : ''}</p></div>
+      <div class="card"><h3>Profile</h3><div class="kv"><span>Name</span><span>${esc(u.nombre)}</span></div><div class="kv"><span>Phone</span><span>${esc(u.tel)}</span></div><div class="kv"><span>Email</span><span>${esc(u.email)}</span></div><div class="kv"><span>Preferences</span><span style="text-align:right;">${esc(u.preferencias || 'None yet')}</span></div></div>
+      <div class="card" style="margin-top:10px;"><h3>Payment methods</h3><div class="kv"><span> Pay</span><span class="pill ok">Default</span></div><div class="kv"><span>Visa •••• 4242</span><span>Exp 09/28</span></div><div class="kv"><span>Zelle</span><span>${esc(u.email)}</span></div><button class="btn sec sm" style="margin-top:8px;">Add payment method</button></div>
+      ${cta ? `<div class="card gold" style="margin-top:10px;"><h3>${esc(cta.tipo)} account</h3><b style="font-size:15px;">${esc(cta.nombre)}</b><div class="small muted" style="margin-top:4px;">Coordinator ${esc(cta.contacto)} · ${cta.invitados ? cta.invitados + ' guests · ' : ''}one monthly invoice. Your rides are billed to the account; you only choose your vehicle and extras.</div></div>` : ''}
+      <div class="card" style="margin-top:10px;"><h3>Your circle <span>· split rides and share ETAs</span></h3>${amigos.length ? amigos.map(a => `<div class="kv"><span>${esc(a.nombre)}</span><span class="small muted">${esc(a.ciudad)}</span></div>`).join('') : '<div class="small muted">Invite friends to share rides and split the fare.</div>'}<button class="btn sec sm" style="margin-top:8px;" id="aInvite">Invite with link</button></div>
+      <div class="card" style="margin-top:10px;"><h3>Spend with All Cabo Services</h3><div class="row"><span class="muted small">${vs.length} completed rides</span><b style="font-size:20px;">${usd(u.gasto)}</b></div><div class="small muted" style="margin-top:6px;">Receipts and CFDI invoices available per trip.</div></div>
+      <p class="legal" style="margin-top:12px;">Demo data lives in this browser only. Payments, WhatsApp and emails are simulated.</p></main>`; bindHeader();
+    $('#aInvite').onclick = () => toast('Invite link copied (simulated)');
+  }
+
+  // ═════════════ render + eventos ═════════════
+  function render() { if (map) { map.remove(); map = null; layers = {}; } ({ book: vBook, trips: vTrips, account: vAccount }[view] || vBook)(); renderNav(); }
+  window.addEventListener('hashchange', () => { const v = location.hash.replace('#', ''); if (v && v !== view) { view = v; render(); } });
+  A.on((motivo) => { if (motivo === 'sim') { actualizarMapa(); return; } if ($('#sheetBg')) { if (window.__chatViaje && $('#chatBox')) { const ms = A.mensajesDe(window.__chatViaje); $('#chatBox').innerHTML = ms.map(m => `<div class="cb ${m.de === 'cliente' ? 'me' : 'them'}">${esc(m.texto)}<time>${new Date(m.t).toTimeString().slice(0, 5)}</time></div>`).join(''); $('#chatBox').scrollTop = 1e6; } return; } if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return; render(); });
+  A.onEvento((ev) => { const v = ev.viajeId ? A.viaje(ev.viajeId) : null; if (!v || v.clienteId !== userId) return; if (ev.tipo === 'viaje_asignado') toast(`${A.chofer(ev.choferId).nombre} is your driver`); if (ev.tipo === 'estado') toast({ en_camino: 'Your driver is on the way', llegue: 'Your driver has arrived · Door 3', a_bordo: 'Enjoy the ride!', completado: 'Trip completed · receipt sent', cancelado: 'Trip cancelled' }[ev.estado] || ''); if (ev.tipo === 'mensaje' && ev.de === 'chofer') toast('New message from your driver'); if (ev.tipo === 'llegada' && ev.fase === 'a_recoger') toast('Your driver is arriving now'); });
+  render();
+})();
+</script>
+</body>
+</html>

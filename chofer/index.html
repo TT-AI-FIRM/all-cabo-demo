@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B0B0C">
+<title>All Cabo Services · Chofer</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../shared/img/fav.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/vendor/leaflet.min.css">
+<link rel="stylesheet" href="../shared/brand.css">
+<style>
+  body { max-width: 480px; margin: 0 auto; min-height: 100vh; }
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 6px 16px; gap: 10px; }
+  .top img { height: 22px; display: block; }
+  .sw { display: inline-flex; align-items: center; gap: 8px; background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 6px 4px 12px; font-size: 12px; font-weight: 700; }
+  .sw i { width: 40px; height: 24px; border-radius: 999px; background: var(--line2); position: relative; transition: background-color 180ms ease; display: inline-block; }
+  .sw i::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform 180ms var(--ease); }
+  .sw.on i { background: var(--ok); } .sw.on i::after { transform: translateX(16px); }
+  main { padding: 6px 16px calc(92px + env(safe-area-inset-bottom)) 16px; }
+  h1.t { font-weight: 500; font-size: 27px; line-height: 1.02; letter-spacing: -.03em; margin: 6px 0 12px 0; } h1.t em { font-style: normal; color: var(--gold); }
+  nav.bottom { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 480px; background: rgba(11,11,12,.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--line); display: flex; padding: 8px 6px calc(8px + env(safe-area-inset-bottom)) 6px; z-index: 40; }
+  nav.bottom .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; padding: 6px 0; border-radius: 12px; position: relative; transition: transform 160ms var(--ease), color 160ms ease; }
+  nav.bottom .tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  nav.bottom .tab.on { color: var(--gold); }
+  nav.bottom .tab .n { position: absolute; top: 2px; right: 22%; background: var(--brick2); color: #fff; font-size: 9.5px; font-weight: 800; border-radius: 999px; padding: 1px 6px; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+  .kpi small { display: block; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+  .kpi b { display: block; font-size: 20px; letter-spacing: -.02em; line-height: 1; }
+  .trip { display: flex; gap: 12px; padding: 13px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); margin-bottom: 10px; width: 100%; text-align: left; transition: transform 160ms var(--ease), border-color 160ms ease; }
+  .trip.new { border-color: var(--gold); background: #1E1A12; }
+  .trip.live { border-color: var(--ok); }
+  .trip .hr { min-width: 54px; text-align: center; } .trip .hr b { display: block; font-size: 18px; line-height: 1.1; } .trip .hr span { font-size: 10px; color: var(--muted); }
+  .trip .rt { flex: 1; min-width: 0; } .trip .rt b { display: block; font-size: 14px; } .trip .rt span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .mapwrap { position: relative; height: 42vh; min-height: 280px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 12px; }
+  .mapwrap .eta { position: absolute; left: 12px; top: 12px; z-index: 500; background: rgba(11,11,12,.86); border: 1px solid var(--line2); border-radius: 12px; padding: 8px 12px; }
+  .mapwrap .eta b { display: block; font-size: 20px; line-height: 1; } .mapwrap .eta span { font-size: 11px; color: var(--muted); }
+  .mapwrap .tag { position: absolute; right: 12px; top: 12px; z-index: 500; }
+  .big { width: 100%; border-radius: 16px; padding: 17px; font-size: 17px; font-weight: 800; background: var(--gold); color: var(--gold-ink); transition: transform 160ms var(--ease); }
+  .big.ok { background: var(--ok); color: #06140C; } .big.info { background: var(--info); color: #08202E; }
+  .acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .acts .btn { flex-direction: column; gap: 4px; padding: 10px 6px; font-size: 12px; text-decoration: none; }
+  .acts .btn span { font-size: 18px; }
+  .plate { display: inline-block; font-weight: 800; letter-spacing: .12em; background: #F4F1EC; color: #111; border-radius: 6px; padding: 3px 8px; font-size: 12px; border: 2px solid #999; }
+  .ck { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .ck:last-child { border-bottom: 0; }
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .roles button { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 12px; text-align: left; color: var(--text); transition: transform 160ms var(--ease), border-color 160ms ease; }
+  .roles button b { display: block; font-size: 14px; } .roles button span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .foto { height: 92px; border-radius: 12px; border: 1px dashed var(--line2); display: grid; place-items: center; color: var(--muted); font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="overlay"></div>
+<div id="toast"></div>
+<nav class="bottom" id="nav"></nav>
+<script src="../shared/vendor/leaflet.min.js"></script>
+<script src="../shared/rutas.js"></script>
+<script src="../shared/core.js"></script>
+<script>
+(function () {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s); const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const A = window.ACS; const usd = A.usd, mxn = A.mxn; const hoy = A.hoy();
+  const qs = new URLSearchParams(location.search); if (qs.get('id')) sessionStorage.setItem('acs_chofer', qs.get('id'));
+  let id = sessionStorage.getItem('acs_chofer') || null; const yo = () => A.chofer(id);
+  let view = location.hash.replace('#', '') || 'hoy'; let sel = { tripId: null }; let map = null, layers = {}; let toastT = null; let watchId = null;
+  function toast(m) { const t = $('#toast'); t.innerHTML = `<div class="toast">${esc(m)}</div>`; clearTimeout(toastT); toastT = setTimeout(() => t.innerHTML = '', 2800); if (navigator.vibrate) navigator.vibrate(40); }
+  function sheet(html) { $('#overlay').innerHTML = `<div class="sheet-bg" id="sheetBg"><div class="sheet">${html}</div></div>`; $('#sheetBg').addEventListener('click', e => { if (e.target.id === 'sheetBg') closeSheet(); }); }
+  function closeSheet() { $('#overlay').innerHTML = ''; }
+  const ini = (n) => n.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+  const lugarN = (i) => { const l = A.lugar(i); return l ? (l.corto || l.nombre) : '—'; };
+  const NAV = [['hoy', 'Hoy', '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>'], ['viaje', 'Viaje', '<svg viewBox="0 0 24 24"><path d="M3 17l3-8h12l3 8M5 17h14v3H5zM7 13h10"/></svg>'], ['gastos', 'Gastos', '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>'], ['mas', 'Más', '<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>']];
+  const misHoy = () => A.viajesDe(id, hoy).filter(v => v.estado !== 'cancelado').sort((a, b) => a.hora < b.hora ? -1 : 1);
+  const activo = () => A.viajeActivo(id) || misHoy().find(v => v.estado === 'asignado' || v.estado === 'aceptado') || null;
+  function renderNav() { const nuevos = misHoy().filter(v => v.estado === 'asignado').length; $('#nav').innerHTML = NAV.map(([v, l, ic]) => `<button class="tab ${view === v ? 'on' : ''}" data-v="${v}">${ic}<span>${l}</span>${v === 'viaje' && nuevos ? `<span class="n">${nuevos}</span>` : ''}</button>`).join(''); $$('#nav [data-v]').forEach(b => b.onclick = () => go(b.dataset.v)); }
+  function go(v) { view = v; location.hash = v; render(); window.scrollTo(0, 0); }
+  function header() { const c = yo(); const veh = A.vehiculo(c.vehiculoId); return `<div class="top"><div class="row" style="gap:10px;"><div class="avatar">${ini(c.nombre)}</div><div><b style="font-size:14px;">${esc(c.nombre)}</b><div class="small muted">${esc(A.TIPOS_VEHICULO[veh.tipo].corto)} · <span class="plate" style="font-size:10px;padding:1px 6px;">${esc(veh.placa)}</span></div></div></div><button class="sw ${c.enLinea ? 'on' : ''}" id="swOn">${c.enLinea ? 'En línea' : 'Fuera'}<i></i></button></div>`; }
+  function bindHeader() { $('#swOn').onclick = () => { A.setEnLinea(id, !yo().enLinea); toast(yo().enLinea ? 'Estás en línea: te llegan viajes' : 'Fuera de línea'); render(); }; }
+
+  // ═════════════ login ═════════════
+  function vLogin() {
+    $('#root').innerHTML = `<main><img src="../shared/img/logo.png" alt="All Cabo Services" style="height:34px;display:block;margin:28px auto 18px auto;"><h1 class="t" style="text-align:center;">App del <em>chofer</em></h1><p class="muted small" style="text-align:center;margin:0 0 18px 0;">Elige con quién entras. En el demo cada pestaña puede ser un chofer distinto.</p><div class="roles">${A.db.choferes.map(c => { const v = A.vehiculo(c.vehiculoId); return `<button data-id="${c.id}"><b>${esc(c.nombre)}</b><span>${esc(A.TIPOS_VEHICULO[v.tipo].corto)} · ${esc(v.placa)} · ${c.enLinea ? 'en línea' : 'fuera'}</span></button>`; }).join('')}</div><p class="legal" style="margin-top:16px;">Datos ilustrativos. El GPS de la flota es simulado sobre la carretera real; puedes activar el GPS de tu teléfono en «Más».</p></main>`;
+    $('#nav').innerHTML = ''; $$('[data-id]').forEach(b => b.onclick = () => { id = b.dataset.id; sessionStorage.setItem('acs_chofer', id); render(); });
+  }
+
+  // ═════════════ HOY ═════════════
+  function tripCard(v) { const done = v.estado === 'completado'; const live = A.EN_RUTA.includes(v.estado); return `<button class="trip ${v.estado === 'asignado' ? 'new' : ''} ${live ? 'live' : ''}" data-t="${v.id}"><div class="hr"><b>${esc(v.hora)}</b><span>${v.horaOriginal ? 'ajustada' : (v.vuelo ? esc(v.vuelo.num) : 'recogida')}</span></div><div class="rt"><b>${esc(lugarN(v.origenId))} → ${esc(lugarN(v.destinoId))}</b><span>${esc(v.nombre)} · ${v.pasajeros} pax · ${v.maletas} maletas${v.extras.length ? ' · ' + v.extras.map(x => esc((A.db.config.extras.find(e => e.id === x) || {}).es || x)).join(', ') : ''}</span><span style="margin-top:6px;"><span class="pill" style="color:${A.ESTADOS[v.estado].color}">${esc(A.ESTADOS[v.estado].es)}</span>${v.pago.metodo === 'efectivo' && !done ? ' <span class="pill warn">cobrar ' + usd(v.precio.total) + ' en efectivo</span>' : ''}${v.estado === 'asignado' ? ' <span class="pill gold">toca para aceptar</span>' : ''}</span></div><div class="num" style="font-weight:800;">${usd(v.precio.total)}</div></button>`; }
+  function vHoy() {
+    const c = yo(); const vs = misHoy(); const done = vs.filter(v => v.estado === 'completado'); const gan = done.reduce((a, v) => a + v.costo.chofer, 0); const prox = A.viajesDe(id).filter(v => v.fecha > hoy && v.estado !== 'cancelado').slice(0, 4);
+    $('#root').innerHTML = header() + `<main><h1 class="t">Hoy, <em>${esc(A.fechaLarga(hoy).split(' ')[0].toLowerCase())} ${hoy.split('-')[2]}.</em></h1>
+      <div class="kpis"><div class="kpi"><small>Viajes hoy</small><b>${done.length}<span class="muted" style="font-size:13px;"> / ${vs.length}</span></b></div><div class="kpi"><small>Ganancia hoy</small><b>${mxn(gan).replace(' MXN', '')}</b></div><div class="kpi"><small>Calificación</small><b><span class="stars">★</span> ${c.calificacion.toFixed(1)}</b></div></div>
+      ${!c.enLinea ? '<div class="card gold" style="margin-bottom:10px;"><b>Estás fuera de línea.</b><div class="small muted">Activa «En línea» arriba para que la central te asigne viajes cercanos.</div></div>' : ''}
+      ${vs.map(tripCard).join('') || '<div class="card muted small">Sin viajes hoy.</div>'}
+      ${prox.length ? `<h3 class="eyebrow" style="margin:14px 0 8px 0;">Próximos días</h3>${prox.map(v => `<button class="trip" data-t="${v.id}"><div class="hr"><b>${esc(v.hora)}</b><span>${esc(A.fechaLarga(v.fecha).split(' ').slice(0, 2).join(' '))}</span></div><div class="rt"><b>${esc(lugarN(v.origenId))} → ${esc(lugarN(v.destinoId))}</b><span>${esc(v.nombre)} · ${v.pasajeros} pax${v.vuelo ? ' · ' + esc(v.vuelo.num) : ''}</span></div><div class="num" style="font-weight:800;">${usd(v.precio.total)}</div></button>`).join('')}` : ''}</main>`; bindHeader();
+    $$('[data-t]').forEach(b => b.onclick = () => { sel.tripId = b.dataset.t; go('viaje'); });
+  }
+
+  // ═════════════ VIAJE ═════════════
+  function vViaje() {
+    const v = (sel.tripId && A.viaje(sel.tripId)) || activo(); if (!v) { $('#root').innerHTML = header() + `<main><h1 class="t">Sin viaje <em>activo.</em></h1><div class="card muted small">Cuando la central te asigne un viaje aparece aquí con el mapa, el cliente y los botones de estado.</div></main>`; bindHeader(); return; }
+    const c = yo(); const cli = A.cliente(v.clienteId); const o = A.lugar(v.origenId), d = A.lugar(v.destinoId); const e = A.eta(v); const done = ['completado', 'cancelado', 'no_show'].includes(v.estado); const msgs = A.mensajesDe(v.id);
+    const meta = v.estado === 'a_bordo' ? d : o; const nav = `https://www.google.com/maps/dir/?api=1&destination=${meta.pos[0]},${meta.pos[1]}&travelmode=driving`;
+    const etaTxt = v.estado === 'en_camino' ? (e && e.llegado ? 'Llegaste al punto' : `${e ? e.min : '—'} min`) : v.estado === 'a_bordo' ? (e && e.llegado ? 'Llegaste al destino' : `${e ? e.min : '—'} min`) : v.estado === 'llegue' ? 'Esperando al pasajero' : done ? A.ESTADOS[v.estado].es : `Recoger ${v.hora}`;
+    const etaSub = v.estado === 'a_bordo' ? `a ${lugarN(v.destinoId)} · ${e ? e.km.toFixed(1) : '—'} km` : v.estado === 'en_camino' ? `al punto de recogida · ${e ? e.km.toFixed(1) : '—'} km` : `${lugarN(v.origenId)}${v.distanciaChofer != null && v.estado === 'asignado' ? ' · a ' + v.distanciaChofer + ' km de ti' : ''}`;
+    const boton = { asignado: ['Aceptar viaje', 'aceptado', ''], aceptado: ['En camino a recoger', 'en_camino', ''], en_camino: ['Llegué al punto', 'llegue', 'info'], llegue: ['Pasajero a bordo', 'a_bordo', 'ok'], a_bordo: ['Completar viaje', 'completado', 'ok'] }[v.estado];
+    $('#root').innerHTML = header() + `<main><div class="row" style="margin-bottom:10px;"><button class="btn ghost sm" id="vBack">‹ Hoy</button><span class="pill" style="color:${A.ESTADOS[v.estado].color}">${esc(A.ESTADOS[v.estado].es)}</span></div>
+      <div class="mapwrap"><div id="map" class="map"></div><div class="eta"><b>${etaTxt}</b><span>${esc(etaSub)}</span></div>${!done ? (c.gpsReal ? '<span class="pill ok tag">GPS del teléfono</span>' : '<span class="pill gold tag">demo · GPS ×' + A.db.config.factorDemo + '</span>') : ''}</div>
+      ${boton && !done ? `<button class="big ${boton[2]}" id="vGo">${boton[0]}</button>` : ''}
+      ${!done ? `<div class="acts"><a class="btn sec" href="${nav}" target="_blank" rel="noopener"><span>🧭</span>Navegar</a><a class="btn sec" href="tel:${esc(cli ? cli.tel.replace(/\s/g, '') : '')}"><span>📞</span>Llamar</a><button class="btn sec" id="vChat"><span>💬</span>Mensajes${msgs.length ? ' (' + msgs.length + ')' : ''}</button></div>` : ''}
+      <div class="card" style="margin-top:12px;"><div class="row"><div><b style="font-size:16px;">${esc(v.nombre)}</b><div class="small muted">${cli ? esc(cli.ciudad) + ' · ' + cli.visitas + ' viajes con nosotros' + (cli.vip ? ' · <span class="pill gold">VIP</span>' : '') : ''}</div></div><div class="num" style="font-weight:800;font-size:18px;">${usd(v.precio.total)}</div></div>
+        <div class="kv" style="margin-top:8px;"><span>Ruta</span><span style="text-align:right;">${esc(o.nombre)} → ${esc(d.nombre)}${v.redondo ? ' · redondo' : ''}</span></div><div class="kv"><span>Recogida</span><span><b>${esc(v.hora)}</b>${v.horaOriginal ? ` <span class="pill warn">era ${esc(v.horaOriginal)} · vuelo ${v.vuelo.estado}</span>` : ''}</span></div>${v.vuelo ? `<div class="kv"><span>Vuelo</span><span style="text-align:right;">${esc(v.vuelo.num)} ${esc(v.vuelo.aerolinea)}${v.vuelo.origen ? ' · ' + esc(v.vuelo.origen) : ''} · <span class="pill ${v.vuelo.estado === 'a tiempo' ? 'ok' : 'warn'}">${v.vuelo.estado === 'a tiempo' ? 'a tiempo' : v.vuelo.estado + ' ' + Math.abs(v.vuelo.minutos) + ' min'}</span></span></div>` : ''}<div class="kv"><span>Pasajeros</span><span>${v.pasajeros} · ${v.maletas} maletas</span></div>${v.extras.length ? `<div class="kv"><span>Extras</span><span style="text-align:right;">${v.extras.map(x => esc((A.db.config.extras.find(e => e.id === x) || {}).es || x)).join(' · ')}</span></div>` : ''}${cli && cli.preferencias ? `<div class="kv"><span>Preferencias</span><span style="text-align:right;">${esc(cli.preferencias)}</span></div>` : ''}${v.notas ? `<div class="kv"><span>Notas</span><span style="text-align:right;">${esc(v.notas)}</span></div>` : ''}<div class="kv"><span>Pago</span><span>${esc(A.METODOS[v.pago.metodo].es)} · <span class="pill ${v.pago.estado === 'aprobado' || v.pago.estado === 'cobrado' ? 'ok' : 'warn'}">${v.pago.estado === 'aprobado' ? 'pagado' : v.pago.estado === 'cobrado' ? 'cobrado' : v.pago.metodo === 'efectivo' ? 'cobrar al pasajero' : 'por confirmar en oficina'}</span></span></div>${v.origenId === 'sjd' && !done ? '<div class="kv"><span>Punto de encuentro</span><span style="text-align:right;">Puerta 3 · letrero All Cabo Services</span></div>' : ''}</div>
+      ${!done && v.estado !== 'asignado' ? `<div class="grid2" style="margin-top:10px;">${v.estado === 'llegue' ? '<button class="btn ghost" id="vNoShow">No llegó el pasajero</button>' : '<span></span>'}<button class="btn ghost" id="vChofer" style="color:var(--bad);">Reportar problema</button></div>` : ''}
+      <p class="legal" style="margin-top:12px;">Los botones de estado avisan al cliente por la app y a la central al instante.</p></main>`; bindHeader();
+    $('#vBack').onclick = () => { sel.tripId = null; go('hoy'); };
+    const g = $('#vGo'); if (g) g.onclick = () => { const to = boton[1]; if (to === 'completado' && v.pago.metodo === 'efectivo') { sheet(`<h3>Cobro en efectivo</h3><p class="small muted">Confirma que recibiste <b style="color:var(--text)">${usd(v.precio.total)}</b> (o ${mxn(v.precio.total * A.db.config.tipoCambio)}).</p><button class="btn xl full ok" id="cobro">Recibí el efectivo</button>`); $('#cobro').onclick = () => { closeSheet(); A.cambiarEstado(v.id, 'completado', c.nombre); cierre(v); }; return; } A.cambiarEstado(v.id, to, c.nombre); toast({ aceptado: 'Viaje aceptado', en_camino: 'El cliente ya ve tu camioneta en el mapa', llegue: 'Avisamos al pasajero que llegaste', a_bordo: 'Buen viaje', completado: 'Viaje completado' }[to]); if (to === 'completado') cierre(v); else render(); };
+    const ch = $('#vChat'); if (ch) ch.onclick = () => chat(v);
+    const ns = $('#vNoShow'); if (ns) ns.onclick = () => { if (confirm('¿Marcar que el pasajero no llegó? La central lo verá y aplica la política de no-show.')) { A.cambiarEstado(v.id, 'no_show', c.nombre); sel.tripId = null; go('hoy'); } };
+    const rp = $('#vChofer'); if (rp) rp.onclick = () => { sheet(`<h3>Reportar problema</h3><div class="chips" style="margin-top:8px;">${['Tráfico fuerte', 'Falla mecánica', 'Cliente no contesta', 'Accidente menor'].map(t => `<button class="chip" data-r="${t}">${t}</button>`).join('')}</div>`); $$('[data-r]').forEach(b => b.onclick = () => { A.log(c.nombre, 'Reporte: ' + b.dataset.r + ' · ' + v.nombre); A.save(); closeSheet(); toast('Reporte enviado a la central'); }); };
+    dibujarMapa(v);
+  }
+  function cierre(v) { const c = yo(); sheet(`<div style="text-align:center;"><div class="avatar" style="width:64px;height:64px;font-size:22px;margin:6px auto 10px auto;background:var(--ok);color:#06140C;">✓</div><h3 style="font-size:20px;">Viaje completado</h3><p class="small muted">${esc(v.nombre)} · ${usd(v.precio.total)} · tu pago ${mxn(v.costo.chofer)}</p></div><h3 style="margin-top:12px;">¿Registras un gasto de este viaje?</h3><div class="grid2"><div><label class="lbl">Tipo</label><select class="txt" id="gTipo"><option value="gasolina">Gasolina</option><option value="caseta">Caseta</option><option value="lavado">Lavado</option><option value="otro">Otro</option></select></div><div><label class="lbl">Monto MXN</label><input class="txt" id="gMonto" type="number" value="620" inputmode="decimal"></div></div><div class="foto" id="gFoto">📷 Tomar foto del ticket (simulado)</div><div class="grid2" style="margin-top:12px;"><button class="btn sec" id="gSkip">Sin gasto</button><button class="btn" id="gGo">Guardar gasto</button></div>`); $('#gFoto').onclick = () => { $('#gFoto').textContent = '✓ Foto adjunta · ticket_' + Date.now().toString(36) + '.jpg'; }; $('#gSkip').onclick = () => { closeSheet(); sel.tripId = null; go('hoy'); }; $('#gGo').onclick = () => { A.registrarGasto({ choferId: id, vehiculoId: c.vehiculoId, tipo: $('#gTipo').value, monto: Number($('#gMonto').value) || 0, viajeId: v.id, foto: $('#gFoto').textContent.startsWith('✓') }); closeSheet(); toast('Gasto registrado'); sel.tripId = null; go('hoy'); }; }
+  function chat(v) {
+    const draw = () => { const ms = A.mensajesDe(v.id); $('#chatBox').innerHTML = ms.map(m => `<div class="cb ${m.de === 'chofer' ? 'me' : 'them'}">${esc(m.texto)}<time>${new Date(m.t).toTimeString().slice(0, 5)}</time></div>`).join('') || '<div class="muted small" style="text-align:center;">Sin mensajes. El cliente ve lo que escribas al instante.</div>'; $('#chatBox').scrollTop = 1e6; };
+    sheet(`<div class="row"><div><b>${esc(v.nombre)}</b><div class="small muted">Pasajero · ${esc(lugarN(v.origenId))} → ${esc(lugarN(v.destinoId))}</div></div><button class="btn sec sm" id="cls">Cerrar</button></div><div class="chat" id="chatBox" style="margin-top:10px;"></div><div class="chips" style="margin-top:8px;">${['I am on my way, ETA 15 min', 'I am at Door 3 with the ACS sign', 'Black Escalade, plate ' + A.vehiculo(yo().vehiculoId).placa, 'Take your time, no rush'].map(t => `<button class="chip" data-q="${esc(t)}">${esc(t)}</button>`).join('')}</div><div class="row" style="margin-top:10px;"><input class="txt" id="chatIn" placeholder="Mensaje…"><button class="btn" id="chatGo">Enviar</button></div>`);
+    $('#cls').onclick = closeSheet; draw(); const send = (t) => { if (!t.trim()) return; A.enviarMensaje(v.id, 'chofer', t.trim()); $('#chatIn').value = ''; draw(); }; $('#chatGo').onclick = () => send($('#chatIn').value); $('#chatIn').onkeydown = (e) => { if (e.key === 'Enter') send($('#chatIn').value); }; $$('[data-q]').forEach(b => b.onclick = () => send(b.dataset.q)); window.__chatViaje = v.id;
+  }
+  const carIcon = (cls) => L.divIcon({ className: 'mk', html: `<div class="${cls}">🚘</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
+  const pinIcon = (dest, label) => L.divIcon({ className: 'mk', html: `<div style="position:relative;"><div class="mk-pin ${dest ? 'dest' : ''}"></div><div class="mk-lbl">${esc(label)}</div></div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+  function dibujarMapa(v) {
+    const el = $('#map'); if (!el) return; const o = A.lugar(v.origenId), d = A.lugar(v.destinoId); const c = yo();
+    map = L.map(el, { zoomControl: false }); L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles © Esri · © OpenStreetMap contributors', maxZoom: 16 }).addTo(map); L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, opacity: .9 }).addTo(map);
+    const r = A.rutaViaje(v); layers = { viajeId: v.id };
+    layers.dest = L.polyline(r.destino, { color: '#E4B15C', weight: 5, opacity: .95 }).addTo(map);
+    if (r.recoger) layers.rec = L.polyline(r.recoger, { color: '#8FD0FF', weight: 4, dashArray: '6 8', opacity: .9 }).addTo(map);
+    L.marker(o.pos, { icon: pinIcon(false, 'Recoger · ' + (o.corto || o.nombre)) }).addTo(map); L.marker(d.pos, { icon: pinIcon(true, d.corto || d.nombre) }).addTo(map);
+    layers.car = L.marker(c.pos, { icon: carIcon('mk-car busy'), zIndexOffset: 1000 }).addTo(map);
+    map.fitBounds(L.latLngBounds([o.pos, d.pos, c.pos]), { padding: [36, 36] });
+  }
+  function actualizarMapa() { if (!map || !layers.viajeId) return; const v = A.viaje(layers.viajeId); const c = yo(); if (!v || !c) return; if (layers.car) layers.car.setLatLng(c.pos); const e = A.eta(v); const el = $('.mapwrap .eta b'); if (el && e && A.EN_RUTA.includes(v.estado) && v.estado !== 'llegue') el.textContent = e.llegado ? (v.estado === 'a_bordo' ? 'Llegaste al destino' : 'Llegaste al punto') : `${e.min} min`; const sub = $('.mapwrap .eta span'); if (sub && e && A.EN_RUTA.includes(v.estado)) sub.textContent = (v.estado === 'a_bordo' ? 'a ' + lugarN(v.destinoId) : 'al punto de recogida') + ' · ' + e.km.toFixed(1) + ' km'; if (v.sim && v.sim.fase === 'a_recoger' && layers.rec) { const i = v.sim.cum.findIndex(x => x >= v.sim.avance); layers.rec.setLatLngs([c.pos].concat(v.sim.pts.slice(Math.max(1, i)))); } if (v.sim && v.sim.fase === 'a_destino' && layers.dest) { const i = v.sim.cum.findIndex(x => x >= v.sim.avance); layers.dest.setLatLngs([c.pos].concat(v.sim.pts.slice(Math.max(1, i)))); } if (e && e.llegado && !layers.avisado) { layers.avisado = true; const b = $('#vGo'); if (b) b.classList.add('ok'); } }
+
+  // ═════════════ GASTOS ═════════════
+  function vGastos() {
+    const c = yo(); const desde = A.sumaDias(hoy, -30); const gs = A.db.gastos.filter(g => g.choferId === id && g.fecha >= desde).sort((a, b) => (b.fecha + (b.hora || '')) < (a.fecha + (a.hora || '')) ? -1 : 1); const tot = gs.reduce((a, g) => a + g.monto, 0); const por = {}; gs.forEach(g => por[g.tipo] = (por[g.tipo] || 0) + g.monto);
+    $('#root').innerHTML = header() + `<main><h1 class="t">Gastos <em>del mes.</em></h1><div class="kpis"><div class="kpi"><small>Total 30 días</small><b>${mxn(tot).replace(' MXN', '')}</b></div><div class="kpi"><small>Gasolina</small><b>${mxn(por.gasolina || 0).replace(' MXN', '')}</b></div><div class="kpi"><small>Casetas</small><b>${mxn(por.caseta || 0).replace(' MXN', '')}</b></div></div><button class="btn xl full" id="gNuevo">Registrar gasto</button><div class="card" style="margin-top:12px;">${gs.slice(0, 20).map(g => `<div class="kv"><span>${esc(g.fecha)} · ${esc(g.tipo)}${g.viajeId ? ' · viaje' : ''}${g.foto ? ' 📷' : ''}</span><b>${mxn(g.monto)}</b></div>`).join('') || '<div class="muted small">Sin gastos registrados.</div>'}</div><p class="legal" style="margin-top:12px;">Cada gasto queda ligado al vehículo y al viaje; la central lo ve en el costo por viaje y en el tablero.</p></main>`; bindHeader();
+    $('#gNuevo').onclick = () => { sheet(`<h3>Registrar gasto</h3><div class="grid2"><div><label class="lbl">Tipo</label><select class="txt" id="gTipo"><option value="gasolina">Gasolina</option><option value="caseta">Caseta</option><option value="lavado">Lavado</option><option value="estacionamiento">Estacionamiento</option><option value="otro">Otro</option></select></div><div><label class="lbl">Monto MXN</label><input class="txt" id="gMonto" type="number" value="850" inputmode="decimal"></div></div><label class="lbl">Viaje (opcional)</label><select class="txt" id="gViaje"><option value="">Sin viaje</option>${misHoy().map(v => `<option value="${v.id}">${esc(v.hora)} · ${esc(v.nombre)}</option>`).join('')}</select><div class="foto" id="gFoto">📷 Tomar foto del ticket (simulado)</div><button class="btn xl full" id="gGo" style="margin-top:12px;">Guardar</button>`); $('#gFoto').onclick = () => { $('#gFoto').textContent = '✓ Foto adjunta'; }; $('#gGo').onclick = () => { A.registrarGasto({ choferId: id, vehiculoId: c.vehiculoId, tipo: $('#gTipo').value, monto: Number($('#gMonto').value) || 0, viajeId: $('#gViaje').value || null, foto: $('#gFoto').textContent.startsWith('✓') }); closeSheet(); toast('Gasto registrado'); render(); }; };
+  }
+
+  // ═════════════ MÁS ═════════════
+  function vMas() {
+    const c = yo(); const veh = A.vehiculo(c.vehiculoId); const ck = A.db.checklists.find(x => x.choferId === id && x.fecha === hoy); const items = (ck && ck.items) || { limpieza: false, llantas: false, agua: false, gasolina: false, documentos: false, silla: false };
+    const sem = A.viajesDe(id).filter(v => v.estado === 'completado' && v.fecha >= A.sumaDias(hoy, -7)); const mes = A.viajesDe(id).filter(v => v.estado === 'completado' && v.fecha >= A.sumaDias(hoy, -30));
+    const LBL = { limpieza: 'Vehículo limpio por dentro y por fuera', llantas: 'Llantas y presión revisadas', agua: 'Agua fría y hielera lista', gasolina: 'Tanque arriba de ¾', documentos: 'Seguro, permiso y licencia a bordo', silla: 'Silla para bebé disponible' };
+    $('#root').innerHTML = header() + `<main><h1 class="t">Más</h1>
+      <div class="card"><h3>GPS de mi teléfono</h3><div class="row"><div class="small muted">Si lo activas, el cliente y la central ven tu posición real. Si no, el demo simula el recorrido sobre la carretera.</div><button class="sw ${c.gpsReal ? 'on' : ''}" id="swGps">${c.gpsReal ? 'Real' : 'Demo'}<i></i></button></div></div>
+      <div class="card" style="margin-top:10px;"><h3>Checklist del vehículo <span>· ${esc(A.TIPOS_VEHICULO[veh.tipo].corto)} ${esc(veh.placa)} · ${ck ? 'guardado ' + esc(ck.hora) : 'pendiente hoy'}</span></h3>${Object.keys(LBL).map(k => `<div class="ck"><span>${LBL[k]}</span><button class="sw ${items[k] ? 'on' : ''}" data-ck="${k}"><i></i></button></div>`).join('')}<button class="btn full" id="ckGo" style="margin-top:10px;">Guardar checklist</button></div>
+      <div class="card" style="margin-top:10px;"><h3>Mis ganancias <span>· ${Math.round(A.db.config.pagoChoferPct * 100)}% del viaje (ejemplo configurable)</span></h3><div class="kv"><span>Esta semana</span><b>${sem.length} viajes · ${mxn(sem.reduce((a, v) => a + v.costo.chofer, 0))}</b></div><div class="kv"><span>Últimos 30 días</span><b>${mes.length} viajes · ${mxn(mes.reduce((a, v) => a + v.costo.chofer, 0))}</b></div><div class="kv"><span>Kilómetros del mes</span><b>${Math.round(mes.reduce((a, v) => a + v.km, 0)).toLocaleString('es-MX')} km</b></div><div class="kv"><span>Licencia vence</span><b>${esc(c.licenciaVence)}</b></div></div>
+      <div class="grid2" style="margin-top:10px;"><button class="btn sec" id="btnCambiar">Cambiar chofer</button><button class="btn ghost" id="btnReset">Reiniciar demo</button></div>
+      <p class="legal" style="margin-top:12px;">Demo de T.T AI Firm para All Cabo Services. Datos ilustrativos.</p></main>`; bindHeader();
+    $$('[data-ck]').forEach(b => b.onclick = () => { items[b.dataset.ck] = !items[b.dataset.ck]; b.classList.toggle('on'); });
+    $('#ckGo').onclick = () => { A.guardarChecklist(id, items); toast('Checklist guardado'); render(); };
+    $('#swGps').onclick = () => toggleGps();
+    $('#btnCambiar').onclick = () => { sessionStorage.removeItem('acs_chofer'); id = null; render(); };
+    $('#btnReset').onclick = () => { if (confirm('¿Reiniciar todos los datos del demo en este navegador?')) { A.reset(); render(); } };
+  }
+  function toggleGps() { const c = yo(); if (c.gpsReal) { if (watchId != null) navigator.geolocation.clearWatch(watchId); watchId = null; A.setGpsReal(id, false); toast('GPS del teléfono apagado · vuelve la simulación'); render(); return; } if (!navigator.geolocation) { toast('Este dispositivo no tiene GPS disponible'); return; } watchId = navigator.geolocation.watchPosition(p => { A.setPosicion(id, p.coords.latitude, p.coords.longitude, true); }, () => { toast('No se pudo leer el GPS: seguimos en modo demo'); A.setGpsReal(id, false); render(); }, { enableHighAccuracy: true, maximumAge: 5000 }); A.setGpsReal(id, true); toast('Usando el GPS de tu teléfono'); render(); }
+
+  // ═════════════ render ═════════════
+  function render() { if (map) { map.remove(); map = null; layers = {}; } if (!id || !yo()) { vLogin(); return; } ({ hoy: vHoy, viaje: vViaje, gastos: vGastos, mas: vMas }[view] || vHoy)(); renderNav(); }
+  window.addEventListener('hashchange', () => { const v = location.hash.replace('#', ''); if (v && v !== view) { view = v; render(); } });
+  A.on((motivo) => { if (motivo === 'sim') { actualizarMapa(); return; } if ($('#sheetBg')) { if (window.__chatViaje && $('#chatBox')) { const ms = A.mensajesDe(window.__chatViaje); $('#chatBox').innerHTML = ms.map(m => `<div class="cb ${m.de === 'chofer' ? 'me' : 'them'}">${esc(m.texto)}<time>${new Date(m.t).toTimeString().slice(0, 5)}</time></div>`).join(''); $('#chatBox').scrollTop = 1e6; } return; } if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return; render(); });
+  A.onEvento((ev) => { if (!id) return; const v = ev.viajeId ? A.viaje(ev.viajeId) : null; if (ev.tipo === 'viaje_asignado' && ev.choferId === id && v) { toast(`Nuevo viaje: ${lugarN(v.origenId)} → ${lugarN(v.destinoId)} · ${v.hora}`); if (navigator.vibrate) navigator.vibrate([80, 40, 80]); } if (ev.tipo === 'mensaje' && ev.de === 'cliente' && v && v.choferId === id) toast('Mensaje de ' + v.nombre.split(' ')[0]); if (ev.tipo === 'llegada' && v && v.choferId === id) toast(ev.fase === 'a_recoger' ? 'Llegaste al punto de recogida' : 'Llegaste al destino'); });
+  render();
+})();
+</script>
+</body>
+</html>

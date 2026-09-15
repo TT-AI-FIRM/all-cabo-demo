@@ -1,0 +1,1 @@
+{ "name": "All Cabo Services", "short_name": "ACS Ride", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#0B0B0C", "theme_color": "#0B0B0C", "icons": [{ "src": "../shared/img/fav.svg", "sizes": "any", "type": "image/svg+xml" }] }

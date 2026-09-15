@@ -37,7 +37,7 @@
   .rv .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .12em; margin-bottom: -.12em; }
   .rv .w > span { display: inline-block; transform: translateY(115%); opacity: 0; transition: transform var(--d, 1100ms) var(--ease-out-expo) var(--dl, 0ms), opacity var(--d, 1100ms) var(--ease-out-expo) var(--dl, 0ms); will-change: transform; }
   .rv.in .w > span { transform: translateY(0); opacity: 1; }
-  .rv.fade .w > span { transform: translateY(18px); transition-timing-function: var(--ease-out-quart); }
+  .rv.fade .w { overflow: visible; padding-bottom: 0; margin-bottom: 0; } .rv.fade .w > span { transform: translateY(18px); transition-timing-function: var(--ease-out-quart); }
   .lines .l { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; }
   .lines .l > span { display: block; transform: translateY(115%); opacity: 0; transition: transform 950ms var(--ease-out-expo) var(--dl, 0ms), opacity 950ms var(--ease-out-expo) var(--dl, 0ms); }
   .lines.in .l > span { transform: none; opacity: 1; }
@@ -54,7 +54,6 @@
   header.site { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 1.5rem 0; font-size: .75rem; color: var(--on-dark); position: relative; z-index: 5; }
   @media (min-width: 640px) { header.site { padding: 2rem 2.5rem 0; } }
   header.site nav.left { display: none; flex: 1; gap: 2rem; } header.site nav.left a { opacity: .9; } header.site nav.left a:hover { opacity: 1; } @media (min-width: 1024px) { header.site nav.left { display: flex; } }
-  header.site .brand { flex: 1; display: flex; justify-content: flex-start; } @media (min-width: 1024px) { header.site .brand { justify-content: center; } } header.site .brand img { height: 1.7rem; }
   header.site .right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
   header.site .textbtn { display: none; text-transform: uppercase; letter-spacing: .12em; } header.site .textbtn:hover { text-decoration: underline; } @media (min-width: 640px) { header.site .textbtn { display: inline; } }
   .burger { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border-radius: var(--radius-pill); background: rgba(255,255,255,.15); backdrop-filter: blur(8px); transition: background-color 200ms ease; } .burger:hover { background: rgba(255,255,255,.25); }
@@ -62,8 +61,8 @@
   /* hero */
   .hero { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-card-lg); background: var(--deep); color: var(--on-dark); height: calc(100svh - 1rem); min-height: 36rem; display: flex; flex-direction: column; }
   @media (min-width: 640px) { .hero { height: calc(100svh - 1.5rem); } }
-  .hero .plate { position: absolute; inset: 0; z-index: -10; overflow: hidden; } .hero .plate .inner { position: absolute; left: 0; right: 0; top: -16%; height: 132%; width: 100%; will-change: transform; } .hero .plate img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
-  .hero .plate::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11,11,12,.66), rgba(11,11,12,.22) 45%, rgba(11,11,12,.86)); }
+  .hero .plate { position: absolute; inset: 0; z-index: -10; overflow: hidden; background: radial-gradient(ellipse 70% 55% at 50% 52%, #2A2010 0%, #14110A 45%, var(--deep) 100%); } .hero .plate .inner { position: absolute; inset: 0; display: grid; place-items: center; will-change: transform; } .hero .plate .biglogo { width: min(78vw, 52rem); height: auto; opacity: .95; filter: drop-shadow(0 1.5rem 3rem rgba(0,0,0,.6)); }
+  @media (max-width: 640px) { .hero .plate .biglogo { width: 86vw; } .hero .plate .inner { place-items: center; padding-bottom: 6rem; } }
   .hero .title { padding: 1rem 1.5rem 0; } @media (min-width: 640px) { .hero .title { padding-left: 2.5rem; padding-right: 2.5rem; } }
   .hero h1 { font-size: 10.6vw; font-weight: 500; text-transform: uppercase; line-height: .85; letter-spacing: -.03em; white-space: nowrap; }
   .hero .bottom { margin-top: auto; padding: 0 1.5rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; } @media (min-width: 640px) { .hero .bottom { padding: 0 2.5rem 2.5rem; flex-direction: row; justify-content: space-between; align-items: flex-end; } }
@@ -85,17 +84,8 @@
   .trust .badges { position: relative; z-index: 20; display: flex; flex-direction: column; gap: 1.5rem; } @media (min-width: 640px) { .trust .badges { flex-direction: row; justify-content: space-between; align-items: flex-start; } }
   .pct { width: 7rem; height: 7rem; border-radius: var(--radius-pill); background: var(--surface2); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex: 0 0 auto; } @media (min-width: 640px) { .pct { width: 8rem; height: 8rem; } }
   .pct b { font-size: 1.5rem; font-weight: 500; } .pct span { font-size: .6rem; color: var(--ink-soft); max-width: 8em; line-height: 1.3; margin-top: .2rem; }
-  .bcard { max-width: 30rem; border-radius: var(--radius-card); background: var(--surface2); padding: 1.25rem; } @media (min-width: 640px) { .bcard { padding: 1.5rem; } }
-  .bcard h3 { font-size: 1.125rem; font-weight: 500; line-height: 1.25; } .bcard p { font-size: .8rem; color: var(--ink-soft); line-height: 1.6; margin-top: .5rem; } .bcard p b { color: var(--ink); font-weight: 500; }
-  .ghost { position: relative; z-index: 0; pointer-events: none; user-select: none; max-width: 88rem; margin: 3rem auto 0; font-size: 8.2vw; font-weight: 500; text-transform: uppercase; line-height: 1.02; letter-spacing: -.02em; color: var(--ghost); }
-  .ghost .row { display: flex; justify-content: space-between; gap: 1rem; } .ghost .row .w { display: inline-block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; } .ghost .w > span { display: inline-block; transform: translateY(115%); opacity: 0; transition: transform 700ms var(--ease-out-expo), opacity 700ms var(--ease-out-expo); will-change: transform; } .ghost.in .w > span { transform: none; opacity: 1; } .ghost .ink { color: var(--ink); }
-  .coach { position: relative; z-index: 10; margin: 2rem auto 0; width: 13rem; } @media (min-width: 640px) { .coach { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin: 0; width: 16rem; } }
-  .coach figure { transform: rotate(6deg); aspect-ratio: 3/4; border-radius: var(--radius-card); background: var(--gold); overflow: hidden; position: relative; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.18); }
-  .coach img { width: 100%; height: 100%; object-fit: cover; transition: opacity 260ms ease; } .coach img.swap { opacity: 0; }
-  .coach figcaption { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; border-radius: var(--radius-xl); background: rgba(11,11,12,.5); color: #fff; backdrop-filter: blur(8px); padding: .5rem .75rem; } .coach figcaption b { display: block; font-size: .875rem; font-weight: 500; } .coach figcaption span { font-size: .65rem; opacity: .85; }
-  .controls { position: relative; z-index: 20; margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; } @media (min-width: 640px) { .controls { margin-top: 6rem; } }
-  .arrow { width: 3rem; height: 3rem; border-radius: var(--radius-pill); display: grid; place-items: center; border: 1px solid var(--hairline); color: var(--ink); transition: border-color 200ms ease, background-color 200ms ease; } @media (min-width: 640px) { .arrow { width: 3.5rem; height: 3.5rem; } }
-  .arrow:hover { border-color: var(--ink); } .arrow.solid { background: var(--ink); border-color: var(--ink); color: #fff; } .arrow.solid:hover { background: #2A2A2E; } .arrow svg { width: 1.25rem; height: 1.25rem; will-change: transform; } .arrow.prev svg { transform: scaleX(-1); }
+  .bcard { max-width: 34rem; border-radius: var(--radius-card); background: var(--surface2); padding: 1.25rem; } @media (min-width: 640px) { .bcard { padding: 1.75rem; } } .bcard .eyebrow { margin-bottom: .75rem; }
+  .bcard h3 { font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -.02em; } .bcard p { font-size: .9rem; color: var(--ink-soft); line-height: 1.6; margin-top: .75rem; } .bcard p b { color: var(--ink); font-weight: 500; }
   /* el sistema */
   .programs { background: var(--surface2); color: var(--ink); padding: 6rem 1.5rem; border-radius: var(--radius-card-lg) var(--radius-card-lg) 0 0; margin-top: .75rem; } @media (min-width: 640px) { .programs { padding-left: 2.5rem; padding-right: 2.5rem; } }
   .eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .22em; color: var(--ink-soft); } .eyebrow::before { content: ''; width: .375rem; height: .375rem; border-radius: var(--radius-pill); background: var(--gold); }
@@ -138,7 +128,7 @@
   .cols { display: grid; gap: 2.5rem; padding: 3.5rem 0; grid-template-columns: 1fr; } @media (min-width: 768px) { .cols { grid-template-columns: 1.4fr 1fr 1fr; } }
   .cols .brandcol { max-width: 22rem; } .cols .brandcol img { height: 2rem; } .cols .brandcol p { font-size: .875rem; color: rgba(244,241,236,.65); margin-top: 1rem; line-height: 1.6; }
   .cols address { font-style: normal; margin-top: 1.5rem; font-size: .875rem; color: rgba(244,241,236,.8); line-height: 1.8; } .cols address .mut { color: rgba(244,241,236,.55); }
-  .cols h4 { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: rgba(244,241,236,.5); } .cols ul, .cols ol { padding: 0; margin-top: 1rem; font-size: .875rem; color: rgba(244,241,236,.8); list-style: none; } .cols li + li { margin-top: .75rem; } .cols li a:hover { color: var(--gold-light); } .cols ol li { display: flex; gap: .6rem; } .cols ol li i { font-style: normal; color: var(--gold-light); }
+  .cols h4 { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: rgba(244,241,236,.5); } .cols ul, .cols ol { padding: 0; margin-top: 1rem; font-size: .875rem; color: rgba(244,241,236,.8); list-style: none; } .cols li + li { margin-top: .75rem; } .cols li a:hover { color: var(--gold-light); }
   .bottombar { border-top: 1px solid rgba(255,255,255,.15); padding-top: 2rem; font-size: .875rem; color: rgba(244,241,236,.6); display: flex; flex-direction: column; gap: 1.25rem; } @media (min-width: 640px) { .bottombar { flex-direction: row; justify-content: space-between; align-items: center; } } .bottombar nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
   /* menú */
   #menu { position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column; pointer-events: none; } #menu.open { pointer-events: auto; }
@@ -157,11 +147,10 @@
   #modal h2 { font-size: 2.25rem; font-weight: 500; line-height: .95; letter-spacing: -.03em; margin-top: .75rem; } @media (min-width: 640px) { #modal h2 { font-size: 3rem; } }
   #modal .opts { display: flex; flex-direction: column; gap: .75rem; margin-top: 1.5rem; }
   #modal .applink { border-color: var(--hairline); background: var(--surface); color: var(--ink); } #modal .applink:hover { background: var(--surface2); border-color: var(--ink); } #modal .applink span { color: var(--ink-soft); }
-  #modal ol { margin: 1.5rem 0 0; padding: 0 0 0 1.2rem; font-size: .8rem; color: var(--ink-soft); line-height: 1.6; } #modal ol li + li { margin-top: .3rem; } #modal h3 { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: var(--ink-soft); margin-top: 1.5rem; }
   /* móvil: tamaños de texto */
   @media (max-width: 640px) {
     .hero h1 { font-size: 9.4vw; } .hero .tag { font-size: 1.55rem; } .hero .bottom { padding-bottom: 1.5rem; }
-    h2.big { font-size: 2.35rem; } .ghost { font-size: 6.8vw; margin-top: 2rem; } .ghost .row { gap: .75rem; }
+    h2.big { font-size: 2.35rem; }
     .cta .h { font-size: 2.8rem; } .conectado dd { font-size: 1rem; } .tcard blockquote { font-size: 1rem; }
     .plist .row { flex-wrap: wrap; gap: .5rem 1rem; padding: 1.5rem 0; } .plist .n { flex: 0 0 100%; width: auto; } .plist .tx { flex: 1 1 100%; } .plist .ar { display: none; }
     .trust { padding: 3rem 1.25rem; } .programs { padding: 4rem 1.25rem; } .facil { padding: 3rem 1.25rem 4rem; } .conectado, .testi { padding: 4rem 1.25rem; } footer.site { padding: 3rem 1.25rem; }
@@ -174,10 +163,9 @@
 <main>
   <!-- HERO -->
   <section class="hero" id="top">
-    <div class="plate"><div class="inner" id="plate"><picture><source media="(max-width: 767px)" srcset="shared/img/site/suburban_drive.jpg"><img src="shared/img/site/hero.jpg" alt="Camioneta de All Cabo Services lista para un traslado en Los Cabos" fetchpriority="high"></picture></div></div>
+    <div class="plate"><div class="inner" id="plate"><img class="biglogo" src="shared/img/logo.png" alt="All Cabo Services" fetchpriority="high"></div></div>
     <header class="site">
       <nav class="left"><a href="#sistema" data-scroll>El sistema</a><a href="#pantallas" data-scroll>Pantallas</a><a href="#conectado" data-scroll>Todo conectado</a></nav>
-      <div class="brand"><a href="#top" data-scroll><img src="shared/img/logo.png" alt="All Cabo Services"></a></div>
       <div class="right"><button class="textbtn" data-open-modal>Probar el demo</button><button class="burger" id="btnMenu" aria-label="Abrir menú"><i></i><i></i></button></div>
     </header>
     <div class="title"><h1 id="heroTitle" class="rv" data-words="Cada Traslado" data-stagger="140" data-d="1100"></h1></div>
@@ -196,19 +184,16 @@
   <!-- PROPUESTA -->
   <section class="trust" id="propuesta">
     <div class="badges">
-      <div class="pct iv" data-s=".9" data-y="0"><b>Demo</b><span>funcional, para probarlo en su teléfono</span></div>
-      <article class="bcard iv" data-dl="120" data-y="24"><h3>Juan Carlos: esto es lo que podemos construir para All Cabo Services.</h3><p>Hoy cada reserva llega por WhatsApp o por teléfono y pasa por usted. Con el sistema, <b>el cliente reserva y paga solo</b>, el viaje <b>le llega al chofer más cercano</b> y usted <b>ve toda la operación en vivo</b>. Nada de esto es una lámina: todo lo que ve aquí ya funciona en el demo.</p></article>
+      <div class="pct iv" data-s=".9" data-y="0"><b>Demo</b><span>funcional, listo para probarse en el teléfono</span></div>
+      <article class="bcard iv" data-dl="120" data-y="24"><span class="eyebrow">La propuesta</span><h3>Un sistema propio para All Cabo Services.</h3><p>Hoy cada reserva llega por WhatsApp o por teléfono y depende de una persona. Con el sistema, <b>el cliente reserva y paga solo</b>, el viaje <b>llega al chofer más cercano</b> y <b>toda la operación se ve en vivo</b> desde la central. Nada de esto es una lámina: todo lo que hay en esta página funciona en el demo.</p></article>
     </div>
-    <h2 class="ghost" id="ghost" aria-label="Palabras del carrusel"><div class="row"><span class="w"><span data-px="-3,3"></span></span><span class="w"><span data-px="3,-3"></span></span></div><div class="row"><span class="w ink"><span data-px="-2,4"></span></span><span class="w"><span data-px="4,-3"></span></span></div></h2>
-    <div class="coach iv" data-y="60" data-s=".92"><figure><img id="coachImg" src="shared/img/site/escalade_jet.jpg" alt="Cadillac Escalade junto a un jet privado" loading="lazy"><figcaption><b id="coachName">Cadillac Escalade</b><span id="coachRole">Traslado ejecutivo desde SJD</span></figcaption></figure></div>
-    <div class="controls"><button class="arrow prev" id="tPrev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><div class="dots dark" id="tDots" role="tablist"></div><button class="arrow solid next" id="tNext" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
   </section>
 
   <!-- EL SISTEMA -->
   <section class="programs" id="sistema">
     <span class="eyebrow">El sistema</span>
     <h2 class="big lines" data-lines="Un solo sistema|para todo el negocio" data-stagger="120"></h2>
-    <p class="intro-p iv" data-y="20">Tres aplicaciones y una sola base de datos. <b>Cada dato se captura una vez</b> y aparece donde hace falta: en el teléfono del cliente, en el del chofer y en su central. Toque cualquiera para abrir su demo.</p>
+    <p class="intro-p iv" data-y="20">Tres aplicaciones y una sola base de datos. <b>Cada dato se captura una vez</b> y aparece donde hace falta: en el teléfono del cliente, en el del chofer y en la central. Cada fila abre su demo.</p>
     <ul class="plist" id="plist"></ul>
   </section>
 
@@ -218,7 +203,7 @@
       <div class="intro">
         <img class="icon iv" data-s=".85" data-y="0" src="shared/img/site/escalade_villa.jpg" alt="Escalade blanca frente a una villa" loading="lazy">
         <h2 class="big lines" data-lines="Así se ve|en el teléfono|del cliente" data-stagger="120" style="margin-top:1.5rem;"></h2>
-        <p class="body rv fade" data-words="Un mapa GPS le muestra al cliente dónde va su camioneta y cuántos minutos faltan para que llegue por él, con el nombre del chofer y la placa. El chofer solo toca botones. Y usted ve toda la operación sin llamar a nadie." data-stagger="24" data-d="700" data-base="250"></p>
+        <p class="body rv fade" data-words="Un mapa GPS le muestra al cliente dónde va su camioneta y cuántos minutos faltan para que llegue por él, con el nombre del chofer y la placa. El chofer solo toca botones. Y desde la central se ve toda la operación sin llamar a nadie." data-stagger="24" data-d="700" data-base="250"></p>
       </div>
       <div class="courts">
         <figure class="gold iv" data-y="48" data-hover-scale="1.03"><img src="shared/img/shots/app_cliente.jpg" alt="App del cliente con la camioneta acercándose en el mapa" loading="lazy"><figcaption><b>App del cliente</b><span>La camioneta avanza sobre la carretera real y el tiempo de llegada baja en vivo.</span></figcaption></figure>
@@ -234,9 +219,9 @@
     <p class="lead iv" data-y="20">WhatsApp sirve para hablar, no para operar una flota. En el sistema <b>cada reserva, cada chofer, cada cobro y cada camioneta viven en el mismo lugar</b>, y lo que hoy se hace a mano se hace solo.</p>
     <dl>
       <div class="cell iv" data-y="30"><dt>Reservas</dt><dd>El cliente reserva y paga desde su teléfono, a cualquier hora, y la confirmación sale sola con chofer, camioneta y placa.</dd></div>
-      <div class="cell iv" data-y="30" data-dl="110"><dt>Despacho</dt><dd>El viaje se asigna automáticamente al chofer disponible más cercano; usted solo interviene si quiere cambiarlo.</dd></div>
+      <div class="cell iv" data-y="30" data-dl="110"><dt>Despacho</dt><dd>El viaje se asigna automáticamente al chofer disponible más cercano; la central solo interviene si quiere cambiarlo.</dd></div>
       <div class="cell iv" data-y="30" data-dl="220"><dt>Vuelos y cobros</dt><dd>Un vuelo retrasado mueve la recogida sin llamadas. Zelle, tarjeta y efectivo quedan registrados y conciliados.</dd></div>
-      <div class="cell iv" data-y="30" data-dl="330"><dt>Flota y números</dt><dd>Seguros, permisos y servicios avisan antes de vencer. El tablero le dice qué zona, qué mes y qué canal rinden más.</dd></div>
+      <div class="cell iv" data-y="30" data-dl="330"><dt>Flota y números</dt><dd>Seguros, permisos y servicios avisan antes de vencer. El tablero muestra qué zona, qué mes y qué canal rinden más.</dd></div>
     </dl>
   </section>
 
@@ -247,7 +232,7 @@
     <ul>
       <li class="iv" data-y="40"><figure class="tcard" data-hover-y="-8"><div><div class="q">Cliente</div><blockquote>Reserva en un minuto a cualquier hora, paga desde su teléfono y ve llegar su camioneta con el nombre del chofer y la placa. Sin escribirle a nadie.</blockquote></div><figcaption><b>Confirmación al instante</b><span>Cualquier día, cualquier hora</span></figcaption></figure></li>
       <li class="iv" data-y="40" data-dl="120"><figure class="tcard" data-hover-y="-8"><div><div class="q">Chofer</div><blockquote>Recibe el viaje en su teléfono con la ruta, el vuelo y las preferencias del cliente. Marca cada paso con un botón. Sin llamadas, sin libreta.</blockquote></div><figcaption><b>Los viajes le llegan solos</b><span>Al chofer disponible más cercano</span></figcaption></figure></li>
-      <li class="iv" data-y="40" data-dl="240"><figure class="tcard" data-hover-y="-8"><div><div class="q">Usted</div><blockquote>Ve la flota, los cobros y el margen en vivo. Cada reserva queda registrada sola y el negocio deja de depender de su celular.</blockquote></div><figcaption><b>Todo el negocio en una pantalla</b><span>Flota, cobros, margen y alertas</span></figcaption></figure></li>
+      <li class="iv" data-y="40" data-dl="240"><figure class="tcard" data-hover-y="-8"><div><div class="q">Dueño</div><blockquote>Ve la flota, los cobros y el margen en vivo. Cada reserva queda registrada sola y el negocio deja de depender de un teléfono.</blockquote></div><figcaption><b>Todo el negocio en una pantalla</b><span>Flota, cobros, margen y alertas</span></figcaption></figure></li>
     </ul>
   </section>
 
@@ -263,7 +248,7 @@
     </div>
     <div class="cols">
       <div class="brandcol"><img src="shared/img/logo.png" alt="All Cabo Services"><p>Propuesta de sistema integral para All Cabo Services, preparada por T.T AI Firm. El demo usa datos ilustrativos; los pagos, los vuelos, los mensajes y el GPS de la flota están simulados. En la versión real todo corre en la nube y se sincroniza entre teléfonos.</p><address><a href="https://allcaboservices.com" target="_blank" rel="noopener">allcaboservices.com</a><br><span class="mut">Los Cabos, Baja California Sur</span></address></div>
-      <nav aria-label="Recorrido"><h4>Recorrido sugerido</h4><ol><li><i>1</i><span>El cliente reserva y paga en su app.</span></li><li><i>2</i><span>La central asigna al chofer más cercano.</span></li><li><i>3</i><span>La camioneta avanza en el mapa del cliente.</span></li><li><i>4</i><span>El chofer completa y registra la gasolina.</span></li><li><i>5</i><span>El tablero ya trae ingreso, costo y margen.</span></li></ol></nav>
+      <nav aria-label="Demos"><h4>Demos</h4><ul><li><a href="cliente/?user=c1&demo=now">App del cliente</a></li><li><a href="chofer/?id=d1">App del chofer</a></li><li><a href="central/?rol=operador#mapa">Central · operador</a></li><li><a href="central/?rol=dueno#tablero">Tablero del dueño</a></li></ul></nav>
       <nav aria-label="Secciones"><h4>Secciones</h4><ul><li><a href="#propuesta" data-scroll>La propuesta</a></li><li><a href="#sistema" data-scroll>El sistema</a></li><li><a href="#pantallas" data-scroll>Pantallas</a></li><li><a href="#conectado" data-scroll>Todo conectado</a></li><li><a href="#beneficios" data-scroll>Lo que cambia</a></li></ul></nav>
     </div>
     <div class="bottombar"><span>© 2026 T.T AI Firm · Propuesta para All Cabo Services</span><nav aria-label="Otros"><a href="central/?rol=operador#viajes">Central · operador</a><a href="central/?rol=dueno#tablero">Tablero del dueño</a></nav><span>Demo con datos ilustrativos</span></div>
@@ -279,8 +264,7 @@
     <a class="applink" href="cliente/?user=c1&demo=now"><img src="shared/img/shots/thumb_cliente.jpg" alt=""><div><b>App del cliente</b><span>En inglés · abre con una camioneta en camino</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     <a class="applink" href="chofer/?id=d1"><img src="shared/img/shots/thumb_chofer.jpg" alt=""><div><b>App del chofer</b><span>Luis Ramírez · Cadillac Escalade</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     <a class="applink" href="central/?rol=dueno"><img src="shared/img/shots/thumb_central.jpg" alt=""><div><b>Central del dueño</b><span>Mapa en vivo, despacho, flota y tablero</span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-  </div>
-  <h3>Recorrido sugerido</h3><ol><li>En la app del cliente, reserve un viaje del aeropuerto a un hotel y pague. Se abre el mapa con la camioneta en camino.</li><li>En la central, la reserva ya está asignada al chofer más cercano.</li><li>En la app del chofer, marque «Llegué», «A bordo» y «Completar».</li><li>En el tablero del dueño ya aparece el ingreso, el costo y el margen del viaje.</li></ol></div></div>
+  </div></div></div>
 
 <script type="module">
   const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666; const html = document.documentElement;
@@ -309,8 +293,7 @@
   function progressOf(el) { const r = el.getBoundingClientRect(); const h = innerHeight; return Math.min(1, Math.max(0, (h - r.top) / (h + r.height))); }
   function onScroll() { px.forEach(({ el, fn }) => fn(progressOf(el))); }
   if (lenis) lenis.on('scroll', onScroll); addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll);
-  const plate = document.getElementById('plate'); reg(document.querySelector('.hero'), (p) => { plate.style.transform = `translateY(${(p * 12).toFixed(2)}%)`; });
-  const ghost = document.getElementById('ghost'); const gw = Array.from(ghost.querySelectorAll('.w > span')); reg(document.querySelector('.trust'), (p) => { gw.forEach(w => { const [a, b] = w.dataset.px.split(',').map(Number); w.style.transform = ghost.classList.contains('in') ? `translate(${(a + (b - a) * p).toFixed(2)}%, 0)` : ''; }); });
+  const plate = document.getElementById('plate'); reg(document.querySelector('.hero'), (p) => { plate.style.transform = `translateY(${(p * 10).toFixed(2)}%) scale(${(1 - p * 0.06).toFixed(3)})`; });
   const SLIDES = [
     { img: 'shared/img/shots/thumb_cliente.jpg', brand: 'Demo · app del cliente', title: 'Reservar, pagar y ver su camioneta', href: 'cliente/?user=c1&demo=now', alt: 'Pantalla de la app del cliente' },
     { img: 'shared/img/shots/thumb_chofer.jpg', brand: 'Demo · app del chofer', title: 'Los viajes le llegan solos', href: 'chofer/?id=d1', alt: 'Pantalla de la app del chofer' },
@@ -320,16 +303,6 @@
   function drawSlide(i, first) { const s = SLIDES[i]; const paint = () => { sc.innerHTML = `<img src="${s.img}" alt="${s.alt}" loading="lazy"><div><b>${s.brand}</b><span>${s.title}</span><a href="${s.href}">Abrir →</a></div>`; sc.classList.remove('swap'); }; if (first) paint(); else { sc.classList.add('swap'); setTimeout(paint, 240); } scDots.innerHTML = SLIDES.map((_, k) => `<button role="tab" aria-label="Demo ${k + 1}" aria-current="${k === i}"><i></i></button>`).join(''); scDots.querySelectorAll('button').forEach((b, k) => b.onclick = () => { si = k; drawSlide(si); restartSlider(); }); }
   function restartSlider() { clearInterval(sTimer); sTimer = setInterval(() => { si = (si + 1) % SLIDES.length; drawSlide(si); }, 3800); }
   function startSlider() { drawSlide(si, true); restartSlider(); }
-  const TS = [
-    { words: ['Reserva', 'Pago', 'Chofer', 'Mapa'], img: 'shared/img/site/escalade_jet.jpg', name: 'Cadillac Escalade', role: 'Traslado ejecutivo desde SJD', alt: 'Cadillac Escalade junto a un jet privado' },
-    { words: ['Vuelo', 'Recogida', 'Ruta', 'Llegada'], img: 'shared/img/site/suburban_playa.jpg', name: 'Chevrolet Suburban', role: 'Hasta 7 pasajeros · Corredor y Cabo', alt: 'Suburban plateada en la playa' },
-    { words: ['Cliente', 'Chofer', 'Central', 'Dueño'], img: 'shared/img/site/sprinter_casa.jpg', name: 'Mercedes-Benz Sprinter', role: 'Grupos, bodas y corporativos', alt: 'Sprinter frente a una casa moderna' },
-  ];
-  let ti = 0; const tDots = document.getElementById('tDots'); const coachImg = document.getElementById('coachImg');
-  function drawTrust(i, first) { const t = TS[i]; ghost.classList.remove('in'); gw.forEach((w, k) => { w.textContent = t.words[k]; w.style.transform = ''; }); requestAnimationFrame(() => requestAnimationFrame(() => { ghost.classList.add('in'); onScroll(); })); if (!first) { coachImg.classList.add('swap'); setTimeout(() => { coachImg.src = t.img; coachImg.alt = t.alt; coachImg.classList.remove('swap'); }, 260); } document.getElementById('coachName').textContent = t.name; document.getElementById('coachRole').textContent = t.role; tDots.innerHTML = TS.map((_, k) => `<button role="tab" aria-label="Grupo ${k + 1}" aria-current="${k === i}"><i></i></button>`).join(''); tDots.querySelectorAll('button').forEach((b, k) => b.onclick = () => { ti = k; drawTrust(ti); }); }
-  gw.forEach((w, k) => w.textContent = TS[0].words[k]); document.getElementById('tPrev').onclick = () => { ti = (ti + TS.length - 1) % TS.length; drawTrust(ti); }; document.getElementById('tNext').onclick = () => { ti = (ti + 1) % TS.length; drawTrust(ti); };
-  const tio = new IntersectionObserver((en) => { if (en[0].isIntersecting) { drawTrust(0, true); tio.disconnect(); } }, { threshold: .2 }); tio.observe(ghost);
-  document.querySelectorAll('.arrow').forEach(b => hover(b, b.querySelector('svg'), { scale: 1 }, { scale: 1.15 }, 320, 18));
   const PROGS = [
     ['01', 'App del cliente', 'Reserva con el precio al instante, paga con Apple Pay, tarjeta, Zelle o transferencia, y ve llegar su camioneta en un mapa GPS con el nombre del chofer y la placa. Si su vuelo se retrasa, la recogida se mueve sola.', 'cliente/?user=c1&demo=now', 'Demo en inglés'],
     ['02', 'App del chofer', 'Cada viaje le llega al chofer disponible más cercano con la ruta, el vuelo y las preferencias del cliente. Marca cada paso con un botón, registra gastos con foto y chatea con el pasajero sin dar su número.', 'chofer/?id=d1', 'Demo'],

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>All Cabo Services · Propuesta de sistema · T.T AI Firm</title>
-<meta name="description" content="Propuesta para All Cabo Services: un sistema interno donde el cliente reserva y paga solo, el viaje llega al chofer más cercano y el dueño ve toda la operación en vivo. Con demos funcionales.">
+<meta name="description" content="Propuesta para All Cabo Services: una plataforma de traslados donde el huésped reserva, paga y planea su estancia desde una web app, el viaje llega al chofer más cercano de la flota propia o aliada, y el dueño ve toda la operación en vivo. Con demos funcionales.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="T.T AI Firm">
 <meta property="og:title" content="All Cabo Services · Propuesta de sistema">
@@ -196,7 +196,7 @@
   <section class="trust" id="propuesta">
     <div class="badges">
       <div class="pct iv" data-s=".9" data-y="0"><b>Demo</b><span>funcional, listo para probarse en el teléfono</span></div>
-      <article class="bcard iv" data-dl="120" data-y="24"><span class="eyebrow">La propuesta</span><h3>Un sistema propio para All Cabo Services.</h3><p>Las reservas se hacen desde una <b>web app</b> que el cliente abre con un enlace o escaneando un código QR, sin instalar nada. Si está registrado, pide sus viajes él mismo, sin escribirle a nadie por WhatsApp ni pasar por la página web. Ahí <b>reserva y paga solo</b>, el viaje <b>llega al chofer más cercano</b> y <b>toda la operación se ve en vivo</b> desde la central. Nada de esto es una lámina: todo lo que hay en esta página funciona en el demo.</p></article>
+      <article class="bcard iv" data-dl="120" data-y="24"><span class="eyebrow">La propuesta</span><h3>Un sistema propio para All Cabo Services.</h3><p>Las reservas se hacen desde una <b>web app</b> que el cliente abre con un enlace o escaneando un código QR, sin instalar nada. Si está registrado, pide sus viajes él mismo, sin escribirle a nadie por WhatsApp ni pasar por la página web. Ahí <b>reserva y paga solo</b>, el viaje <b>llega al chofer más cercano</b> y <b>toda la operación se ve en vivo</b> desde la central. Y cuando la flota propia no alcanza, <b>otras transportadoras trabajan dentro de la plataforma</b> y All Cabo cobra una comisión por cada viaje. Nada de esto es una lámina: todo lo que hay en esta página funciona en el demo.</p></article>
     </div>
   </section>
 
@@ -317,10 +317,11 @@
   function restartSlider() { clearInterval(sTimer); sTimer = setInterval(() => { si = (si + 1) % SLIDES.length; drawSlide(si); }, 3800); }
   function startSlider() { drawSlide(si, true); restartSlider(); }
   const PROGS = [
-    ['01', 'App del cliente', 'Entra con un enlace o un código QR, sin instalar nada. Reserva con el precio al instante, paga con Apple Pay, tarjeta, Zelle o transferencia, y ve llegar su camioneta en un mapa GPS con el nombre del chofer y la placa. Si su vuelo se retrasa, la recogida se mueve sola.', 'cliente/?user=c1&demo=now', 'Demo en inglés'],
+    ['01', 'App del cliente', 'Entra con un enlace o un código QR, sin instalar nada, en el teléfono o en la computadora. Pide un traslado, un chofer por horas o planea la estancia completa: llegada, cenas, actividades y salida en un solo pago. Paradas y extras con precio claro, Apple Pay o Zelle directo, sugerencias de hoteles, restaurantes y actividades, y amigos para compartir el viaje o dividir la cuenta. Ve llegar su camioneta en un mapa híbrido con el nombre del chofer y la placa.', 'cliente/?user=c1&demo=now', 'Demo en inglés'],
     ['02', 'App del chofer', 'Cada viaje le llega al chofer disponible más cercano con la ruta, el vuelo y las preferencias del cliente. Marca cada paso con un botón, registra gastos con foto y chatea con el pasajero sin dar su número.', 'chofer/?id=d1', 'Demo'],
-    ['03', 'Central de operaciones', 'Mapa GPS de toda la flota, tablero de despacho, vuelos del día, clientes y aliados con su comisión, y una flota con seguros, permisos y servicios al día.', 'central/?rol=operador#mapa', 'Demo'],
+    ['03', 'Central de operaciones', 'Mapa GPS de toda la flota, propia y aliada; tablero de despacho, vuelos del día, estancias planeadas, clientes y aliados con su comisión, la lista de sugerencias que ve el huésped, y una flota con seguros, permisos y servicios al día.', 'central/?rol=operador#mapa', 'Demo'],
     ['04', 'Tablero y asistente de IA', 'Ingresos, margen, temporada, canales y cobros pendientes, con conciliación de Zelle y efectivo. Y un asistente de inteligencia artificial al que el dueño le pregunta en lenguaje normal sobre su negocio y contesta con los números del sistema.', 'central/?rol=dueno#tablero', 'Demo'],
+    ['05', 'Flotas aliadas', 'Otras transportadoras de Los Cabos suben su flota a la plataforma. El viaje se asigna a la camioneta disponible más cercana, sea propia o aliada; el cliente siempre ve la marca All Cabo, la plataforma cobra su comisión y el dueño de la camioneta paga chofer y gasolina. Sin comprar más camionetas para crecer.', 'central/?rol=dueno#proveedores', 'Demo'],
   ];
   document.getElementById('plist').innerHTML = PROGS.map(([n, t, d, h, tag], i) => `<li><a href="${h}"><div class="row iv" data-y="26" data-dl="${i * 90}"><span class="n">${n}</span><span class="tx"><b>${t}</b><span>${d}</span><small>${tag} →</small></span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a></li>`).join('');
   document.querySelectorAll('#plist .row').forEach(r => { io.observe(r); hover(r.closest('a'), r.querySelector('.ar'), { x: 0, opacity: .55 }, { x: 8, opacity: 1 }, 300, 20); });

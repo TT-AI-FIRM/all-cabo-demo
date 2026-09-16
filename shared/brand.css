@@ -84,3 +84,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .cb.them { background: var(--panel3); border: 1px solid var(--line2); border-bottom-left-radius: 4px; }
 .cb time { display: block; font-size: 9.5px; opacity: .65; margin-top: 3px; }
 .legal { font-size: 10.5px; color: var(--dim); line-height: 1.45; }
+/* selector de estilo de mapa (híbrido / mapa / sobrio) */
+.mapstyle { position: absolute; left: 12px; top: 12px; z-index: 500; background: rgba(11,11,12,.82); color: var(--text); border: 1px solid var(--line2); border-radius: 999px; padding: 6px 11px; font-size: 11px; font-weight: 700; letter-spacing: .04em; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: transform 160ms var(--ease), background-color 160ms ease; }
+.mapstyle:active { transform: scale(.96); }
+.leaflet-container .mk-lbl { text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 2px #000; }

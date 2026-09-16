@@ -20,7 +20,8 @@
   #side { display: none; }
   html[data-device="mobile"] #panel { max-width: 480px; margin: 0 auto; }
   html[data-device="desktop"] #app { display: grid; grid-template-columns: 500px minmax(0, 1fr); height: 100vh; }
-  html[data-device="desktop"] #panel { height: 100vh; overflow: auto; border-right: 1px solid var(--line); background: var(--bg); }
+  html[data-device="desktop"] #panel { height: 100vh; overflow: auto; border-right: 1px solid var(--line); background: var(--bg); display: flex; flex-direction: column; }
+  html[data-device="desktop"] #panel nav#nav { order: -1; flex: 0 0 auto; } html[data-device="desktop"] #panel #root { flex: 1 0 auto; }
   html[data-device="desktop"] #side { display: block; position: relative; background: #0E0E10; }
   html[data-device="desktop"] #side .map { position: absolute; inset: 0; }
   html[data-device="desktop"] #side .over { position: absolute; left: 24px; right: 24px; bottom: 24px; z-index: 500; display: flex; justify-content: center; pointer-events: none; }
@@ -79,7 +80,7 @@
   .mapwrap { position: relative; height: 46vh; min-height: 300px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 12px; }
   .mapwrap.mini { height: 170px; min-height: 170px; margin: 10px 0 0 0; }
   .etacard { background: rgba(11,11,12,.9); border: 1px solid var(--line2); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); min-width: 0; }
-  .etacard b { display: block; font-size: 19px; line-height: 1.1; letter-spacing: -.02em; } .etacard span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .etacard b { display: block; font-size: 19px; line-height: 1.1; letter-spacing: -.02em; } .etacard div > span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; } .etacard > .avatar { flex: 0 0 40px; width: 40px; height: 40px; }
   .mapwrap .eta { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 500; }
   .mapwrap .demo, #side .demo { position: absolute; right: 12px; top: 12px; z-index: 500; }
   #side .demo { right: 24px; top: 24px; }

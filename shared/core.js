@@ -2,7 +2,7 @@
    Datos ilustrativos con semilla fija. Pagos, vuelos, WhatsApp y GPS de la flota son SIMULADOS (el GPS del teléfono del chofer puede ser real si lo permite). */
 (function () {
   'use strict';
-  const KEY = 'acs_demo_v5';
+  const KEY = 'acs_demo_v6';
   const R = window.ACS_RUTAS || { puntos: {}, rutas: {} };
 
   // ───────────────────────── utilidades ─────────────────────────
@@ -100,12 +100,15 @@
     { id: 's_art', cat: 'activity', nombre: 'San José Art Walk', lugarId: 'art', tagline: 'Thursday evenings', desc: 'Galleries open late in the historic district, November to June. Pair it with dinner in town.', icono: '🎨', color: '#2A2030', duracion: 3, cuando: 'Thursdays · 5–9 PM · Nov–Jun' },
     { id: 's_medano', cat: 'activity', nombre: 'Médano Beach day', lugarId: 'md', tagline: 'Beach clubs & water sports', desc: 'The swimmable town beach in Cabo San Lucas, lined with beach clubs. We drop you off and pick you up.', icono: '🏖️', color: '#2A2618', duracion: 5, cuando: 'Any day' },
   ];
+  // fotos ilustrativas por palabra clave (servicio público de fotos; si no carga, la app muestra el color de fondo)
+  const FOTOS_KW = { s_oo: 'resort,pool', s_lv: 'luxury,hotel,pool', s_es: 'cliff,resort,sea', s_wa: 'hotel,ocean,view', s_cb: 'beach,resort', s_mo: 'bay,resort', s_ff: 'farm,restaurant', s_ac: 'cocktail,garden,bar', s_ed: 'mexican,food,dinner', s_sm: 'sunset,dinner,terrace', s_fa: 'seafood,dinner', s_ofc: 'beach,bar,sand', s_arco: 'boat,sea,rocks', s_whale: 'whale,ocean', s_snork: 'snorkel,reef', s_golf: 'golf,course,ocean', s_art: 'art,gallery,street', s_medano: 'beach,club,umbrella' };
+  SUGERENCIAS.forEach((sg, i) => { sg.foto = 'https://loremflickr.com/480/320/' + (FOTOS_KW[sg.id] || 'travel,mexico') + '?lock=' + ((i + 3) * 11); });
   const lugar = (id) => LUGARES.find(l => l.id === id);
   const TIPOS_VEHICULO = {
-    suburban: { id: 'suburban', nombre: 'Chevrolet Suburban', corto: 'Suburban', pax: 7, maletas: 7, icono: '🚙' },
-    escalade: { id: 'escalade', nombre: 'Cadillac Escalade', corto: 'Escalade', pax: 6, maletas: 6, icono: '🚘' },
-    hiace: { id: 'hiace', nombre: 'Toyota Hiace', corto: 'Hiace', pax: 12, maletas: 12, icono: '🚐' },
-    sprinter: { id: 'sprinter', nombre: 'Mercedes-Benz Sprinter', corto: 'Sprinter', pax: 14, maletas: 16, icono: '🚐' },
+    suburban: { id: 'suburban', nombre: 'Chevrolet Suburban', corto: 'Suburban', pax: 7, maletas: 7, icono: '🚙', tanque: 106, rendimiento: 6.5, desc: 'Black SUV · leather · cold water' },
+    escalade: { id: 'escalade', nombre: 'Cadillac Escalade', corto: 'Escalade', pax: 6, maletas: 6, icono: '🚘', tanque: 90, rendimiento: 6, desc: 'Premium SUV · captain seats' },
+    hiace: { id: 'hiace', nombre: 'Toyota Hiace', corto: 'Hiace', pax: 12, maletas: 12, icono: '🚐', tanque: 70, rendimiento: 8.5, desc: 'Group van · big luggage space' },
+    sprinter: { id: 'sprinter', nombre: 'Mercedes-Benz Sprinter', corto: 'Sprinter', pax: 14, maletas: 16, icono: '🚐', tanque: 93, rendimiento: 9, desc: 'Luxury van · groups & weddings' },
   };
   const EXTRAS = [
     { id: 'host', en: 'Host driver · bilingual concierge on board', es: 'Chofer anfitrión', precio: 25 },
@@ -162,12 +165,20 @@
     { id: 'd8', nombre: 'Paola Núñez', tel: '6241008899', vehiculoId: 'v10', nodo: 'sanjose', enLinea: true, calificacion: 4.9, ingreso: 2020, licenciaVence: '2028-02-03', idiomas: 'ES · EN', proveedorId: 'p2' },
     { id: 'd9', nombre: 'Raúl Cota', tel: '6241009900', vehiculoId: 'v11', nodo: 'sjd', enLinea: true, calificacion: 4.7, ingreso: 2016, licenciaVence: '2027-08-27', idiomas: 'ES · EN', proveedorId: 'p3' },
     { id: 'd10', nombre: 'Iván Beltrán', tel: '6241001010', vehiculoId: 'v12', nodo: 'pacifico', enLinea: false, calificacion: 4.8, ingreso: 2019, licenciaVence: '2027-12-15', idiomas: 'ES · EN', proveedorId: 'p4' },
+    { id: 'd11', nombre: 'Fernando Lugo', tel: '6241111213', vehiculoId: 'v13', nodo: 'sjd', enLinea: true, calificacion: 4.9, ingreso: 2017, licenciaVence: '2028-01-20', idiomas: 'ES · EN', proveedorId: 'p5' },
+    { id: 'd12', nombre: 'Karla Mendoza', tel: '6241121314', vehiculoId: 'v14', nodo: 'palmilla', enLinea: true, calificacion: 4.8, ingreso: 2020, licenciaVence: '2027-07-09', idiomas: 'ES · EN', proveedorId: 'p5' },
+    { id: 'd13', nombre: 'Omar Verdugo', tel: '6241131415', vehiculoId: 'v15', nodo: 'csl', enLinea: true, calificacion: 4.7, ingreso: 2015, licenciaVence: '2027-04-02', idiomas: 'ES · EN', proveedorId: 'p6' },
+    { id: 'd14', nombre: 'Lucía Amador', tel: '6241141516', vehiculoId: 'v16', nodo: 'pedregal', enLinea: false, calificacion: 4.9, ingreso: 2021, licenciaVence: '2028-05-17', idiomas: 'ES · EN · FR', proveedorId: 'p6' },
+    { id: 'd15', nombre: 'Tomás Arriola', tel: '6241151617', vehiculoId: 'v17', nodo: 'plc', enLinea: true, calificacion: 4.8, ingreso: 2018, licenciaVence: '2027-10-30', idiomas: 'ES · EN', proveedorId: 'p3' },
+    { id: 'd16', nombre: 'Gabriela Soto', tel: '6241161718', vehiculoId: 'v18', nodo: 'sanjose', enLinea: true, calificacion: 4.9, ingreso: 2019, licenciaVence: '2028-03-08', idiomas: 'ES · EN', proveedorId: 'p2' },
   ];
   const PROVEEDORES = [
     { id: 'acs', nombre: 'All Cabo Services', propio: true, contacto: 'Juan Carlos Macías', comision: 0, zona: 'Los Cabos', desde: 2011 },
     { id: 'p2', nombre: 'Baja Elite Transfers', propio: false, contacto: 'Mariana Ochoa', tel: '6241112233', comision: 0.20, zona: 'Cabo San Lucas', desde: 2026, banco: 'Pago semanal por transferencia' },
     { id: 'p3', nombre: 'Corridor Luxury Vans', propio: false, contacto: 'Esteban Villarreal', tel: '6241223344', comision: 0.20, zona: 'Corredor y San José', desde: 2026, banco: 'Pago semanal por transferencia' },
     { id: 'p4', nombre: 'Pacific Coast Rides', propio: false, contacto: 'Diana Arce', tel: '6241334455', comision: 0.18, zona: 'Pacífico', desde: 2026, banco: 'Pago quincenal por transferencia' },
+    { id: 'p5', nombre: 'Cabo Executive Shuttle', propio: false, contacto: 'Ernesto Villalobos', tel: '6241445566', comision: 0.20, zona: 'Aeropuerto y Corredor', desde: 2026, banco: 'Pago semanal por transferencia' },
+    { id: 'p6', nombre: "Land's End Limo", propio: false, contacto: 'Renata Osuna', tel: '6241556677', comision: 0.22, zona: 'Cabo San Lucas y Pedregal', desde: 2026, banco: 'Pago semanal por transferencia' },
   ];
   const AEROLINEAS = [['UA', 'United', 'Los Angeles (LAX)'], ['AA', 'American', 'Dallas (DFW)'], ['AS', 'Alaska', 'Seattle (SEA)'], ['DL', 'Delta', 'Atlanta (ATL)'], ['WN', 'Southwest', 'Denver (DEN)'], ['WS', 'WestJet', 'Calgary (YYC)'], ['AC', 'Air Canada', 'Vancouver (YVR)'], ['AM', 'Aeroméxico', 'Ciudad de México (MEX)'], ['Y4', 'Volaris', 'Guadalajara (GDL)'], ['UA', 'United', 'San Francisco (SFO)'], ['AA', 'American', 'Phoenix (PHX)'], ['DL', 'Delta', 'Salt Lake City (SLC)']];
 
@@ -191,10 +202,25 @@
       { id: 'v10', tipo: 'escalade', anio: 2024, placa: 'BCS-415-K', color: 'Negro', km: 21700, seguroVence: sumaDias(H, 280), permisoVence: sumaDias(H, 300), servicioCadaKm: 10000, ultimoServicioKm: 20000, proveedorId: 'p2' },
       { id: 'v11', tipo: 'sprinter', anio: 2022, placa: 'BCS-628-L', color: 'Negro', km: 97300, seguroVence: sumaDias(H, 75), permisoVence: sumaDias(H, 150), servicioCadaKm: 15000, ultimoServicioKm: 90000, proveedorId: 'p3' },
       { id: 'v12', tipo: 'suburban', anio: 2022, placa: 'BCS-233-M', color: 'Blanco', km: 76800, seguroVence: sumaDias(H, 120), permisoVence: sumaDias(H, 90), servicioCadaKm: 10000, ultimoServicioKm: 70000, proveedorId: 'p4' },
+      { id: 'v13', tipo: 'escalade', anio: 2024, placa: 'BCS-812-N', color: 'Negro', km: 18400, seguroVence: sumaDias(H, 260), permisoVence: sumaDias(H, 310), servicioCadaKm: 10000, ultimoServicioKm: 10000, proveedorId: 'p5' },
+      { id: 'v14', tipo: 'suburban', anio: 2023, placa: 'BCS-377-O', color: 'Negro', km: 43900, seguroVence: sumaDias(H, 150), permisoVence: sumaDias(H, 200), servicioCadaKm: 10000, ultimoServicioKm: 40000, proveedorId: 'p5' },
+      { id: 'v15', tipo: 'sprinter', anio: 2023, placa: 'BCS-590-P', color: 'Negro', km: 66100, seguroVence: sumaDias(H, 95), permisoVence: sumaDias(H, 180), servicioCadaKm: 15000, ultimoServicioKm: 60000, proveedorId: 'p6' },
+      { id: 'v16', tipo: 'escalade', anio: 2023, placa: 'BCS-104-Q', color: 'Negro', km: 39200, seguroVence: sumaDias(H, 210), permisoVence: sumaDias(H, 140), servicioCadaKm: 10000, ultimoServicioKm: 30000, proveedorId: 'p6' },
+      { id: 'v17', tipo: 'suburban', anio: 2024, placa: 'BCS-655-R', color: 'Negro', km: 22600, seguroVence: sumaDias(H, 330), permisoVence: sumaDias(H, 290), servicioCadaKm: 10000, ultimoServicioKm: 20000, proveedorId: 'p3' },
+      { id: 'v18', tipo: 'sprinter', anio: 2024, placa: 'BCS-720-S', color: 'Negro', km: 31500, seguroVence: sumaDias(H, 240), permisoVence: sumaDias(H, 350), servicioCadaKm: 15000, ultimoServicioKm: 30000, proveedorId: 'p2' },
     );
+    db.vehiculos.forEach((v, i) => { v.combustible = [72, 38, 91, 55, 64, 27, 83, 46, 69, 58, 34, 77, 88, 41, 62, 95, 29, 73][i] || 60; });
     db.proveedores = JSON.parse(JSON.stringify(PROVEEDORES));
     db.sugerencias = SUGERENCIAS.map(x => ({ ...x, activa: true }));
     db.itinerarios = []; db.invitaciones = [];
+    // requisitos para aceptar flotas ajenas (el dueño los edita) y solicitudes recibidas
+    db.config.requisitosFlota = { anioMin: 2021, tipos: ['suburban', 'escalade', 'sprinter'], colores: ['Negro'], calificacionMin: 4.7, ingles: true, seguro: true, permisoTuristico: true };
+    db.solicitudes = [
+      { id: 'sol1', empresa: 'Baja Premier Transport', contacto: 'Rodrigo Esparza', tel: '6241556677', zona: 'Corredor y San José', desde: 2019, estado: 'pendiente', fecha: sumaDias(H, -2), mensaje: 'Trabajamos con Las Ventanas y Palmilla; queremos tomar traslados de aeropuerto en temporada alta.', vehiculos: [{ tipo: 'escalade', anio: 2024, placa: 'BCS-908-P', color: 'Negro' }, { tipo: 'suburban', anio: 2023, placa: 'BCS-611-Q', color: 'Negro' }], choferes: [{ nombre: 'Rodrigo Esparza', calificacion: 4.9, idiomas: 'ES · EN', anios: 9 }, { nombre: 'Marisol Peña', calificacion: 4.8, idiomas: 'ES · EN', anios: 6 }], docs: { seguro: true, permisoTuristico: true, licencias: true, factura: true } },
+      { id: 'sol2', empresa: 'Cabo Vans Express', contacto: 'Julio Cárdenas', tel: '6241667788', zona: 'Cabo San Lucas', desde: 2015, estado: 'pendiente', fecha: sumaDias(H, -5), mensaje: 'Tenemos dos Hiace y mucha experiencia con grupos grandes.', vehiculos: [{ tipo: 'hiace', anio: 2018, placa: 'BCS-233-R', color: 'Blanco' }, { tipo: 'hiace', anio: 2020, placa: 'BCS-234-S', color: 'Blanco' }], choferes: [{ nombre: 'Julio Cárdenas', calificacion: 4.5, idiomas: 'ES', anios: 11 }], docs: { seguro: true, permisoTuristico: false, licencias: true, factura: false } },
+      { id: 'sol3', empresa: "Land's End Black Cars", contacto: 'Andrea Fierro', tel: '6241778899', zona: 'Pacífico', desde: 2022, estado: 'pendiente', fecha: sumaDias(H, -1), mensaje: 'Una Sprinter 2024 de lujo con chofer bilingüe calificado 4.9.', vehiculos: [{ tipo: 'sprinter', anio: 2024, placa: 'BCS-450-T', color: 'Negro' }], choferes: [{ nombre: 'Mauricio Fierro', calificacion: 4.9, idiomas: 'ES · EN', anios: 7 }], docs: { seguro: true, permisoTuristico: true, licencias: true, factura: true } },
+      { id: 'sol4', empresa: 'Todos Santos Rides', contacto: 'Beatriz Ceseña', tel: '6121234567', zona: 'Todos Santos', desde: 2021, estado: 'rechazada', fecha: sumaDias(H, -12), resuelta: sumaDias(H, -10), motivo: 'Fuera de la zona de servicio de Los Cabos', vehiculos: [{ tipo: 'suburban', anio: 2022, placa: 'BCS-102-U', color: 'Gris' }], choferes: [{ nombre: 'Beatriz Ceseña', calificacion: 4.8, idiomas: 'ES · EN', anios: 4 }], docs: { seguro: true, permisoTuristico: true, licencias: true, factura: true } },
+    ];
     db.choferes = CHOFERES.map(c => ({ ...c, pos: NODOS[c.nodo].slice(), gpsReal: false, checkin: c.enLinea ? '07:' + pad(30 + Math.floor(rnd() * 25)) : null, semanaViajes: 0 }));
     db.aliados = [
       { id: 'a1', nombre: 'Concierge · One&Only Palmilla', tipo: 'Hotel', contacto: 'Fernanda L.', comision: 0.10, lugarId: 'oo' }, { id: 'a2', nombre: 'Concierge · Las Ventanas al Paraíso', tipo: 'Hotel', contacto: 'Gerardo M.', comision: 0.10, lugarId: 'lv' },
@@ -215,7 +241,7 @@
     // historial de 12 meses
     db.viajes = []; db.mensajes = []; db.gastos = []; db.checklists = []; db.bitacora = [];
     const hoteles = LUGARES.filter(l => l.tipo === 'hotel');
-    const meses = (m) => [2.7, 2.6, 2.8, 2.3, 1.7, 1.6, 1.9, 1.6, 1.0, 1.1, 1.8, 2.7][m]; // viajes por día según temporada (ilustrativo)
+    const meses = (m) => [5.0, 4.8, 5.2, 4.3, 3.4, 3.2, 4.4, 5.4, 6.0, 2.6, 3.6, 5.2][m]; // viajes por día según temporada (ilustrativo; agosto y septiembre muy movidos)
     const finVeh = (tipo) => db.vehiculos.filter(v => v.tipo === tipo);
     for (let back = 365; back >= 1; back--) {
       const fecha = sumaDias(H, -back); const m = Number(fecha.split('-')[1]) - 1; const dow = new Date(fecha + 'T12:00:00').getDay();
@@ -249,12 +275,28 @@
       { hora: '16:20', o: 'sjd', d: 'oo', c: 'c5', ch: 'd4', tipo: 'sprinter', pax: 12, estado: 'asignado', canal: 'planner', aliado: 'a5', metodo: 'transferencia', vuelo: db.vuelos[8].num, cuenta: 'cta1', notas: 'Wedding party · welcome signs · 2 coolers' },
       { hora: '18:00', o: 'oo', d: 'vi', c: 'c2', ch: 'd1', tipo: 'escalade', pax: 4, estado: 'asignado', canal: 'app', metodo: 'applepay', vuelo: null, notas: 'Dinner transfer · pick up back at 10:30 PM', redondo: true },
       { hora: '20:30', o: 'sjd', d: 'di', c: 'c18', ch: null, tipo: 'escalade', pax: 2, estado: 'solicitado', canal: 'whatsapp', metodo: 'zelle', vuelo: db.vuelos[11].num, pagoEstado: 'pendiente_confirmar' },
+      // día movido: más viajes, varios cubiertos por flotas aliadas
+      { hora: '07:40', o: 'sjd', d: 'cb', c: 'c21', ch: 'd7', tipo: 'suburban', pax: 3, estado: 'completado', canal: 'app', metodo: 'applepay', vuelo: null },
+      { hora: '08:50', o: 'gv', d: 'sjd', c: 'c22', ch: 'd9', tipo: 'sprinter', pax: 9, estado: 'completado', canal: 'concierge', aliado: 'a10', metodo: 'tarjeta', vuelo: null },
+      { hora: '10:10', o: 'sjd', d: 'pbs', c: 'c23', ch: 'd12', tipo: 'suburban', pax: 4, estado: 'completado', canal: 'app', metodo: 'zelle', vuelo: db.vuelos[1].num },
+      { hora: '11:45', o: 'sjd', d: 'es', c: 'c24', ch: 'd1', tipo: 'escalade', pax: 2, estado: 'completado', canal: 'repeticion', metodo: 'applepay', vuelo: db.vuelos[2].num },
+      { hora: '12:20', o: 'wa', d: 'ff', c: 'c25', ch: 'd13', tipo: 'sprinter', pax: 8, estado: 'completado', canal: 'app', metodo: 'tarjeta', vuelo: null },
+      { hora: '13:30', o: 'sjd', d: 'vi', c: 'c26', ch: 'd8', tipo: 'escalade', pax: 2, estado: 'a_bordo', canal: 'app', metodo: 'applepay', vuelo: db.vuelos[3].num },
+      { hora: '14:05', o: 'sjd', d: 'gs', c: 'c27', ch: 'd11', tipo: 'escalade', pax: 3, estado: 'en_camino', canal: 'concierge', aliado: 'a3', metodo: 'tarjeta', vuelo: db.vuelos[5].num },
+      { hora: '14:15', o: 'mo', d: 'sjd', c: 'c28', ch: 'd15', tipo: 'suburban', pax: 4, estado: 'a_bordo', canal: 'app', metodo: 'zelle', vuelo: null },
+      { hora: '15:10', o: 'sjd', d: 'lv', c: 'c29', ch: 'd16', tipo: 'sprinter', pax: 10, estado: 'asignado', canal: 'planner', aliado: 'a6', metodo: 'transferencia', vuelo: db.vuelos[6].num },
+      { hora: '17:30', o: 'oo', d: 'sm', c: 'c30', ch: 'd3', tipo: 'suburban', pax: 4, estado: 'asignado', canal: 'app', metodo: 'applepay', vuelo: null, redondo: true },
+      { hora: '19:15', o: 'sjd', d: 'hr', c: 'c31', ch: 'd12', tipo: 'suburban', pax: 5, estado: 'asignado', canal: 'whatsapp', metodo: 'efectivo', vuelo: db.vuelos[10].num },
     ];
     const manana = sumaDias(H, 1), pasado = sumaDias(H, 2);
     const proxV = [
       { fecha: manana, hora: '10:15', o: 'sjd', d: 'cb', c: 'c19', ch: 'd3', tipo: 'suburban', pax: 2, estado: 'asignado', canal: 'app', metodo: 'tarjeta', vuelo: 'AS 1522' },
       { fecha: manana, hora: '13:40', o: 'sjd', d: 'oo', c: 'c6', ch: 'd4', tipo: 'sprinter', pax: 9, estado: 'asignado', canal: 'planner', aliado: 'a5', metodo: 'transferencia', vuelo: 'UA 1712', cuenta: 'cta1' },
       { fecha: pasado, hora: '11:00', o: 'wa', d: 'sjd', c: 'c20', ch: 'd2', tipo: 'suburban', pax: 3, estado: 'asignado', canal: 'concierge', aliado: 'a3', metodo: 'zelle', vuelo: null },
+      { fecha: manana, hora: '09:20', o: 'sjd', d: 'es', c: 'c32', ch: 'd11', tipo: 'escalade', pax: 2, estado: 'asignado', canal: 'app', metodo: 'applepay', vuelo: 'DL 388' },
+      { fecha: manana, hora: '12:05', o: 'sjd', d: 'wa', c: 'c33', ch: 'd7', tipo: 'suburban', pax: 4, estado: 'asignado', canal: 'concierge', aliado: 'a3', metodo: 'tarjeta', vuelo: 'AA 1177' },
+      { fecha: manana, hora: '16:40', o: 'cb', d: 'sjd', c: 'c34', ch: 'd16', tipo: 'sprinter', pax: 11, estado: 'asignado', canal: 'planner', aliado: 'a5', metodo: 'transferencia', vuelo: null, cuenta: 'cta1' },
+      { fecha: pasado, hora: '14:30', o: 'sjd', d: 'no', c: 'c35', ch: 'd13', tipo: 'sprinter', pax: 7, estado: 'asignado', canal: 'app', metodo: 'zelle', vuelo: 'WN 2231' },
     ];
     [...hoyV.map(x => ({ ...x, fecha: H })), ...proxV].forEach((x, i) => {
       const cli = db.clientes.find(c => c.id === x.c); const q = cotizarCon(db.config, { origenId: x.o, destinoId: x.d, redondo: !!x.redondo, extras: x.extras || [] }); const dist = distanciaViaje(x.o, x.d);
@@ -275,8 +317,14 @@
     // mensajes de ejemplo
     const t4 = db.viajes.find(v => v.id === 't4'), t5 = db.viajes.find(v => v.id === 't5');
     db.mensajes.push({ id: 'm1', viajeId: t4.id, de: 'cliente', texto: 'Hi Ana! We are 5 with 6 bags, is that ok?', t: Date.now() - 3600000 }, { id: 'm2', viajeId: t4.id, de: 'chofer', texto: 'Perfect, the Suburban fits all. See you at Door 3 with the ACS sign.', t: Date.now() - 3500000 }, { id: 'm3', viajeId: t5.id, de: 'chofer', texto: 'Good afternoon Mr. Hoffman, I am on my way to Chileno Bay. ETA 15 min.', t: Date.now() - 600000 });
-    // gastos del mes
-    db.viajes.filter(v => v.estado === 'completado' && v.fecha >= sumaDias(H, -30)).forEach((v, i) => { if (i % 3 === 0) db.gastos.push({ id: 'g' + i, fecha: v.fecha, choferId: v.choferId, vehiculoId: v.vehiculoId, tipo: 'gasolina', monto: 500 + Math.floor(rnd() * 500), viajeId: v.id, foto: true }); if (v.costo.casetas) db.gastos.push({ id: 'gc' + i, fecha: v.fecha, choferId: v.choferId, vehiculoId: v.vehiculoId, tipo: 'caseta', monto: v.costo.casetas, viajeId: v.id, foto: false }); });
+    // gastos de 12 meses de la flota propia: gasolina y casetas por viaje, lavado semanal, seguro mensual y servicios en taller
+    let gi = 0; const propiosV = db.vehiculos.filter(v => v.proveedorId === 'acs');
+    db.viajes.filter(v => v.estado === 'completado' && (!v.proveedorId || v.proveedorId === 'acs')).forEach(v => { db.gastos.push({ id: 'g' + (gi++), fecha: v.fecha, choferId: v.choferId, vehiculoId: v.vehiculoId, tipo: 'gasolina', monto: v.costo.gasolina, viajeId: v.id, foto: rnd() < 0.7, detalle: 'Gasolina · ' + Math.round(v.km) + ' km' }); if (v.costo.casetas) db.gastos.push({ id: 'g' + (gi++), fecha: v.fecha, choferId: v.choferId, vehiculoId: v.vehiculoId, tipo: 'caseta', monto: v.costo.casetas, viajeId: v.id, foto: rnd() < 0.5, detalle: 'Autopista SJD · ' + (v.redondo ? 'ida y vuelta' : 'un tramo') }); });
+    for (let back = 364; back >= 0; back -= 7) { const f = sumaDias(H, -back); propiosV.forEach(ve => { const ch = db.choferes.find(c => c.vehiculoId === ve.id); db.gastos.push({ id: 'g' + (gi++), fecha: f, choferId: ch ? ch.id : null, vehiculoId: ve.id, tipo: 'lavado', monto: 250, viajeId: null, foto: false, detalle: 'Lavado y aspirado semanal' }); }); }
+    for (let mb = 11; mb >= 0; mb--) { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - mb); const f = fechaISO(d); if (f > H) continue; propiosV.forEach(ve => { db.gastos.push({ id: 'g' + (gi++), fecha: f, choferId: null, vehiculoId: ve.id, tipo: 'seguro', monto: ve.tipo === 'sprinter' || ve.tipo === 'hiace' ? 4900 : 4200, viajeId: null, foto: false, detalle: 'Póliza de seguro · mensualidad' }); }); }
+    const SERVICIOS = [['Servicio de aceite y filtros', 3800], ['Frenos delanteros', 6200], ['Llantas (4)', 16800], ['Servicio mayor · afinación', 9400], ['Batería', 4100], ['Alineación y balanceo', 1500], ['Aire acondicionado', 5600], ['Suspensión · amortiguadores', 7300]];
+    propiosV.forEach((ve, i) => { const n = 3 + (i % 3); for (let k = 0; k < n; k++) { const f = sumaDias(H, -(15 + Math.floor(rnd() * 345))); const sv = pick(SERVICIOS); db.gastos.push({ id: 'g' + (gi++), fecha: f, choferId: null, vehiculoId: ve.id, tipo: 'mantenimiento', monto: sv[1] + Math.floor(rnd() * 600), viajeId: null, foto: true, detalle: sv[0] + ' · taller' }); } });
+    db.gastos.sort((a, b) => a.fecha < b.fecha ? 1 : -1);
     db.checklists = db.choferes.filter(c => c.enLinea).map(c => ({ id: 'ck' + c.id, fecha: H, choferId: c.id, vehiculoId: c.vehiculoId, items: { limpieza: true, llantas: true, agua: true, gasolina: true, documentos: true, silla: c.id === 'd1' }, hora: c.checkin }));
     db.bitacora.push({ t: Date.now() - 7200000, quien: 'sistema', que: 'Viaje t2 completado · One&Only Palmilla' }, { t: Date.now() - 5400000, quien: 'sistema', que: 'Vuelo UA 1234 retrasado 25 min · recogida ajustada' }, { t: Date.now() - 1800000, quien: 'Ana Castro', que: 'Pasajero a bordo · viaje t4' });
     db.viajes.sort((a, b) => (a.fecha + a.hora) < (b.fecha + b.hora) ? -1 : 1);
@@ -361,7 +409,8 @@
   function setGpsReal(choferId, on) { const c = chofer(choferId); c.gpsReal = !!on; if (!on) { const v = viajeActivo(choferId); if (v && v.sim) { /* retoma la simulación desde la posición actual */ iniciarSimEn(db, v, v.sim.fase); } } persist('datos'); }
   function registrarPago(id, metodo, datos) { const v = viaje(id); const est = metodo === 'applepay' || metodo === 'tarjeta' ? 'aprobado' : (metodo === 'efectivo' ? 'pendiente' : 'pendiente_confirmar'); v.pago = { metodo, estado: est, ref: datos && datos.ref || (metodo === 'zelle' ? 'ZL-' + Math.floor(10000 + Math.random() * 89999) : (metodo === 'transferencia' ? 'SPEI-' + Math.floor(100000 + Math.random() * 899999) : '')), ultimos4: datos && datos.ultimos4 || '' }; log(v.nombre, `Pago ${METODOS[metodo].es} · ${usd(v.precio.total)} · ${est}`); persist('datos'); return v.pago; }
   function confirmarPago(id) { const v = viaje(id); v.pago.estado = v.pago.metodo === 'efectivo' ? 'cobrado' : 'aprobado'; log('central', `Pago confirmado · ${v.nombre} · ${usd(v.precio.total)}`); persist('datos'); }
-  function enviarMensaje(viajeId, de, texto) { const m = { id: uid('m'), viajeId, de, texto, t: Date.now() }; db.mensajes.push(m); emitir({ tipo: 'mensaje', viajeId, de }); persist('datos'); return m; }
+  const chatAbierto = (v) => !!v && EN_RUTA.includes(v.estado); // la mensajería solo vive mientras el viaje está en curso
+  function enviarMensaje(viajeId, de, texto) { const v = viaje(viajeId); if (!chatAbierto(v)) return null; const m = { id: uid('m'), viajeId, de, texto, t: Date.now() }; db.mensajes.push(m); emitir({ tipo: 'mensaje', viajeId, de }); persist('datos'); return m; }
   function registrarGasto(g) { const x = { id: uid('g'), fecha: hoy(), hora: ahoraHM(), ...g }; db.gastos.unshift(x); log(chofer(g.choferId).nombre, `Gasto ${g.tipo} · ${mxn(g.monto)}`); persist('datos'); return x; }
   function guardarChecklist(choferId, items) { const c = chofer(choferId); const ck = { id: uid('ck'), fecha: hoy(), hora: ahoraHM(), choferId, vehiculoId: c.vehiculoId, items }; db.checklists = db.checklists.filter(x => !(x.choferId === choferId && x.fecha === hoy())); db.checklists.push(ck); log(c.nombre, 'Checklist del vehículo guardado'); persist('datos'); return ck; }
   function calificar(id, estrellas, comentario) { const v = viaje(id); v.calificacion = estrellas; v.comentario = comentario || ''; persist('datos'); }
@@ -401,6 +450,23 @@
   function guardarSugerencia(sg) { const x = db.sugerencias.find(y => y.id === sg.id); if (x) Object.assign(x, sg); else db.sugerencias.push({ id: uid('s'), activa: true, icono: '✨', color: '#26221C', duracion: 3, ...sg }); log('central', 'Sugerencia guardada: ' + (sg.nombre || '')); persist('datos'); }
   function quitarSugerencia(id) { db.sugerencias = db.sugerencias.filter(s => s.id !== id); persist('datos'); }
   const sugerencia = (id) => db.sugerencias.find(s => s.id === id);
+  // ───────────────────────── flotas ajenas: requisitos y solicitudes (el dueño elige a quién deja entrar) ─────────────────────────
+  function evaluarSolicitud(s) {
+    const r = db.config.requisitosFlota || { anioMin: 2021, tipos: ['suburban', 'escalade', 'sprinter'], colores: ['Negro'], calificacionMin: 4.7, ingles: true, seguro: true, permisoTuristico: true }; const out = [];
+    (s.vehiculos || []).forEach(v => { const t = TIPOS_VEHICULO[v.tipo] || { corto: v.tipo }; out.push({ ok: v.anio >= r.anioMin, texto: `${t.corto} ${v.placa} · modelo ${v.anio} (se pide ${r.anioMin} o más reciente)` }); out.push({ ok: (r.tipos || []).includes(v.tipo), texto: `${t.corto} ${v.placa} · tipo de unidad aceptado (${(r.tipos || []).map(x => TIPOS_VEHICULO[x] ? TIPOS_VEHICULO[x].corto : x).join(', ')})` }); out.push({ ok: (r.colores || []).includes(v.color), texto: `${t.corto} ${v.placa} · color ${v.color} (se pide ${(r.colores || []).join(' o ')})` }); });
+    (s.choferes || []).forEach(c => { out.push({ ok: c.calificacion >= r.calificacionMin, texto: `${c.nombre} · calificación ${Number(c.calificacion).toFixed(1)} (mínimo ${r.calificacionMin})` }); if (r.ingles) out.push({ ok: /EN/.test(c.idiomas || ''), texto: `${c.nombre} · habla inglés` }); });
+    const d = s.docs || {}; if (r.seguro) out.push({ ok: !!d.seguro, texto: 'Seguro de pasajeros vigente' }); if (r.permisoTuristico) out.push({ ok: !!d.permisoTuristico, texto: 'Permiso estatal de transporte turístico' }); out.push({ ok: !!d.licencias, texto: 'Licencias de los choferes en orden' }); out.push({ ok: !!d.factura, texto: 'Puede facturar (CFDI) para las liquidaciones' });
+    return { checks: out, cumple: out.every(x => x.ok), fallas: out.filter(x => !x.ok).length };
+  }
+  function aprobarSolicitud(id, comision) {
+    const s = (db.solicitudes || []).find(x => x.id === id); if (!s || s.estado !== 'pendiente') return null;
+    const p = { id: uid('p'), nombre: s.empresa, propio: false, contacto: s.contacto, tel: s.tel, comision: comision == null ? (db.config.comisionPlataforma || 0.2) : comision, zona: s.zona, desde: new Date().getFullYear(), banco: 'Pago semanal por transferencia' }; db.proveedores.push(p);
+    const nodo = /pac[ií]fico/i.test(s.zona) ? 'pacifico' : /san lucas|pedregal/i.test(s.zona) ? 'csl' : /san jos/i.test(s.zona) ? 'sanjose' : /aeropuerto/i.test(s.zona) ? 'sjd' : 'palmilla';
+    (s.vehiculos || []).forEach((v, i) => { const veh = { id: uid('v'), tipo: v.tipo, anio: v.anio, placa: v.placa, color: v.color, km: 20000 + Math.floor(Math.random() * 40000), seguroVence: sumaDias(hoy(), 200), permisoVence: sumaDias(hoy(), 250), servicioCadaKm: 10000, ultimoServicioKm: 20000, proveedorId: p.id, combustible: 80 }; db.vehiculos.push(veh); const c = (s.choferes || [])[i] || (s.choferes || [])[0]; if (c) db.choferes.push({ id: uid('d'), nombre: c.nombre, tel: s.tel, vehiculoId: veh.id, nodo, pos: NODOS[nodo].slice(), enLinea: false, calificacion: c.calificacion, ingreso: new Date().getFullYear() - (c.anios || 1), licenciaVence: sumaDias(hoy(), 400), idiomas: c.idiomas, proveedorId: p.id, gpsReal: false, checkin: null, semanaViajes: 0 }); });
+    s.estado = 'aprobada'; s.resuelta = hoy(); s.proveedorId = p.id; log('central', `Flota aliada aprobada: ${s.empresa} · ${(s.vehiculos || []).length} camioneta(s)`); persist('datos'); return p;
+  }
+  function rechazarSolicitud(id, motivo) { const s = (db.solicitudes || []).find(x => x.id === id); if (!s) return; s.estado = 'rechazada'; s.motivo = motivo || ''; s.resuelta = hoy(); log('central', `Solicitud de flota rechazada: ${s.empresa}`); persist('datos'); }
+  function guardarRequisitos(r) { db.config.requisitosFlota = Object.assign(db.config.requisitosFlota || {}, r); persist('datos'); }
   function vueloDe(num) { if (!num) return null; const n = String(num).toUpperCase().replace(/\s+/g, ' ').trim(); return db.vuelos.find(f => f.num === n || f.num.replace(' ', '') === n.replace(' ', '')); }
 
   // ───────────────────────── simulación de GPS ─────────────────────────
@@ -410,6 +476,7 @@
     const cum = [0]; for (let i = 1; i < r.pts.length; i++) cum.push(cum[i - 1] + haversine(r.pts[i - 1], r.pts[i]));
     v.sim = { fase, pts: r.pts, cum, km: cum[cum.length - 1], min: r.min, avance: 0, llegado: false, t0: Date.now() };
   }
+  function rumbo(a, b) { const toR = Math.PI / 180; const y = Math.sin((b[1] - a[1]) * toR) * Math.cos(b[0] * toR); const x = Math.cos(a[0] * toR) * Math.sin(b[0] * toR) - Math.sin(a[0] * toR) * Math.cos(b[0] * toR) * Math.cos((b[1] - a[1]) * toR); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; }
   function posEnSim(s) { const a = Math.min(s.avance, s.km); let i = 1; while (i < s.cum.length && s.cum[i] < a) i++; if (i >= s.cum.length) return s.pts[s.pts.length - 1]; const p0 = s.pts[i - 1], p1 = s.pts[i]; const seg = s.cum[i] - s.cum[i - 1] || 1; const f = (a - s.cum[i - 1]) / seg; return [p0[0] + (p1[0] - p0[0]) * f, p0[1] + (p1[1] - p0[1]) * f]; }
   function tick() {
     let cambio = false; const kmPorTick = db.config.velocidadKmh * db.config.factorDemo / 3600;
@@ -417,9 +484,13 @@
       if (!EN_RUTA.includes(v.estado) || v.estado === 'llegue') return; const c = chofer(v.choferId); if (!c) return;
       if (!v.sim) iniciarSimEn(db, v, v.estado === 'a_bordo' ? 'a_destino' : 'a_recoger');
       if (c.gpsReal) return; const s = v.sim; if (s.llegado) return;
-      s.avance = Math.min(s.km, s.avance + kmPorTick); c.pos = posEnSim(s); if (s.avance >= s.km - 0.001) { s.llegado = true; c.nodo = (s.fase === 'a_recoger' ? lugar(v.origenId) : lugar(v.destinoId)).nodo; emitir({ tipo: 'llegada', viajeId: v.id, fase: s.fase }); }
+      const prev = c.pos; s.avance = Math.min(s.km, s.avance + kmPorTick); c.pos = posEnSim(s); if (prev && (prev[0] !== c.pos[0] || prev[1] !== c.pos[1])) c.rumbo = rumbo(prev, c.pos);
+      c.velocidad = Math.round(db.config.velocidadKmh * (0.82 + 0.34 * Math.abs(Math.sin(Date.now() / 6000 + v.id.length * 1.7))));
+      const veh = vehiculo(c.vehiculoId); if (veh) { const t = TIPOS_VEHICULO[veh.tipo]; veh.combustible = Math.max(2, (veh.combustible == null ? 60 : veh.combustible) - kmPorTick / (t.rendimiento || 7) / (t.tanque || 90) * 100); }
+      if (s.avance >= s.km - 0.001) { s.llegado = true; c.velocidad = 0; c.nodo = (s.fase === 'a_recoger' ? lugar(v.origenId) : lugar(v.destinoId)).nodo; emitir({ tipo: 'llegada', viajeId: v.id, fase: s.fase }); }
       cambio = true;
     });
+    db.choferes.forEach(c => { const va = viajeActivo(c.id); if (!va || va.estado === 'llegue' || (va.sim && va.sim.llegado)) c.velocidad = 0; });
     if (cambio) persist('sim');
   }
   setInterval(() => { if (esLider()) tick(); }, 1000);
@@ -451,6 +522,44 @@
   M.recurrentes = function () { const rec = db.clientes.filter(c => c.visitas >= 2).length; return { recurrentes: rec, total: db.clientes.length, pct: rec / db.clientes.length * 100 }; };
   M.gastosMes = function () { const desde = sumaDias(hoy(), -30); const g = db.gastos.filter(x => x.fecha >= desde); const por = {}; g.forEach(x => { por[x.tipo] = (por[x.tipo] || 0) + x.monto; }); return { total: g.reduce((a, x) => a + x.monto, 0), por, n: g.length }; };
 
+  // ───────────────────────── telemetría de flota (velocidad, combustible, avance, rumbo, alertas) ─────────────────────────
+  M.telemetria = function () {
+    const H = hoy(); const alertas = M.alertasFlota();
+    return db.vehiculos.map(veh => {
+      const c = db.choferes.find(x => x.vehiculoId === veh.id); const va = c ? viajeActivo(c.id) : null; const prov = (db.proveedores || []).find(p => p.id === (veh.proveedorId || 'acs')); const t = TIPOS_VEHICULO[veh.tipo];
+      const al = alertas.filter(a => a.vehiculoId === veh.id || (c && a.choferId === c.id)).map(a => ({ nivel: a.nivel, texto: a.texto }));
+      const kmServ = veh.ultimoServicioKm + veh.servicioCadaKm - veh.km; const mant = kmServ <= 0 || !!veh.enTaller;
+      const estado = va ? 'activo' : (mant ? 'mantenimiento' : (c && c.enLinea ? 'libre' : 'fuera'));
+      let progreso = null, etaV = null, ruta = null; if (va) { etaV = eta(va); if (va.sim) progreso = Math.round(Math.min(1, va.sim.avance / Math.max(0.01, va.sim.km)) * 100); ruta = { origen: lugar(va.origenId), destino: lugar(va.destinoId), fase: va.sim ? va.sim.fase : (va.estado === 'a_bordo' ? 'a_destino' : 'a_recoger'), km: va.sim ? va.sim.km : (va.km || 0) }; }
+      const horas = c && c.enLinea && c.checkin ? Math.max(0, (minutosDe(ahoraHM()) - minutosDe(c.checkin)) / 60) : 0; if (horas >= 8 && va) al.unshift({ nivel: 'warn', texto: `Descanso requerido: 30 min (lleva ${horas.toFixed(1)} h en línea)` });
+      const combustible = veh.combustible == null ? 60 : veh.combustible; if (combustible < 20) al.push({ nivel: combustible < 10 ? 'bad' : 'warn', texto: `Combustible bajo: ${Math.round(combustible)}%` });
+      const hoyV = db.viajes.filter(v => v.vehiculoId === veh.id && v.fecha === H && v.estado === 'completado');
+      return { vehiculo: veh, tipo: t, chofer: c, proveedor: prov, propio: !veh.proveedorId || veh.proveedorId === 'acs', viaje: va, estado, velocidad: va && c && va.estado !== 'llegue' && !(va.sim && va.sim.llegado) ? (c.velocidad || db.config.velocidadKmh) : 0, combustible, litros: Math.round(combustible / 100 * (t.tanque || 90)), progreso, eta: etaV, ruta, rumbo: c && c.rumbo != null ? c.rumbo : 315, horas, alertas: al, viajesHoy: hoyV.length, ingresoHoy: hoyV.reduce((a, v) => a + v.precio.total, 0) };
+    });
+  };
+  // ───────────────────────── finanzas por mes (ingresos, gastos, utilidad, comparación) ─────────────────────────
+  const ymDe = (iso) => String(iso || '').slice(0, 7);
+  M.meses12 = function () { const out = []; for (let i = 11; i >= 0; i--) { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - i); out.push({ ym: d.getFullYear() + '-' + pad(d.getMonth() + 1), mes: MESES[d.getMonth()], anio: d.getFullYear() }); } return out; };
+  M.finanzasMes = function (ym) {
+    const vsAll = db.viajes.filter(v => ymDe(v.fecha) === ym); const vs = vsAll.filter(comp); const propios = vs.filter(v => !v.proveedorId || v.proveedorId === 'acs'); const aliados = vs.filter(v => v.proveedorId && v.proveedorId !== 'acs'); const tc = db.config.tipoCambio;
+    const ingreso = vs.reduce((a, v) => a + v.precio.total, 0); const ingresoPropio = propios.reduce((a, v) => a + v.precio.total, 0); const ventaAliados = aliados.reduce((a, v) => a + v.precio.total, 0); const comision = aliados.reduce((a, v) => a + (v.liquidacion ? v.liquidacion.plataforma : 0), 0); const pagoProveedores = ventaAliados - comision; const neto = ingresoPropio + comision;
+    const gs = db.gastos.filter(g => ymDe(g.fecha) === ym); const por = {}; gs.forEach(g => { por[g.tipo] = (por[g.tipo] || 0) + g.monto; }); por.choferes = propios.reduce((a, v) => a + (v.costo ? v.costo.chofer : 0), 0); const gastos = Object.values(por).reduce((a, b) => a + b, 0);
+    const netoMXN = neto * tc; const m = M.meses12().find(x => x.ym === ym) || { ym, mes: ym, anio: '' };
+    return { ym, mes: m.mes, anio: m.anio, viajes: vs.length, viajesPropios: propios.length, viajesAliados: aliados.length, ingreso, ingresoPropio, ventaAliados, comision, pagoProveedores, neto, ingresoMXN: ingreso * tc, netoMXN, gastos, por, utilidadMXN: netoMXN - gastos, margenPct: netoMXN ? (netoMXN - gastos) / netoMXN * 100 : 0, ticket: vs.length ? ingreso / vs.length : 0, pasajeros: vs.reduce((a, v) => a + v.pasajeros, 0), km: Math.round(vs.reduce((a, v) => a + (v.km || 0), 0)), cancelados: vsAll.filter(v => v.estado === 'cancelado').length, noshow: vsAll.filter(v => v.estado === 'no_show').length, registrosGasto: gs.length };
+  };
+  M.finanzas12 = function () { return M.meses12().map(m => M.finanzasMes(m.ym)); };
+  M.gastosDe = function (ym, tipo) { if (tipo === 'choferes') return db.viajes.filter(v => comp(v) && ymDe(v.fecha) === ym && (!v.proveedorId || v.proveedorId === 'acs')).map(v => ({ id: 'ch' + v.id, fecha: v.fecha, hora: v.hora, tipo: 'choferes', monto: v.costo ? v.costo.chofer : 0, vehiculoId: v.vehiculoId, choferId: v.choferId, viajeId: v.id, detalle: `Pago al chofer · ${Math.round(db.config.pagoChoferPct * 100)}% de ${usd(v.precio.total)}` })).sort((a, b) => (a.fecha + a.hora) < (b.fecha + b.hora) ? 1 : -1); return db.gastos.filter(g => ymDe(g.fecha) === ym && (!tipo || g.tipo === tipo)).slice().sort((a, b) => (a.fecha + (a.hora || '')) < (b.fecha + (b.hora || '')) ? 1 : -1); };
+  M.ingresoPorDia = function (ym) { const por = {}; db.viajes.filter(v => comp(v) && ymDe(v.fecha) === ym).forEach(v => { por[v.fecha] = (por[v.fecha] || 0) + v.precio.total; }); return Object.keys(por).sort().map(f => ({ fecha: f, dia: Number(f.slice(8)), ingreso: por[f] })); };
+  M.ingresoPorZonaMes = function (ym) { const vs = db.viajes.filter(v => comp(v) && ymDe(v.fecha) === ym); return Object.values(ZONAS).map(z => ({ zona: z, viajes: vs.filter(v => v.zona === z.id).length, ingreso: vs.filter(v => v.zona === z.id).reduce((a, v) => a + v.precio.total, 0) })); };
+  M.ingresoPorCanalMes = function (ym) { const vs = db.viajes.filter(v => comp(v) && ymDe(v.fecha) === ym); return Object.entries(CANALES).map(([id, nombre]) => ({ id, nombre, viajes: vs.filter(v => v.canal === id).length, ingreso: vs.filter(v => v.canal === id).reduce((a, v) => a + v.precio.total, 0) })).filter(x => x.viajes).sort((a, b) => b.ingreso - a.ingreso); };
+  M.viajesMes = function (ym) { return db.viajes.filter(v => ymDe(v.fecha) === ym).slice().sort((a, b) => (a.fecha + a.hora) < (b.fecha + b.hora) ? 1 : -1); };
+  M.flotaAliada = function (ym) {
+    const vs = db.viajes.filter(v => comp(v) && v.proveedorId && v.proveedorId !== 'acs' && (!ym || ymDe(v.fecha) === ym));
+    const proveedores = (db.proveedores || []).filter(p => !p.propio).map(p => { const x = vs.filter(v => v.proveedorId === p.id); const venta = x.reduce((a, v) => a + v.precio.total, 0); const com = x.reduce((a, v) => a + (v.liquidacion ? v.liquidacion.plataforma : 0), 0); const chs = db.choferes.filter(c => c.proveedorId === p.id).map(c => { const cv = x.filter(v => v.choferId === c.id); const cal = cv.filter(v => v.calificacion); return { chofer: c, vehiculo: vehiculo(c.vehiculoId), viajes: cv.length, ingreso: cv.reduce((a, v) => a + v.precio.total, 0), calif: cal.length ? cal.reduce((a, v) => a + v.calificacion, 0) / cal.length : c.calificacion, n5: cal.filter(v => v.calificacion === 5).length }; }).sort((a, b) => b.viajes - a.viajes); const cl = {}; x.forEach(v => { const k = v.clienteId || v.nombre; cl[k] = cl[k] || { id: v.clienteId, nombre: v.nombre, viajes: 0, gasto: 0, ultimo: v.fecha }; cl[k].viajes++; cl[k].gasto += v.precio.total; if (v.fecha > cl[k].ultimo) cl[k].ultimo = v.fecha; }); return { proveedor: p, viajes: x.length, venta, comision: com, aPagar: venta - com, porViaje: x.length ? com / x.length : 0, choferes: chs, clientes: Object.values(cl).sort((a, b) => b.gasto - a.gasto), vehiculos: db.vehiculos.filter(v => v.proveedorId === p.id), pendiente: db.viajes.filter(v => comp(v) && v.proveedorId === p.id && v.liquidacion && !v.liquidacion.liquidado).reduce((a, v) => a + v.liquidacion.proveedor, 0), calif: chs.length ? chs.reduce((a, c) => a + c.calif, 0) / chs.length : null }; }).sort((a, b) => b.venta - a.venta);
+    const venta = vs.reduce((a, v) => a + v.precio.total, 0); const comision = vs.reduce((a, v) => a + (v.liquidacion ? v.liquidacion.plataforma : 0), 0);
+    return { viajes: vs.length, venta, comision, aPagar: venta - comision, porViaje: vs.length ? comision / vs.length : 0, proveedores, clientes: vs.reduce((set, v) => set.add(v.clienteId || v.nombre), new Set()).size };
+  };
+
   function asistente(q) {
     const s = (q || '').toLowerCase(); const p = M.periodo(30); const z = M.porZona(90).sort((a, b) => b.ingreso - a.ingreso); const meses = M.porMes(); const mejor = meses.slice().sort((a, b) => b.ingreso - a.ingreso)[0]; const peor = meses.slice().sort((a, b) => a.ingreso - b.ingreso)[0]; const can = M.porCanal(90); const ch = M.porChofer(30); const al = M.aliados(90); const fl = M.alertasFlota(); const con = M.conciliacion(); const h = M.hoy();
     if (/proveedor|otras? flotas?|aliad[oa]s? de flota|plataforma|socios? de flota|comisi[oó]n de (la )?plataforma|baja elite|corridor luxury|pacific coast/.test(s)) { const pl = M.plataforma(30); const pp = M.porProveedor(30).filter(x => !x.proveedor.propio && x.viajes); return `Últimos 30 días: ${pl.viajesAliados} de ${pl.viajes} viajes los cubrieron flotas aliadas (${usd(pl.bruto - pl.ingresoPropio)} de venta). La plataforma se quedó ${usd(pl.comision)} de comisión y a los proveedores les corresponden ${usd(pl.pagoProveedores)}; hay ${usd(pl.pendienteLiquidar)} pendientes de liquidar. ${pp.length ? 'Por proveedor: ' + pp.map(x => `${x.proveedor.nombre} ${x.viajes} viajes · comisión ${usd(x.plataforma)}`).join(' · ') + '.' : ''}`; }
@@ -479,9 +588,10 @@
     hibrido: { nombre: { es: 'Híbrido', en: 'Hybrid' }, capas: [{ url: ESRI + 'World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 }, { url: ESRI + 'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', maxZoom: 19, opacity: .95 }, { url: ESRI + 'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', maxZoom: 19, opacity: .95 }] },
     mapa: { nombre: { es: 'Mapa', en: 'Map' }, capas: [{ url: ESRI + 'World_Street_Map/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 }] },
     gris: { nombre: { es: 'Sobrio', en: 'Minimal' }, capas: [{ url: ESRI + 'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', maxZoom: 16 }, { url: ESRI + 'Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', maxZoom: 16, opacity: .9 }] },
+    oscuro: { nombre: { es: 'Oscuro', en: 'Dark' }, capas: [{ url: ESRI + 'Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', maxZoom: 16 }, { url: ESRI + 'Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', maxZoom: 16, opacity: .85 }] },
   };
-  function estiloMapa(m, estilo) { if (!window.L) return; (m._acsCapas || []).forEach(l => m.removeLayer(l)); const def = MAPAS[estilo] || MAPAS.hibrido; m._acsCapas = def.capas.map((c, i) => L.tileLayer(c.url, { maxZoom: c.maxZoom || 19, opacity: c.opacity == null ? 1 : c.opacity, attribution: i === 0 ? ATTR : '' }).addTo(m)); m._acsEstilo = MAPAS[estilo] ? estilo : 'hibrido'; try { localStorage.setItem('acs_mapa', m._acsEstilo); } catch (e) { } if (m._acsBtn) m._acsBtn.textContent = def.nombre[m._acsIdioma || 'es']; }
-  function mapa(el, opts) { opts = opts || {}; const m = L.map(el, Object.assign({ zoomControl: false, attributionControl: true }, opts.leaflet || {})); m._acsIdioma = opts.idioma || 'es'; let estilo = opts.estilo || 'hibrido'; try { estilo = localStorage.getItem('acs_mapa') || estilo; } catch (e) { } estiloMapa(m, estilo);
+  function estiloMapa(m, estilo) { if (!window.L) return; (m._acsCapas || []).forEach(l => m.removeLayer(l)); const def = MAPAS[estilo] || MAPAS.hibrido; m._acsCapas = def.capas.map((c, i) => L.tileLayer(c.url, { maxZoom: c.maxZoom || 19, opacity: c.opacity == null ? 1 : c.opacity, attribution: i === 0 ? ATTR : '' }).addTo(m)); m._acsEstilo = MAPAS[estilo] ? estilo : 'hibrido'; if (!m._acsFijo) { try { localStorage.setItem('acs_mapa', m._acsEstilo); } catch (e) { } } if (m._acsBtn) m._acsBtn.textContent = def.nombre[m._acsIdioma || 'es']; }
+  function mapa(el, opts) { opts = opts || {}; const m = L.map(el, Object.assign({ zoomControl: false, attributionControl: true }, opts.leaflet || {})); m._acsIdioma = opts.idioma || 'es'; m._acsFijo = !!opts.fijo; let estilo = opts.estilo || 'hibrido'; if (!opts.fijo) { try { estilo = localStorage.getItem('acs_mapa') || estilo; } catch (e) { } } estiloMapa(m, estilo);
     if (opts.selector !== false) { const wrap = el.parentElement; const b = document.createElement('button'); b.className = 'mapstyle press'; b.type = 'button'; b.title = m._acsIdioma === 'en' ? 'Map style' : 'Estilo de mapa'; b.textContent = (MAPAS[m._acsEstilo] || MAPAS.hibrido).nombre[m._acsIdioma]; b.onclick = () => { const ks = Object.keys(MAPAS); estiloMapa(m, ks[(ks.indexOf(m._acsEstilo) + 1) % ks.length]); }; m._acsBtn = b; (wrap || el).appendChild(b); }
     return m; }
   function dispositivo() { const q = new URLSearchParams(location.search).get('device'); if (q === 'desktop' || q === 'mobile') sessionStorage.setItem('acs_device', q); if (q === 'auto') sessionStorage.removeItem('acs_device'); const forzado = sessionStorage.getItem('acs_device'); const d = forzado || (window.matchMedia && matchMedia('(min-width: 1024px)').matches ? 'desktop' : 'mobile'); document.documentElement.dataset.device = d; document.documentElement.dataset.deviceForzado = forzado ? '1' : ''; return d; }
@@ -495,7 +605,7 @@
     ZONAS, LUGARES, lugar, NODOS, TIPOS_VEHICULO, EXTRAS, CANALES, ESTADOS, METODOS, ACTIVOS, EN_RUTA, RUTAS: R, PROVEEDORES, SUGERENCIAS, MAPAS,
     mapa, estiloMapa, dispositivo, fijarDispositivo,
     crearItinerario, cancelarItinerario, itinerario, itinerariosDe, compartirViaje, pagarParte, agregarAmigo, invitarAmigo, aceptarInvitacion, viajesCompartidosCon, enlaceSeguimiento,
-    proveedor, liquidarProveedor, guardarProveedor, guardarSugerencia, quitarSugerencia, sugerencia,
+    proveedor, liquidarProveedor, guardarProveedor, guardarSugerencia, quitarSugerencia, sugerencia, evaluarSolicitud, aprobarSolicitud, rechazarSolicitud, guardarRequisitos, chatAbierto,
     cotizar: (d) => cotizarCon(db.config, d), distanciaViaje, rutaEntre, rutaLugares, rutaViaje, eta, usaAutopista,
     solicitarViaje, despachar: (id) => { const v = viaje(id); const c = despachar(v); persist('datos'); return c; }, cambiarEstado, reasignar, setEnLinea, setPosicion, setGpsReal, registrarPago, confirmarPago, enviarMensaje, registrarGasto, guardarChecklist, calificar, vueloDe,
     chofer, vehiculo, cliente, aliado, viaje, viajeActivo, mensajesDe: (viajeId) => db.mensajes.filter(m => m.viajeId === viajeId), viajesDe: (choferId, fecha) => db.viajes.filter(v => v.choferId === choferId && (!fecha || v.fecha === fecha)),

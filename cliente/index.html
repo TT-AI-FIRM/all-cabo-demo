@@ -165,7 +165,7 @@
   /* ── v2.1: mapa de fondo a pantalla completa con hoja deslizable encima (estilo app de transporte) ── */
   html[data-device="mobile"] .ub-map { position: fixed; inset: 0; z-index: 0; background: #0E0E10; }
   html[data-device="mobile"] .ub-map .map { position: absolute; inset: 0; }
-  html[data-device="mobile"] .ub-map .mapstyle { display: none; }
+  html[data-device="mobile"] .ub-map .mapstyle { left: auto; right: 16px; top: calc(62px + env(safe-area-inset-top)); z-index: 2; background: rgba(255,255,255,.92); color: #1A1206; border-color: rgba(11,11,12,.12); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
   html[data-device="mobile"] .ub-top { position: fixed; left: 0; right: 0; top: 0; z-index: 3; padding: calc(10px + env(safe-area-inset-top)) 16px 0 16px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
   html[data-device="mobile"] .ub-top > * { pointer-events: auto; }
   html[data-device="mobile"] .ub-logo { display: inline-flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 999px; background: rgba(11,11,12,.84); border: 1px solid var(--line2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); } .ub-logo img { height: 22px; display: block; }

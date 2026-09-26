@@ -2,7 +2,7 @@
    Datos ilustrativos con semilla fija. Pagos, vuelos, WhatsApp y GPS de la flota son SIMULADOS (el GPS del teléfono del chofer puede ser real si lo permite). */
 (function () {
   'use strict';
-  const KEY = 'acs_demo_v6';
+  const KEY = 'acs_demo_v7';
   const R = window.ACS_RUTAS || { puntos: {}, rutas: {} };
 
   // ───────────────────────── utilidades ─────────────────────────
@@ -78,6 +78,10 @@
     { id: 'plg', nombre: 'Puerto Los Cabos Golf Club', corto: 'Puerto Los Cabos Golf', tipo: 'actividad', nodo: 'plc', zona: 'sj', area: 'San José', pos: [23.0630, -109.6600] },
     { id: 'qvg', nombre: 'Quivira Golf Club', corto: 'Quivira Golf', tipo: 'actividad', nodo: 'diamante', zona: 'csl', area: 'Pacific', pos: [22.9330, -110.0250] },
     { id: 'md', nombre: 'Médano Beach', corto: 'Médano Beach', tipo: 'actividad', nodo: 'csl', zona: 'csl', area: 'Cabo San Lucas', pos: [22.8900, -109.9020] },
+    { id: 'smb', nombre: 'Santa María Bay', corto: 'Santa María Bay', tipo: 'actividad', nodo: 'chileno', zona: 'sj', area: 'Corridor', pos: [22.9445, -109.8205] },
+    { id: 'mis', nombre: 'Mission San José del Cabo · Plaza Mijares', corto: 'Mission San José', tipo: 'actividad', nodo: 'sanjose', zona: 'sj', area: 'San José', pos: [23.0617, -109.6979] },
+    { id: 'wir', nombre: 'Wirikuta Desert Botanical Garden', corto: 'Wirikuta Garden', tipo: 'actividad', nodo: 'plc', zona: 'sj', area: 'San José', pos: [23.0720, -109.6480] },
+    { id: 'est', nombre: 'Estero San José', corto: 'Estero San José', tipo: 'actividad', nodo: 'sanjose', zona: 'sj', area: 'San José', pos: [23.0490, -109.6770] },
   ];
   // sugerencias curadas (lista del demo; el dueño la edita desde la central)
   const SUGERENCIAS = [
@@ -93,16 +97,20 @@
     { id: 's_sm', cat: 'restaurant', nombre: 'Sunset Monalisa', lugarId: 'sm', tagline: 'Sunset over the Arch', desc: 'Cliffside Mediterranean dinner on the Corridor with the best view of Land\'s End.', icono: '🌇', color: '#2C2216', duracion: 3, cuando: 'Book for sunset' },
     { id: 's_fa', cat: 'restaurant', nombre: 'El Farallón', lugarId: 'fa', tagline: 'Seafood on the cliff', desc: 'At the Waldorf Astoria Pedregal: catch of the day sold by weight, waves under your table.', icono: '🦞', color: '#1F2230', duracion: 3, cuando: 'Dinner · 6–10 PM' },
     { id: 's_ofc', cat: 'restaurant', nombre: 'The Office on the Beach', lugarId: 'ofc', tagline: 'Feet in the sand', desc: 'Médano Beach institution for breakfast, ceviche and margaritas with the Arch in front of you.', icono: '🍹', color: '#1E2A2C', duracion: 3, cuando: 'Brunch or lunch' },
-    { id: 's_arco', cat: 'activity', nombre: 'El Arco & Lover\'s Beach by boat', lugarId: 'mar', tagline: 'From the marina', desc: 'Glass-bottom boats and private charters leave from the Cabo San Lucas marina to the Arch and Lover\'s Beach.', icono: '⛵', color: '#1B2633', duracion: 3, cuando: 'Mornings are calmest' },
-    { id: 's_whale', cat: 'activity', nombre: 'Whale watching', lugarId: 'mar', tagline: 'December to April', desc: 'Humpback and gray whales pass Land\'s End in winter. Tours leave from the marina; bring a jacket.', icono: '🐋', color: '#182634', duracion: 3, cuando: 'Dec–Apr · morning' },
-    { id: 's_snork', cat: 'activity', nombre: 'Snorkel at Chileno Bay', lugarId: 'chb', tagline: 'Protected cove', desc: 'The easiest snorkeling on the Corridor, straight from the beach. We can wait while you swim.', icono: '🤿', color: '#1A2A2E', duracion: 4, cuando: 'Morning' },
-    { id: 's_golf', cat: 'activity', nombre: 'Golf day', lugarId: 'cds', tagline: 'Cabo del Sol · Quivira · Puerto Los Cabos', desc: 'Three of the most photographed courses in Mexico. Tell us the course and tee time; your driver waits.', icono: '⛳', color: '#1F2A1E', duracion: 5, cuando: 'Tee times from 7 AM' },
-    { id: 's_art', cat: 'activity', nombre: 'San José Art Walk', lugarId: 'art', tagline: 'Thursday evenings', desc: 'Galleries open late in the historic district, November to June. Pair it with dinner in town.', icono: '🎨', color: '#2A2030', duracion: 3, cuando: 'Thursdays · 5–9 PM · Nov–Jun' },
-    { id: 's_medano', cat: 'activity', nombre: 'Médano Beach day', lugarId: 'md', tagline: 'Beach clubs & water sports', desc: 'The swimmable town beach in Cabo San Lucas, lined with beach clubs. We drop you off and pick you up.', icono: '🏖️', color: '#2A2618', duracion: 5, cuando: 'Any day' },
+    { id: 's_arco', cat: 'activity', sub: 'water', nombre: 'El Arco & Lover\'s Beach by boat', lugarId: 'mar', tagline: 'From the marina', desc: 'Glass-bottom boats and private charters leave from the Cabo San Lucas marina to the Arch and Lover\'s Beach.', icono: '⛵', color: '#1B2633', duracion: 3, cuando: 'Mornings are calmest' },
+    { id: 's_whale', cat: 'activity', sub: 'water', nombre: 'Whale watching', lugarId: 'mar', tagline: 'December to April', desc: 'Humpback and gray whales pass Land\'s End in winter. Tours leave from the marina; bring a jacket.', icono: '🐋', color: '#182634', duracion: 3, cuando: 'Dec–Apr · morning' },
+    { id: 's_snork', cat: 'activity', sub: 'beach', nombre: 'Snorkel at Chileno Bay', lugarId: 'chb', tagline: 'Protected cove', desc: 'The easiest snorkeling on the Corridor, straight from the beach. We can wait while you swim.', icono: '🤿', color: '#1A2A2E', duracion: 4, cuando: 'Morning' },
+    { id: 's_golf', cat: 'activity', sub: 'golf', nombre: 'Golf day', lugarId: 'cds', tagline: 'Cabo del Sol · Quivira · Puerto Los Cabos', desc: 'Three of the most photographed courses in Mexico. Tell us the course and tee time; your driver waits.', icono: '⛳', color: '#1F2A1E', duracion: 5, cuando: 'Tee times from 7 AM' },
+    { id: 's_art', cat: 'activity', sub: 'culture', nombre: 'San José Art Walk', lugarId: 'art', tagline: 'Thursday evenings', desc: 'Galleries open late in the historic district, November to June. Pair it with dinner in town.', icono: '🎨', color: '#2A2030', duracion: 3, cuando: 'Thursdays · 5–9 PM · Nov–Jun' },
+    { id: 's_medano', cat: 'activity', sub: 'beach', nombre: 'Médano Beach day', lugarId: 'md', tagline: 'Beach clubs & water sports', desc: 'The swimmable town beach in Cabo San Lucas, lined with beach clubs. We drop you off and pick you up.', icono: '🏖️', color: '#2A2618', duracion: 5, cuando: 'Any day' },
+    { id: 's_smb', cat: 'activity', sub: 'beach', nombre: 'Santa María Bay', lugarId: 'smb', tagline: 'Snorkel cove', desc: 'A small protected bay on the Corridor with clear water and reef fish close to shore. Bring reef-safe sunscreen.', icono: '🐟', color: '#17303A', duracion: 4, cuando: 'Morning' },
+    { id: 's_sail', cat: 'activity', sub: 'water', nombre: 'Sunset sail', lugarId: 'mar', tagline: 'From the marina', desc: "Catamarans and private yachts leave the Cabo San Lucas marina in the late afternoon to watch the sun go down past Land's End.", icono: '⛵', color: '#2C2030', duracion: 3, cuando: 'Late afternoon' },
+    { id: 's_mis', cat: 'activity', sub: 'culture', nombre: 'Mission San José del Cabo', lugarId: 'mis', tagline: 'On the main plaza', desc: "The town's mission church faces Plaza Mijares, a short walk from the galleries and cafés of San José's historic center.", icono: '⛪', color: '#2A2420', duracion: 2, cuando: 'Any day' },
+    { id: 's_wir', cat: 'activity', sub: 'nature', nombre: 'Wirikuta Desert Botanical Garden', lugarId: 'wir', tagline: 'Cactus garden', desc: 'A walk through a desert garden of Baja cactus and sculptures in Puerto Los Cabos. Go early or late; there is little shade.', icono: '🌵', color: '#23291C', duracion: 2, cuando: 'Morning or late afternoon' },
+    { id: 's_est', cat: 'activity', sub: 'nature', nombre: 'Estero San José', lugarId: 'est', tagline: 'Palms and birds', desc: 'The estuary where the San José river meets the sea: an easy walk among palms, with herons and other birdlife.', icono: '🪶', color: '#1D2A24', duracion: 2, cuando: 'Early morning' },
   ];
-  // fotos ilustrativas por palabra clave (servicio público de fotos; si no carga, la app muestra el color de fondo)
-  const FOTOS_KW = { s_oo: 'resort,pool', s_lv: 'luxury,hotel,pool', s_es: 'cliff,resort,sea', s_wa: 'hotel,ocean,view', s_cb: 'beach,resort', s_mo: 'bay,resort', s_ff: 'farm,restaurant', s_ac: 'cocktail,garden,bar', s_ed: 'mexican,food,dinner', s_sm: 'sunset,dinner,terrace', s_fa: 'seafood,dinner', s_ofc: 'beach,bar,sand', s_arco: 'boat,sea,rocks', s_whale: 'whale,ocean', s_snork: 'snorkel,reef', s_golf: 'golf,course,ocean', s_art: 'art,gallery,street', s_medano: 'beach,club,umbrella' };
-  SUGERENCIAS.forEach((sg, i) => { sg.foto = 'https://loremflickr.com/480/320/' + (FOTOS_KW[sg.id] || 'travel,mexico') + '?lock=' + ((i + 3) * 11); });
+  // fotos locales (Wikimedia Commons, créditos en shared/img/lugares/creditos.js)
+  SUGERENCIAS.forEach((sg) => { sg.foto = '../shared/img/lugares/' + sg.id + '.webp'; });
   const lugar = (id) => LUGARES.find(l => l.id === id);
   const TIPOS_VEHICULO = {
     suburban: { id: 'suburban', nombre: 'Chevrolet Suburban', corto: 'Suburban', pax: 7, maletas: 7, icono: '🚙', tanque: 106, rendimiento: 6.5, desc: 'Black SUV · leather · cold water' },

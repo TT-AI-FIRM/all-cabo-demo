@@ -1,0 +1,94 @@
+/* stay · Planear la estancia: tres pasos en tarjetas claras y un solo pago (usa los tokens de app.css).
+   Todo va bajo .st para no tocar otras pantallas. */
+
+/* pasos */
+.st .steps { margin: 6px 0 6px; }
+.st-stepl { display: flex; gap: 6px; margin: 0 0 12px; font-size: 11.5px; font-weight: 600; color: var(--faint); }
+.st-stepl span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-stepl span.on { color: var(--ink); }
+
+/* tarjetas del paso 1 */
+.st-card { margin-top: 12px; }
+.st-ya { margin-bottom: 4px; }
+.st-ya .tx span { white-space: normal; }
+.st-h { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.st-h > div { flex: 1; min-width: 0; }
+.st-h b { display: block; font-size: 16px; letter-spacing: -.01em; }
+.st-h span { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st .ic { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--soft); color: var(--ink); flex: none; }
+.st .ic svg { width: 20px; height: 20px; }
+.st .ic.dark { background: var(--ink); color: var(--white); }
+.st .ic.accent { background: var(--accent-soft); color: var(--accent); }
+.st-card .grid2 .lbl, .st-l0 { margin-top: 14px; }
+.st-card .grid2:first-child .lbl { margin-top: 0; }
+.st-hint { display: flex; align-items: center; gap: 6px; margin: 10px 2px 0; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+.st-hint:empty { display: none; }
+.st-hint svg { width: 14px; height: 14px; flex: none; }
+.st-hint span { min-width: 0; }
+.st-note { margin: 10px 4px 0; }
+.st .opt .pr small { font-size: 11.5px; font-weight: 500; color: var(--muted); }
+.st .chips { gap: 8px; }
+.st .chip { min-height: 42px; }
+.st .chip svg { width: 16px; height: 16px; flex: none; }
+.st-next { margin-top: 20px; height: auto; min-height: 56px; padding: 10px 24px; white-space: normal; text-align: center; line-height: 1.25; }
+
+/* paso 2 · tu plan */
+.st-ph { margin-top: 4px; }
+.st-plan { margin-bottom: 4px; }
+.st-act { padding: 14px 16px 16px; }
+.st-act + .st-act { border-top: 1px solid var(--line); }
+.st-act .lrow { padding: 0; min-height: 0; }
+.st-act .lrow:active { transform: none; }
+.st .lrow .thumb { position: relative; }
+.st-act .grid2 .lbl { margin-top: 12px; }
+.st-x { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--ink2); flex: none; }
+.st-x svg { width: 16px; height: 16px; }
+.st-mode { margin-top: 12px; border-radius: var(--r-sm); }
+.st-mode button { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 54px; padding: 6px 8px; border-radius: 11px; white-space: normal; line-height: 1.2; text-align: center; }
+.st-mode b { font-size: 13.5px; font-weight: 600; }
+.st-mode small { margin-top: 3px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.st-mode button.on small { color: var(--accent-ink); }
+.st-empty { display: flex; align-items: center; gap: 12px; }
+.st-empty p { font-size: 13.5px; color: var(--ink2); line-height: 1.45; }
+
+/* paso 2 · sugerencias */
+.st-cats { margin: 18px 0 14px; }
+.st .pcard.wide .ph { height: 150px; }
+.st-sug.pcard:active { transform: none; }
+.st-in { position: absolute; top: 10px; right: 10px; }
+.st-in svg, .st-mine svg { width: 12px; height: 12px; }
+.st-mine { height: 40px; padding: 0 14px; }
+.st-desc { margin-top: 8px; font-size: 13.5px; line-height: 1.45; color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.st-when { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.st-when svg { width: 14px; height: 14px; flex: none; }
+.st-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.st-acts .btn { height: 40px; }
+.st-acts .btn svg { width: 16px; height: 16px; }
+.st-cta { position: sticky; bottom: calc(var(--nav-h) + 16px + var(--safe-b)); z-index: 5; margin: 18px -6px 0; padding: 6px; border-radius: 999px; background: var(--glass2); border: 1px solid var(--glass-line); box-shadow: var(--shadow); backdrop-filter: blur(22px) saturate(170%); -webkit-backdrop-filter: blur(22px) saturate(170%); }
+.st-cta .btn { min-width: 0; }
+
+/* paso 3 · la semana */
+.st-map { height: 200px; margin-bottom: 14px; }
+.st-dayh { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 14px 16px 2px; }
+.st-dayh:not(:first-child) { border-top: 1px solid var(--line); margin-top: 4px; }
+.st-dayh b { font-size: 14px; letter-spacing: -.01em; }
+.st-dayh span { font-size: 12px; font-weight: 600; color: var(--muted); }
+.st-week .lrow { align-items: flex-start; min-height: 0; padding: 10px 16px; }
+.st-week .lrow + .lrow { border-top: 0; }
+.st-week .lrow .thumb { width: 42px; height: 42px; border-radius: 14px; }
+.st-week .lrow .tx span { margin-top: 1px; }
+.st-week .lrow .end { padding-top: 2px; }
+.st-tot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 6px; padding: 14px 16px; border-top: 1px solid var(--line2); background: var(--soft); font-size: 15px; font-weight: 600; }
+.st-tot b { font-size: 18px; letter-spacing: -.01em; }
+.st-vrow { margin-top: 14px; }
+.st-vrow .tx b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-vrow .linkbtn { flex: none; min-height: 40px; }
+.st-zelle { margin-top: 10px; }
+.st-legal { margin-top: 12px; text-align: center; }
+.st-over { min-width: 320px; }
+
+@media (max-width: 370px) {
+  .st-mode b { font-size: 12.5px; }
+  .st-mode small { font-size: 11.5px; }
+  .st .opt .pr small { font-size: 11px; }
+}

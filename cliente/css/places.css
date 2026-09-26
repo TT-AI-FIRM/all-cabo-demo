@@ -1,0 +1,110 @@
+/* places · «Find food», «Things to do» y la ficha del lugar (usa los tokens de app.css) */
+
+/* ───── filtro por tipo: fila deslizable de chips (se sale al borde como .hscroll) ───── */
+.pl-filter { gap: 8px; margin-bottom: 12px; }
+.pl-filter .chip { min-height: 40px; white-space: nowrap; }
+.pl-filter .chip svg { width: 16px; height: 16px; flex: none; }
+html[data-device="desktop"] .pl-filter { margin-left: -22px; margin-right: -22px; padding-left: 22px; padding-right: 22px; }
+.pl-geo { margin: 0 2px 12px; }
+
+/* ───── mapa en la pantalla (teléfono) y tarjetita del lugar elegido ───── */
+.pl-map { height: 240px; }
+.pl-map .mapstyle { top: 12px; bottom: auto; }
+#plPeek { position: absolute; left: 10px; right: 10px; bottom: 20px; z-index: 520; }
+#plPeek:empty { display: none; }
+.pl-peek { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 22px; background: var(--glass2); border: 1px solid var(--glass-line); box-shadow: var(--shadow-lg); backdrop-filter: blur(22px) saturate(170%); -webkit-backdrop-filter: blur(22px) saturate(170%); animation: sheetUp 260ms var(--ease); }
+#sideOver .pl-peek { width: min(440px, 100%); }
+.pl-peek-main { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; min-height: 52px; text-align: left; }
+.pl-peek .tx { flex: 1; min-width: 0; }
+.pl-peek .tx b { display: block; font-size: 15px; font-weight: 600; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-peek .tx span { display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-go { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--white); flex: none; }
+.pl-go svg { width: 20px; height: 20px; }
+.pl-thumb { position: relative; width: 52px; height: 52px; border-radius: 14px; overflow: hidden; background: var(--soft); flex: none; }
+.pl-thumb .ph-fallback { font-size: 22px; }
+.mk-photo.pl-hot { border-color: var(--ink); transform: scale(1.12); transition: transform 160ms var(--ease); }
+
+/* ───── tarjeta grande con foto (lista) ───── */
+.pl-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.pl-card { position: relative; padding: 10px; border-radius: var(--r-xl); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-sm); transition: transform 140ms var(--ease), border-color 160ms ease, box-shadow 160ms ease; }
+.pl-card:has(.pl-open:active) { transform: scale(.985); }
+.pl-card.on { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(15, 17, 21, .07), var(--shadow); }
+.pl-ph { position: relative; height: 188px; border-radius: 18px; overflow: hidden; background: var(--soft); }
+.pl-ph .ph-fallback { font-size: 40px; }
+.pl-tag { position: absolute; left: 10px; bottom: 10px; display: block; max-width: calc(100% - 20px); line-height: 22px; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--shadow-sm); }
+.pl-pin { position: absolute; top: 10px; right: 10px; z-index: 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--glass2); border: 1px solid var(--glass-line); box-shadow: var(--shadow-sm); color: var(--ink); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.pl-pin svg { width: 18px; height: 18px; }
+.pl-card.on .pl-pin { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.pl-bd { padding: 12px 6px 4px; }
+.pl-open { display: block; width: 100%; text-align: left; font-size: 17px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* toda la tarjeta abre la ficha; el alfiler y «Ride there» quedan encima */
+.pl-open::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.pl-open:focus-visible { outline: none; }
+.pl-open:focus-visible::after { outline: 2px solid var(--accent2); outline-offset: 2px; border-radius: var(--r-xl); }
+.pl-meta { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-desc { margin-top: 8px; font-size: 14px; line-height: 1.4; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.pl-when { display: inline-flex; align-items: center; gap: 6px; min-width: 0; height: 30px; padding: 0 11px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-ink); font-size: 12.5px; font-weight: 600; }
+.pl-when svg { width: 14px; height: 14px; flex: none; }
+.pl-when span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-ride { position: relative; z-index: 2; flex: none; height: 40px; }
+html[data-device="desktop"] .pl-ph { height: 168px; }
+
+/* ───── ficha del lugar ───── */
+.pl-hero { position: relative; height: 300px; border-radius: var(--r-xl); overflow: hidden; background: var(--soft); box-shadow: var(--shadow); }
+.pl-hero .ph-fallback { font-size: 64px; }
+.pl-back { position: absolute; top: 12px; left: 12px; z-index: 2; }
+.pl-hero .pl-tag { left: 14px; bottom: 14px; height: 28px; line-height: 28px; padding: 0 12px; font-size: 12.5px; }
+.pl-head { margin: 18px 2px 0; }
+.pl-head h1 { font-size: 28px; line-height: 1.1; letter-spacing: -.03em; overflow-wrap: anywhere; }
+.pl-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; margin-top: 8px; font-size: 13.5px; color: var(--muted); }
+.pl-sub > span + span::before { content: "·"; margin: 0 7px; color: var(--faint); }
+.pl-cat { display: inline-flex; align-items: center; gap: 5px; color: var(--ink); font-weight: 600; }
+.pl-cat svg { width: 16px; height: 16px; }
+.pl-text { margin: 12px 2px 0; font-size: 15.5px; line-height: 1.5; color: var(--ink2); }
+.pl-facts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 16px; }
+.pl-fact { display: flex; align-items: flex-start; gap: 10px; min-width: 0; padding: 12px; border-radius: var(--r); background: var(--glass2); border: 1px solid var(--glass-line); box-shadow: var(--shadow-sm); }
+.pl-fact:only-child { grid-column: 1 / -1; }
+.pl-fact i { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); flex: none; }
+.pl-fact i svg { width: 17px; height: 17px; }
+.pl-fact div { min-width: 0; }
+.pl-fact small { display: block; font-size: 12px; font-weight: 600; color: var(--muted); }
+.pl-fact b { display: block; margin-top: 1px; font-size: 14px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.pl-cta { margin-top: 18px; }
+.pl-route { margin-top: 10px; font-size: 13px; color: var(--muted); text-align: center; }
+.pl-acts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 16px; }
+.pl-act { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; min-height: 116px; padding: 14px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-sm); text-align: left; transition: transform 140ms var(--ease); }
+.pl-act:active { transform: scale(.97); }
+.pl-act-ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--soft); color: var(--ink); flex: none; }
+.pl-act-ic svg { width: 19px; height: 19px; }
+.pl-act-tx { display: block; min-width: 0; }
+.pl-act-tx b { display: flex; align-items: center; gap: 5px; font-size: 14.5px; font-weight: 600; letter-spacing: -.01em; }
+.pl-act-tx b svg { width: 13px; height: 13px; color: var(--muted); flex: none; }
+.pl-act-tx small { display: block; margin-top: 2px; font-size: 12.5px; line-height: 1.3; color: var(--muted); }
+.pl-act.wide { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 12px; min-height: 64px; }
+.pl-routemap { height: 190px; }
+html[data-device="desktop"] .pl-hero { height: 260px; }
+
+/* ───── hojas (añadir a la estancia, pedir mesa) ───── */
+.pl-sh { display: flex; align-items: center; gap: 12px; padding: 4px 0 4px; }
+.pl-sh .tx { flex: 1; min-width: 0; }
+.pl-sh .tx b { display: block; font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-sh .tx span { display: block; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-seg button { min-height: 52px; padding: 6px 10px; white-space: normal; line-height: 1.2; }
+.pl-quote { margin: 14px 0; padding: 12px 14px; border-radius: var(--r); background: var(--soft); }
+.pl-quote .sum { padding: 0; font-size: 15px; color: var(--ink); }
+.pl-quote p { margin-top: 4px; }
+.pl-pax { margin-top: 14px; padding: 8px 4px 0; }
+.pl-pax > span:first-child { min-width: 0; }
+.pl-pax b { display: block; font-size: 15px; font-weight: 600; }
+.pl-pax small { display: block; font-size: 12.5px; color: var(--muted); }
+.pl-legal { margin-top: 10px; text-align: center; }
+
+@media (max-width: 370px) {
+  .pl-filter { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
+  .pl-ph { height: 168px; }
+  .pl-hero { height: 250px; }
+  .pl-head h1 { font-size: 25px; }
+  .pl-act { padding: 12px; }
+}
+@media (prefers-reduced-transparency: reduce) { .pl-peek, .pl-pin { background: var(--white) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } }

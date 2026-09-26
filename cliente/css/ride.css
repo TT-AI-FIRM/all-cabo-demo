@@ -1,0 +1,100 @@
+/* ride · reserva en cuatro pasos (usa los tokens de app.css; todo va dentro de .rd salvo la tarjeta lateral) */
+.rd .steps { margin: 0 0 12px; }
+.rd-sub { margin: 0 2px 14px; text-align: center; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html[data-device="desktop"] .rd-sub { text-align: left; }
+.rd .chip { min-height: 40px; }
+.rd .chip svg { width: 16px; height: 16px; flex: none; }
+.rd-legal { margin-top: 12px; text-align: center; }
+
+/* paso 1 · servicio y ruta */
+.rd-serv { margin-bottom: 12px; }
+.rd-serv button { min-width: 0; padding: 0 6px; }
+.rd-route.card { padding: 4px; }
+.rd .route.has-stops .rt-swap { top: 34px; }
+.rt-dot em { font-style: normal; font-size: 12px; font-weight: 700; }
+.rd .rt-x { width: 40px; height: 40px; right: 4px; display: grid; place-items: center; }
+.rd .rt-x svg { width: 16px; height: 16px; }
+.rd-under { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; margin-top: 12px; }
+.rd-geo { margin-top: 12px; }
+.rd-go { margin-top: 16px; }
+
+/* paso 2 · cuándo */
+.rd-opt .tx span { line-height: 1.35; }
+.rd-opt.on .ic { background: var(--ink); color: #fff; }
+.rd-radio { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line2); display: grid; place-items: center; flex: none; color: #fff; }
+.rd-radio svg { width: 14px; height: 14px; stroke-width: 2.6; }
+.opt.on .rd-radio { background: var(--ink); border-color: var(--ink); }
+.rd-form { margin-top: 12px; }
+.rd-form .grid2 .lbl { margin-top: 0; }
+.rd-form input[type="date"], .rd-form input[type="time"] { min-width: 0; padding: 0 12px; }
+.rd-hint { margin: 6px 2px 0; }
+.rd-flight { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 10px; }
+.rd-hrs { display: flex; align-items: center; gap: 12px; }
+.rd-hrs .small { flex: 1; min-width: 0; }
+.rd-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 64px; margin-top: 12px; text-align: left; }
+.rd-toggle .tx { min-width: 0; }
+.rd-toggle b { display: block; font-size: 15px; font-weight: 600; }
+.rd-toggle .tx span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.rd .cta-bar .btn { min-width: 0; }
+.rd-cta-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* paso 3 · camioneta */
+.rd-party { padding: 4px 14px; }
+.rd-stp { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 58px; }
+.rd-stp + .rd-stp { border-top: 1px solid var(--line); }
+.rd-stp .l { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; min-width: 0; }
+.rd-stp .l svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.rd-vehs { margin-top: 12px; }
+.rd-veh { align-items: center; }
+.rd-veh .tx b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25; }
+.rd-veh .tx .rd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin-top: 4px; color: var(--ink2); font-weight: 600; }
+.rd-meta i { display: inline-flex; align-items: center; gap: 3px; font-style: normal; }
+.rd-meta svg { width: 13px; height: 13px; color: var(--muted); }
+.rd-meta .eta { color: var(--ok); }
+.rd-veh .pr { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.rd-veh .pr small { margin-top: 0; font-size: 12px; font-weight: 600; }
+.rd-veh .pr .pill { height: 22px; font-size: 11.5px; padding: 0 9px; }
+
+/* paso 4 · confirmar */
+.rd-trip.card { padding: 6px 8px 8px; }
+.rd-ro .rt-row { padding-right: 10px; min-height: 52px; }
+.rd-ro .rt-row:hover { background: none; }
+.rd-info { display: flex; align-items: center; gap: 12px; padding: 10px; border-top: 1px solid var(--line); }
+.rd-info .ic { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--ink2); flex: none; }
+.rd-info .ic svg { width: 14px; height: 14px; }
+.rd-info .tx { flex: 1; min-width: 0; }
+.rd-info .tx small { display: block; font-size: 12px; color: var(--muted); font-weight: 500; }
+.rd-info .tx b { display: block; font-size: 15px; font-weight: 600; }
+.rd-info .pill { flex: none; }
+.rd-sim { padding: 0 10px 4px 48px; margin-top: -4px; }
+.rd-pick { margin-top: 12px; }
+.rd-change { flex: none; font-size: 14px; font-weight: 600; color: var(--accent); padding-right: 2px; }
+.rd-price { margin-top: 12px; }
+.rd-price .sum > span:first-child { min-width: 0; }
+.rd-price .sum > span:last-child { flex: none; }
+.rd .more summary > span:first-child { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; min-width: 0; }
+.rd .more summary .chev { width: 20px; height: 20px; display: grid; place-items: center; flex: none; }
+.rd .more summary .chev svg { width: 18px; height: 18px; }
+.rd .more .chips { margin-top: 2px; }
+.rd-note { margin: 0 0 10px; }
+.rd-pay { margin-top: 18px; }
+.rd-paylbl { margin: 0 2px 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.rd-pay .zellebtn { margin-top: 10px; }
+.rd-other { text-align: center; margin-top: 2px; }
+.rd-backfull { margin-top: 6px; }
+
+/* escritorio · tarjeta sobre el mapa lateral */
+.rd-over { display: flex; align-items: center; gap: 14px; width: min(560px, 100%); padding: 14px 18px 14px 14px; border-radius: var(--r-lg); }
+.rd-over-ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; flex: none; }
+.rd-over-ic svg { width: 22px; height: 22px; }
+.rd-over .tx { flex: 1; min-width: 0; }
+.rd-over .tx b { display: block; font-size: 16px; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rd-over .tx span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.rd-over .p { text-align: right; flex: none; }
+.rd-over .p small { display: block; font-size: 12px; color: var(--muted); }
+.rd-over .p b { font-size: 22px; letter-spacing: -.02em; }
+
+@media (max-width: 370px) {
+  .rd-serv button { font-size: 13.5px; padding: 0 4px; }
+  .rd-veh .pr { font-size: 15px; }
+}

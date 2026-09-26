@@ -1,0 +1,68 @@
+/* social · Amigos y Cuenta (usa los tokens y componentes de app.css) */
+.soc .btn.sm { height: 40px; }
+.soc .pill svg { width: 13px; height: 13px; flex: none; }
+.soc .card > h3 { margin-bottom: 12px; }
+
+/* ───── agregar amigo ───── */
+.sc-add { height: 58px; padding: 0 6px 0 16px; }
+.sc-add input { height: 100%; }
+.sc-add .btn { height: 46px; padding: 0 20px; flex: none; }
+.sc-hint { margin-top: 10px; line-height: 1.45; }
+.sc-demo { gap: 8px; margin-top: 8px; flex-wrap: wrap; min-width: 0; }
+.sc-try { display: inline-flex; align-items: center; min-height: 40px; max-width: 100%; padding: 0 14px; border-radius: 999px; background: var(--white); border: 1px dashed var(--line2); font-size: 13.5px; font-weight: 600; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ───── invitaciones y enviadas ───── */
+.sc-flush { padding: 0; overflow: hidden; }
+.sc-flush .lrow + .lrow { border-top-color: rgba(122, 90, 18, .12); }
+.sc-flush .lrow .btn, .sc-sent .pill { flex: none; }
+.sc-sent { margin-top: 12px; }
+
+/* ───── tu círculo (mosaicos de vidrio, como el inicio) ───── */
+.sc-circle { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.sc-fr { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 14px; border-radius: var(--r-lg); }
+.sc-fr-top { justify-content: space-between; }
+.sc-fr-top .avatar { width: 48px; height: 48px; font-size: 15px; }
+.sc-fr-tx { min-width: 0; flex: 1; }
+.sc-fr-tx b { display: block; font-size: 15px; font-weight: 600; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-fr-tx span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-fr-btn { width: 100%; height: 42px; padding: 0 10px; gap: 6px; font-size: 13.5px; }
+.sc-fr-btn svg { width: 16px; height: 16px; flex: none; }
+.sc-fr-btn span { overflow: hidden; text-overflow: ellipsis; }
+.sc-fr-add { justify-content: space-between; text-align: left; border: 1.5px dashed var(--line2); background: rgba(255, 255, 255, .35); }
+.sc-fr-add .ic { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--white); color: var(--ink); box-shadow: var(--shadow-sm); flex: none; }
+.sc-fr-add .ic svg { width: 20px; height: 20px; }
+.sc-fr-add .sc-fr-tx { display: block; flex: none; }
+.sc-circle > .sc-fr-add:nth-child(odd) { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: flex-start; }
+
+/* ───── viajes compartidos y seguridad ───── */
+.sc-trips .trip .amt { font-size: 15px; }
+.sc-safe { display: flex; align-items: flex-start; gap: 14px; margin-top: 22px; }
+.sc-safe .ic { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--white); color: var(--accent); box-shadow: var(--shadow-sm); flex: none; }
+.sc-safe .ic svg { width: 20px; height: 20px; }
+.sc-safe h3 { margin-bottom: 4px; }
+
+/* ───── cuenta ───── */
+.sc-hero { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 18px; border-radius: var(--r-xl); }
+.sc-hero-tx { flex: 1; min-width: 0; }
+.sc-hero-tx h1 { font-size: 22px; line-height: 1.15; letter-spacing: -.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-hero-tx p { margin-top: 3px; font-size: 13.5px; color: var(--muted); }
+.sc-hero-tx .pill { margin-top: 8px; }
+.lrow .ic.sc-apple { background: #000; color: #fff; font-size: 19px; font-weight: 600; }
+.lrow .ic.sc-zelle { background: #6D1ED4; color: #fff; font-size: 17px; font-weight: 800; }
+.lrow .ic.sc-visa { background: #1A1F71; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .03em; }
+.sc-cta { margin-top: 14px; }
+.sc-cta b { display: block; font-size: 15.5px; margin: 6px 0 4px; letter-spacing: -.01em; }
+.sc-stats { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.sc-stat { min-width: 0; padding: 14px 16px; border-radius: var(--r-lg); background: var(--white); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.sc-stat .eyebrow { font-size: 10.5px; }
+.sc-stat b { display: block; margin-top: 6px; font-size: 24px; letter-spacing: -.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-note { margin: 10px 2px 0; }
+.sc-credits { margin-top: 22px; }
+.sc-credits .body .list { margin-top: 10px; }
+.sc-cr-list .lrow { min-height: 56px; }
+
+@media (max-width: 370px) {
+  .sc-fr { padding: 12px; }
+  .sc-fr-btn svg { display: none; }
+  .sc-add .btn { padding: 0 16px; }
+}

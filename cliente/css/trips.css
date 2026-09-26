@@ -1,0 +1,108 @@
+/* trips · estilos propios de la pantalla de viajes (usa los tokens de app.css; prefijo trp- / trk-) */
+
+/* ───── texto del ETA y punto «en vivo» ───── */
+.trp-eta-tx { flex: 1; min-width: 0; }
+.etacard .avatar { flex: none; }
+.trp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); flex: none; animation: trpPulse 1.6s ease-out infinite; }
+@keyframes trpPulse { 0% { box-shadow: 0 0 0 0 rgba(232, 97, 44, .55); } 100% { box-shadow: 0 0 0 9px rgba(232, 97, 44, 0); } }
+
+/* ───── lista: viaje en vivo ───── */
+.trp-live { width: 100%; text-align: left; margin: 2px 0 4px; padding: 16px 16px 16px 18px; }
+.trp-live b { font-size: 19px; line-height: 1.2; }
+.trp-live-tag { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px; font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent2); }
+.trp-live-rt { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .12); font-style: normal; font-size: 12.5px; font-weight: 600; opacity: .8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ───── lista: estancia ───── */
+.trp-stay { margin-top: 12px; }
+.trp-stay-h { display: flex; align-items: center; gap: 12px; }
+.trp-stay-ph { position: relative; width: 58px; height: 58px; border-radius: 16px; overflow: hidden; flex: none; display: grid; place-items: center; background: var(--soft); color: var(--ink2); }
+.trp-stay-ph > svg { width: 22px; height: 22px; }
+.trp-stay-h .tx { flex: 1; min-width: 0; }
+.trp-stay-h .tx b { display: block; margin-top: 2px; font-size: 16px; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trp-stay-h .tx small { display: block; font-size: 13px; color: var(--muted); }
+.trp-stay-h .eyebrow { display: block; color: var(--accent); letter-spacing: .08em; }
+.trp-stay-rows { margin-top: 12px; border-top: 1px solid var(--line); }
+.trp-srow { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 58px; padding: 8px 0; text-align: left; }
+.trp-srow + .trp-srow { border-top: 1px solid var(--line); }
+.trp-srow .d { width: 42px; height: 44px; border-radius: 12px; background: var(--soft); display: grid; place-content: center; text-align: center; line-height: 1.05; flex: none; }
+.trp-srow .d small { display: block; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+.trp-srow .d b { display: block; font-size: 16px; }
+.trp-srow .tx { flex: 1; min-width: 0; }
+.trp-srow .tx b { display: block; font-size: 14.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trp-srow .tx small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+.trp-srow .chev { display: grid; color: var(--faint); flex: none; }
+.trp-srow .chev svg { width: 16px; height: 16px; }
+.trp-stay-f { margin-top: 10px; font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+
+/* ───── lista: vacíos ───── */
+.trp-empty { text-align: center; padding: 16px; }
+.trp-empty-ph { height: 128px; margin-bottom: 14px; border-radius: 16px; overflow: hidden; background: var(--soft); }
+.trp-empty-ph img { width: 100%; height: 100%; object-fit: cover; }
+.trp-empty b { display: block; font-size: 16px; letter-spacing: -.01em; }
+.trp-empty p { margin: 4px 0 0; }
+.trp-empty .btn { margin-top: 14px; }
+
+/* ───── detalle ───── */
+.trp-st { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 14px 2px 0; }
+.trp-tl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; font-size: 11.5px; font-weight: 600; color: var(--faint); }
+.trp-tl .on { color: var(--ink); }
+.trp-card, .trp-route, .trp-drv, .trp-assign { margin-top: 12px; }
+.card + .trp-card, .card + .trp-drv, .card + .trp-assign { margin-top: 12px; }
+.trp-route { padding: 8px 8px 10px; }
+.trp-route .rt-row { padding-right: 10px; min-height: 54px; }
+.trp-route .rt-row:hover { background: none; }
+.trp-route .rt-dot svg { width: 13px; height: 13px; }
+.trp-meet { display: flex; align-items: center; gap: 10px; margin: 4px 6px 0; padding: 10px 12px; border-radius: var(--r-sm); background: var(--accent-soft); color: var(--accent-ink); font-size: 13px; line-height: 1.35; }
+.trp-meet svg { width: 18px; height: 18px; flex: none; }
+.trp-drv .drv .tx { flex: 1; min-width: 0; }
+.trp-drv .drv .tx b { display: block; font-size: 16px; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trp-drv .drv .tx > span { display: block; font-size: 13px; color: var(--muted); margin-top: 1px; }
+.trp-veh { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.trp-veh .vimg { width: 78px; height: 54px; border-radius: 12px; overflow: hidden; background: var(--soft); flex: none; }
+.trp-veh .vimg img { width: 100%; height: 100%; object-fit: cover; }
+.trp-veh .tx { flex: 1; min-width: 0; }
+.trp-veh .tx b { display: block; font-size: 14.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trp-veh .tx span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+.trp-2 { margin-top: 14px; }
+.trp-2 .btn { padding: 0 12px; }
+.trp-hint { margin-top: 10px; line-height: 1.45; }
+.trp-assign .row { gap: 10px; margin-bottom: 4px; }
+.trp-parts { margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+.trp-parts .eyebrow { margin-bottom: 4px; }
+.trp-part { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.trp-part b { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trp-part .num { font-weight: 700; font-size: 14px; }
+.trp-acts { margin-top: 14px; }
+.trp-acts.one { grid-template-columns: minmax(0, 1fr); }
+.trp-acts .btn { padding: 0 10px; font-size: 14px; }
+.trp-acts .btn svg { width: 17px; height: 17px; flex: none; }
+.trp-stars { display: flex; justify-content: center; gap: 8px; }
+.trp-center { text-align: center; margin-top: 10px; }
+.trp-danger { background: var(--bad); }
+
+/* ───── hojas: compartir, dividir, chat ───── */
+.trp-link { margin: 12px 0; padding: 12px 14px; border-radius: var(--r-sm); background: var(--soft); border: 1px solid var(--line); font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; line-height: 1.4; overflow-wrap: anywhere; }
+.trp-fr { margin-top: 12px; }
+.trp-quick { margin-top: 10px; }
+.trp-quick .chip { min-height: 40px; font-size: 13.5px; }
+.trp-chat-in { display: flex; gap: 8px; margin-top: 10px; }
+.trp-chat-in .txt { flex: 1; min-width: 0; }
+.trp-chat-in .btn { height: 52px; flex: none; }
+.trp-chat-empty { margin: auto; max-width: 240px; text-align: center; }
+
+/* ───── escritorio: tarjeta del ETA sobre el mapa lateral ───── */
+.trp-side { width: 100%; min-width: 320px; max-width: 520px; text-align: left; }
+
+/* ───── enlace público de seguimiento: columna de teléfono centrada, sin barra inferior ───── */
+.trk .ms-map, .trk .ms-top { left: max(0px, calc(50% - 280px)); right: max(0px, calc(50% - 280px)); }
+.trk .ms-panel { max-width: 560px; margin-left: auto; margin-right: auto; padding-bottom: calc(28px + var(--safe-b)); }
+.trp-chip { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--glass2); border: 1px solid var(--glass-line); box-shadow: var(--shadow-sm); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.trk-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 16px 2px 0; }
+.trk-h b { min-width: 0; font-size: 17px; letter-spacing: -.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trk-sub { margin: 2px 2px 0; }
+
+@media (max-width: 370px) {
+  .trp-live b { font-size: 17px; }
+  .trp-veh .vimg { width: 64px; height: 46px; }
+  .trp-acts .btn { font-size: 13.5px; gap: 6px; }
+}
